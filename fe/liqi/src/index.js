@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import HomePage from './pages/users/homePage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <h1>LIQI</h1>
-  </React.StrictMode>
+  <HomePage/>
 );
 
