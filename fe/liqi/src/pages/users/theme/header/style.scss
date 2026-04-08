@@ -4,37 +4,22 @@
 
 .header__top {
     height: 60px;
-    width: 100%;
-    max-width: 1200px;
     background: map.get($theme-color, "background");
     margin: 0 auto;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-
-    .row {
-        justify-content: space-between;
-    }
 }
 
 
 
 .header__top_right{
-    display: flex;
-    justify-content: end;
-    background: map.get($theme-color, "background");
-
-
     ul {
-        display: flex;
-        column-gap: 15px;
-        list-style-type: none;
-
+        
         li {
-            padding: 0 16px;
+            text-align: center;
             cursor: pointer;
-
             a {
                 text-decoration: none;
                 text-transform: uppercase;
@@ -48,19 +33,12 @@
 }
 
 .header__top_left{
-    display: flex;
-    justify-content: start;
-    background: map.get($theme-color, "background");
 
     ul {
-        display: flex;
-        column-gap: 15px;
-        list-style-type: none;
-
+        
         li {
-            padding: 0 16px;
+            text-align: center;
             cursor: pointer;
-
             a {
                 text-decoration: none;
                 text-transform: uppercase;
