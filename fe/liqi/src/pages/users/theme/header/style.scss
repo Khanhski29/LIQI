@@ -1,21 +1,30 @@
+@use "sass:map";
+@import "../../../../style/pages/theme.scss";
+
+
 .header__top {
     height: 60px;
     width: 100%;
     max-width: 1200px;
-    // background-color: #0a1428;
-    background-color: #a2a2a2;
+    background: map.get($theme-color, "background");
     margin: 0 auto;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    line-height: 60px;
+
+    .row {
+        justify-content: space-between;
+    }
 }
+
+
 
 .header__top_right{
     display: flex;
     justify-content: end;
-    background-color: red;
+    background: map.get($theme-color, "background");
+
 
     ul {
         display: flex;
@@ -28,9 +37,11 @@
 
             a {
                 text-decoration: none;
-                color: #ffffff;
                 text-transform: uppercase;
-                font-family: "BeaufortMedium";
+                font-family: "BeaufortBold";
+                color: map.get($theme-color, "color");
+                font-size: 16px;
+                line-height: 60px;
             }
         }
     }
@@ -39,7 +50,7 @@
 .header__top_left{
     display: flex;
     justify-content: start;
-    background-color: rgb(84, 157, 248);
+    background: map.get($theme-color, "background");
 
     ul {
         display: flex;
@@ -52,10 +63,11 @@
 
             a {
                 text-decoration: none;
-                color: #ffffff;
                 text-transform: uppercase;
-                font-family: "BeaufortMedium";
-
+                font-family: "BeaufortBold";
+                color: map.get($theme-color, "color");
+                font-size: 16px;
+                line-height: 60px;
             }
         }
     }
