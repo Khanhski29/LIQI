@@ -2,7 +2,10 @@ import { memo } from "react";
 import "./style.scss"
 
 const HomePage = () => {
-    return <h1>HomePage</h1>
+    return (
+        <div>body</div>
+    )
+   
 }
 
 export default memo(HomePage);
