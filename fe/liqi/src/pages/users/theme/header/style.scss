@@ -12,40 +12,52 @@
     right: 0;
 }
 
+.header__logo {
+    a {
+        line-height: 60px;
+        color: map.get($theme-color, "color");
+        text-decoration: none;
+        text-transform: uppercase;
+        font-family: "BeaufortBold";
+        display: block;
+        text-align: center;
+        cursor: pointer;
+    }
+}
 
 
-.header__top_right{
+.header__menu {
     ul {
-        
-        li {
-            text-align: center;
-            cursor: pointer;
+
+        li{
             a {
-                text-decoration: none;
-                text-transform: uppercase;
-                font-family: "BeaufortBold";
-                color: map.get($theme-color, "color");
-                font-size: 16px;
-                line-height: 60px;
+               line-height: 60px;
+               color: map.get($theme-color, "color");
+               text-decoration: none; 
+               text-transform: uppercase;
+               font-family: "BeaufortBold";
+               text-align: center;
+               display: block;
+               cursor: pointer;
             }
         }
     }
 }
 
-.header__top_left{
 
+.header__authentication {
     ul {
-        
-        li {
-            text-align: center;
-            cursor: pointer;
+
+        li{
             a {
-                text-decoration: none;
-                text-transform: uppercase;
-                font-family: "BeaufortBold";
-                color: map.get($theme-color, "color");
-                font-size: 16px;
-                line-height: 60px;
+               line-height: 60px;
+               color: map.get($theme-color, "color");
+               text-decoration: none; 
+               text-transform: uppercase;
+               font-family: "BeaufortBold";
+               text-align: center;
+               display: block;
+               cursor: pointer;
             }
         }
     }
