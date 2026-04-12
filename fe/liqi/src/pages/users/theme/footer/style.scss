@@ -5,14 +5,13 @@
 .footer__bot {
     background-color: map.get($theme-color, "background");
     padding: 64px 32px !important;
-
+    
     .row {
         // justify-content: center;
         // align-items: center;
     }
 
     .footer__left {
-        flex-direction: column;
 
         .logo {
             font-size: 64px;
@@ -25,23 +24,38 @@
             margin-top: 10px;
             margin-bottom: 10px;
 
-            a{
-                font-size: 22px;
-                color: map-get($theme-color, "sub-color" );
+            ul {
+                list-style-type: none;
+                
+                li {
+
+                    text-align: center;
+
+                    a{
+                        font-size: 22px;
+                        color: map-get($theme-color, "sub-color" );
+                        text-decoration: none;
+                    }  
+                } 
             }
         }
 
-        .para {
+        p {
             color: map-get($theme-color, "sub-color" );
             font-size: 16px;
             margin-top: 10px;
             margin-bottom: 10px;
+            display: block;
         }
     }
 
+    
+
+
+
     .footer__right {
         align-items: unset;
-        margin-top: 15px;
+        margin-top: 20px;
         .col {
 
             
@@ -70,6 +84,24 @@
             }
         }
             
+    }
+
+
+    .footer__bot__about {
+        &::before {
+                content: "";
+                display: block;
+                border-top: 1px solid #fff;
+                margin-bottom: 10px;
+            }
+        
+        padding: 5px 12px;
+
+        p {
+            color: map.get($theme-color, "sub-color");
+            font-size: 12px;
+            margin: 3px;
+        }
     }
 }
 
