@@ -1,9 +1,37 @@
+@use "sass:map";
+@import "../../../style/pages/theme.scss";
 
 .homepage {
     // height: 1200px;
+    margin-top: 60px !important;
     .slider {
         height: 750px;
         background-color: #ECE7E1;
+        position: relative;
+
+        .slider__text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            p{
+                &:first-child {
+                    font-size: 96px;
+                    text-transform: uppercase;
+                    font-family: "BeaufortHeavyItalic";
+                    background: linear-gradient(to top, #C28F2D, #cfbd9c);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    text-shadow: unset;
+                }
+
+                text-align: center;
+                font-size: 24px;
+                // text-shadow: 2px 2px 2px #505050;
+                color: map.get($theme-color, "color");
+                font-family: "BeaufortBoldItalic";
+            }
+        }
     }
     
     .content {
@@ -21,8 +49,21 @@
                     p{
                         &:first-child {
                             font-size: 64px;
+                            text-transform: uppercase;
+                            font-family: "BeaufortHeavy";
+                            margin-bottom: 10px;
                         }
                         color: #fff;
+                        font-size: 24px;
+                        margin: 5px 0;
+                    }
+
+                    button{
+                        margin-top: 10px;
+                        font-size: 22px;
+                        color: map.get($theme-color, "dcolor");
+                        background-color: #ff4655;
+                        font-weight: 500;
                     }
                 }
 
@@ -39,10 +80,26 @@
 
         .block1 {
             background-color: #1A0F22;
+            
+            .row {
+                .text{
+                    p{
+                        color: map.get($theme-color, "dcolor");
+                    }
+                }
+            }
         }
         .block2 {
             background-color: #ECE7E1;
 
+            .row {
+                .text{
+                    p{
+                        color: map.get($theme-color, "ncolor");
+                    }
+                }
+            }
+            
             .picture {
                 
                 img {
@@ -55,6 +112,14 @@
         }
         .block3 {
             background-color: #1A0F22; 
+
+            .row {
+                .text{
+                    p{
+                        color: map.get($theme-color, "dcolor");
+                    }
+                }
+            }
         }
 
     }
