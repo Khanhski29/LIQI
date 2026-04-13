@@ -3,7 +3,10 @@
   src: url("../../components/font/beaufort lol/BeaufortforLOL-LightItalic.ttf") format("truetype");
 }
 
-
+@font-face {
+  font-family: "BeaufortBoldItalic";
+  src: url("../../components/font/beaufort lol/BeaufortforLOL-BoldItalic.ttf") format("truetype");
+}
 
 @font-face {
   font-family: "BeaufortHeavyItalic";
@@ -20,10 +23,23 @@
   src: url("../../components/font/beaufort lol/BeaufortforLOL-Bold.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "BeaufortHeavy";
+  src: url("../../components/font/beaufort lol/BeaufortforLOL-Heavy.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Oswald";
+  src: url("../../components/font/Oswald/Oswald-VariableFont_wght.ttf") format("truetype");
+}
+
 $theme-color: (
     "background": #141212,
     "color": #f9f9f9,
+    "dcolor": #ece8e1,
+    "ncolor": #0f1923,
     "sub-color": #7e7e7e
 )
+
 
 
