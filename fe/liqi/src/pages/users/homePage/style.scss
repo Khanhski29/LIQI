@@ -1,5 +1,61 @@
 
-.body {
-    height: 500px;
-    margin-top: 60px;
+.homepage {
+    // height: 1200px;
+    .slider {
+        height: 750px;
+        background-color: #ECE7E1;
+    }
+    
+    .content {
+        
+        .block {
+            height: 640px;
+            padding: 64px 96px;
+
+            .row{
+                height: 100%;;
+                align-items: center;
+
+                .text {
+                    
+                    p{
+                        &:first-child {
+                            font-size: 64px;
+                        }
+                        color: #fff;
+                    }
+                }
+
+                .picture {
+
+
+                    img {
+                        width: 500px;
+                        height: auto;
+                    }
+                }
+            }
+        }
+
+        .block1 {
+            background-color: #1A0F22;
+        }
+        .block2 {
+            background-color: #ECE7E1;
+
+            .picture {
+                
+                img {
+                    width: 500px;
+                    height: auto;
+                    position: relative;
+                    right: 200px;
+                }
+            }
+        }
+        .block3 {
+            background-color: #1A0F22; 
+        }
+
+    }
 }

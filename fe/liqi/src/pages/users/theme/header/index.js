@@ -28,16 +28,16 @@ const Header = () =>{
         <div className='container wide header__top'>
             <div className='row'>
                 {/* logo */}
-                <div className='col lg-1 md-1 sm-4 header__logo'>
+                <div className='col lg-1 md-1 lmd-1 sm-4 header__logo'>
                     <Link to="">LOGO</Link>
                 </div>
 
                 {/* menu */}
-                <div className='col lg-5 md-5 sm-4'>
+                <div className='col lg-5 md-5 lmd-8 sm-4'>
                     <nav className='header__menu'>
                         <ul className='row no-gutters'>
                             {menus?.map((menu, menuKey) => (
-                                <li key={menuKey} className='col lg-4 md-4 sm-0'>
+                                <li key={menuKey} className='col lg-4 md-4 lmd-3 sm-0'>
                                     <Link to={menu?.path} > {menu?.name}</Link>
                                 </li>
                             ))}
@@ -46,12 +46,12 @@ const Header = () =>{
                 </div>
 
                 {/* authentication */}
-                <div className='col lg-6 md-6 sm-4 header__authentication'>
+                <div className='col lg-6 md-6 lmd-3 sm-4 header__authentication'>
                     <ul className='row no-gutters'>
-                        <li className='col lg-o-6 lg-3 md-o-5 md-3 sm-12'>
+                        <li className='col lg-o-6 lg-3 md-o-5 md-3 lmd-12 sm-12'>
                             <Link to="#" >Đăng Nhập</Link>
                         </li>
-                        <li className='col lg-3 md-3 sm-0'>
+                        <li className='col lg-3 md-3 lmd-0 sm-0'>
                             <Link to="#" >Đăng Ký</Link>
                         </li>
                     </ul>
