@@ -1,11 +1,42 @@
 import { memo } from "react";
 import "./style.scss"
 
+import img1 from '../../../components/pictures/p1.png';
+import img2 from '../../../components/pictures/p2.png';
+import img3 from '../../../components/pictures/p3.png';
+import card1 from '../../../components/pictures/slide/gojo.jpg';
+import card2 from '../../../components/pictures/slide/hay.jpg';
+import card3 from '../../../components/pictures/slide/nak.jpg';
+import card4 from '../../../components/pictures/slide/tel.jpg';
+import card5 from '../../../components/pictures/slide/tv.jpg';
+import card6 from '../../../components/pictures/slide/tulen.jpg';
+import card7 from '../../../components/pictures/slide/nk.jpg';
+
+
 const HomePage = () => {
     return (
         
         <div className="container wide homepage">
             <div className="slider">
+                <div className="slider__track">
+                    <div className="card"><img src={card1}/></div>
+                    <div className="card"><img src={card2}/></div>
+                    <div className="card"><img src={card3}/></div>
+                    <div className="card"><img src={card4}/></div>
+                    <div className="card"><img src={card5}/></div>
+                    <div className="card"><img src={card6}/></div>
+                    <div className="card"><img src={card7}/></div>
+                    {/*  */}
+                    <div className="card"><img src={card1}/></div>
+                    <div className="card"><img src={card2}/></div>
+                    <div className="card"><img src={card5}/></div>
+                    <div className="card"><img src={card3}/></div>
+                    <div className="card"><img src={card6}/></div>
+                    <div className="card"><img src={card4}/></div>
+                    <div className="card"><img src={card7}/></div>
+                    
+                </div>
+
                 
                 <div className="slider__text">
                     <p>LiQi Shop</p>
@@ -24,7 +55,7 @@ const HomePage = () => {
                             <button className="btn-l">Mua Ngay</button>
                         </div>
                         <div className="col lg-4 picture">
-                            <img src="https://cmsassets.rgpub.io/sanity/images/dsfx7636/news/1d62a3751be9d7abfce84da8ca89be7d79f07fed-1232x1232.png?accountingTag=VAL&auto=format&fit=fill&q=80&w=1232"></img>
+                            <img src={img2} />
                         </div>
                     </div>
                 </div>
@@ -32,7 +63,7 @@ const HomePage = () => {
                 <div className="container block block2">
                     <div className="row">
                         <div className="col lg-4 picture">
-                            <img src="https://cmsassets.rgpub.io/sanity/images/dsfx7636/news/1d62a3751be9d7abfce84da8ca89be7d79f07fed-1232x1232.png?accountingTag=VAL&auto=format&fit=fill&q=80&w=1232"></img>
+                            <img src={img1} />
                         </div>
                         <div className="col lg-8 text">
                             <p>Shop có thu lại acc không ?</p>
@@ -54,7 +85,7 @@ const HomePage = () => {
                             <button className="btn-l">Đăng Ký Ngay</button>
                         </div>
                         <div className="col lg-4 picture">
-                            <img src="https://cmsassets.rgpub.io/sanity/images/dsfx7636/news/1d62a3751be9d7abfce84da8ca89be7d79f07fed-1232x1232.png?accountingTag=VAL&auto=format&fit=fill&q=80&w=1232"></img>
+                            <img src={img3} />
                         </div>
                     </div>
                 </div>

@@ -23,6 +23,20 @@
         display: block;
         text-align: center;
         cursor: pointer;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+
+        svg {
+            // margin-left: 5px;
+            width: 40px;
+            height: auto;
+            position: relative;
+            top: 10px;
+        }
+
     }
 }
 

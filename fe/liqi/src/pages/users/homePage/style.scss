@@ -1,13 +1,40 @@
 @use "sass:map";
 @import "../../../style/pages/theme.scss";
 
+
+@keyframes slider {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+
 .homepage {
     // height: 1200px;
     margin-top: 60px !important;
     .slider {
-        height: 750px;
+        height: 700px;
         background-color: #ECE7E1;
         position: relative;
+        overflow: hidden;
+
+        .slider__track {
+            display: flex;
+            height: 700px;
+            width: max-content;
+            animation: slider 60s linear infinite !important;
+            overflow: hidden;
+            
+            .card {
+                filter: grayscale(0.4);
+            }
+        }
+        
+
+
 
         .slider__text {
             position: absolute;
@@ -71,7 +98,7 @@
 
 
                     img {
-                        width: 500px;
+                        width: 600px;
                         height: auto;
                     }
                 }
@@ -106,7 +133,7 @@
                     width: 500px;
                     height: auto;
                     position: relative;
-                    right: 200px;
+                    right: 250px;
                 }
             }
         }

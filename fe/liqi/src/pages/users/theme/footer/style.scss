@@ -14,10 +14,16 @@
     .footer__left {
 
         .logo {
-            font-size: 64px;
-            font-family: "BeaufortHeavyItalic";
-            color: map.get($theme-color, "color");
+            // font-size: 64px;
+            // font-family: "BeaufortHeavyItalic";
+            // color: map.get($theme-color, "color");
             margin-bottom: 10px;
+
+            svg {
+                width: 128px;
+                height: auto;
+            }
+            
         }
 
         .social {
