@@ -106,23 +106,26 @@
         }
 
         .block1 {
-            background-color: #1A0F22;
+            // background-color: #1A0F22;
+             background: url("../../../components/pictures/background\ 1.jpg") center / cover no-repeat;
             
             .row {
                 .text{
                     p{
-                        color: map.get($theme-color, "dcolor");
+                        color: map.get($theme-color, "ncolor");
                     }
                 }
             }
         }
         .block2 {
-            background-color: #ECE7E1;
+            // background-color: #ECE7E1;
+             background: url("../../../components/pictures/background\ 3.jpg") center / cover no-repeat;
+
 
             .row {
                 .text{
                     p{
-                        color: map.get($theme-color, "ncolor");
+                        color: map.get($theme-color, "dcolor");
                     }
                 }
             }
@@ -138,12 +141,14 @@
             }
         }
         .block3 {
-            background-color: #1A0F22; 
+            // background-color: #1A0F22; 
+             background: url("../../../components/pictures/background\ 2.jpg") center / cover no-repeat;
+
 
             .row {
                 .text{
                     p{
-                        color: map.get($theme-color, "dcolor");
+                        color: map.get($theme-color, "ncolor");
                     }
                 }
             }

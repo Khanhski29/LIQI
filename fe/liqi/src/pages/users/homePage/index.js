@@ -47,14 +47,14 @@ const HomePage = () => {
             <div className="content">
                 <div className="container block block1">
                     <div className="row">
-                        <div className="col lg-8 text">
+                        <div className="col lg-8 md-6 lmd-6 sm-8 text">
                             <p>Tại Sao Là LiQi Shop</p>
                             <p>-Mức giá hợp lý để sở hữu skin hot nhất</p>
                             <p>-Đổi thông tin an toàn cho khách</p>
                             <p>-dịch vụ trả góp, trả trước 50% là log acc chơi</p>
                             <button className="btn-l">Mua Ngay</button>
                         </div>
-                        <div className="col lg-4 picture">
+                        <div className="col lg-4 md-6 lmd-6 sm-4 picture">
                             <img src={img2} />
                         </div>
                     </div>
@@ -62,10 +62,10 @@ const HomePage = () => {
                 
                 <div className="container block block2">
                     <div className="row">
-                        <div className="col lg-4 picture">
+                        <div className="col lg-4 md-6 lmd-6 sm-4 picture">
                             <img src={img1} />
                         </div>
-                        <div className="col lg-8 text">
+                        <div className="col lg-8 md-6 lmd-6 sm-8 text">
                             <p>Shop có thu lại acc không ?</p>
                             <p>-Tất nhiên là có</p>
                             <p>-Thu lại acc giá tốt trên 50%</p>
@@ -77,14 +77,14 @@ const HomePage = () => {
 
                 <div className="container block block3">
                     <div className="row">
-                        <div className="col lg-8 text">
+                        <div className="col lg-8 md-6 lmd-6 sm-8 text">
                             <p>Hợp tác với chúng tôi</p>
                             <p>-Trở thành người bán acc</p>
                             <p>-Có hỗ trợ bảo kê uy tín</p>
                             <p>-Giới thiệu khách hàng và nhận hoa hồng</p>
                             <button className="btn-l">Đăng Ký Ngay</button>
                         </div>
-                        <div className="col lg-4 picture">
+                        <div className="col lg-4 md-6 lmd-6 sm-4 picture">
                             <img src={img3} />
                         </div>
                     </div>
