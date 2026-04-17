@@ -58,7 +58,7 @@ const Footer = () =>{
                                 
                             </ul>
                         </div>
-                        <div className='col lg-4 md-4 lmd-4 sm-4'>
+                        <div className='col lg- md-5 lmd-5 sm-5'>
                             <p>
                                 prod@0.1.1 <br/>© 2026 KhanhSki
                             </p>
