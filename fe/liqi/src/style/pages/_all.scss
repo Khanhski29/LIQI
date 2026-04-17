@@ -1,12 +1,16 @@
 @use "sass:map" ;  
 @import "./theme.scss";
 @import "./responsive.scss";
+@import "./rps.scss";
 
 
 html,
 body {
     margin: 0;
      
+}
+#root {
+    overflow: hidden;
 }
 
 * {

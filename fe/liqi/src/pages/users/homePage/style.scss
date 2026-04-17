@@ -30,6 +30,9 @@
             
             .card {
                 filter: grayscale(0.4);
+                img{
+                    height: 700px;
+                }
             }
         }
         
@@ -41,6 +44,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -100%);
+            width: 100%;
+            padding: 0 300px;
             p{
                 &:first-child {
                     font-size: 96px;
@@ -133,8 +138,6 @@
             .picture {
                 
                 img {
-                    width: 500px;
-                    height: auto;
                     position: relative;
                     right: 250px;
                 }
