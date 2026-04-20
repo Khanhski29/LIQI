@@ -1,0 +1,50 @@
+@use "sass:map";
+@import "../../../style/pages/theme.scss";
+
+.products {
+    margin-top: 60px !important;
+
+    .row {
+
+        .col {
+            margin-bottom: 10px;
+            
+            .item {
+                background-color: #ECE9E3;
+                padding: 16px 8px; 
+
+                img {
+                    object-fit: cover;
+                    width: 100%;
+                    max-height: 200px;
+                    border: 1px solid #000;
+                    display: block;
+                }
+
+                .item__about {
+                    padding: 8px 0;
+                    div{
+                        display: flex;
+                        justify-content: space-between;
+                        p {
+                            font-family: "BeaufortMedium";
+                            font-size: 18px;
+                            text-transform: uppercase;
+                            color: map.get($theme-color, "ncolor");
+                        }
+                        
+                        .price {
+                            color: #ff4655;
+                        }
+                    }
+
+                    .description {
+                        text-align: justify;
+                        color: map.get($theme-color, "ncolor");
+                        margin-top: 8px;
+                    }
+                }
+            }
+        }
+    }
+}
