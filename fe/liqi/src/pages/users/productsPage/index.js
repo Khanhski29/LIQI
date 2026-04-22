@@ -10,7 +10,7 @@ const ProductsPage = () => {
                 img: img1,
                 id: `VIP${String(index + 1).padStart(4, "0")}`,
                 price: 300000 + index * 10000,
-                description: "Tu len tân thần, Nak vệ thần..."
+                description: "Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần..."
             })),
         []
     );
@@ -46,32 +46,48 @@ const ProductsPage = () => {
     }, [filteredProducts, page]);
 
     const getPagination = () => {
-        const pages = [];
+    const pages = [];
 
-        if(totalPages <= 7) {
-            for(let i=1; i<totalPages; i++) {
-                pages.push(i);
-            }
-        } else {
-            pages.push(1);
-
-            if(page > 3) {
-                pages.push("...");
-            }
-
-            for(let i=Math.max(2, page -1); i<=Math.min(totalPages -1, page +1); i++) {
-                pages.push(i);
-            }
-
-            if(page < totalPages -2) {
-                pages.push("...");
-            }
-
-            pages.push(totalPages);
+    if (totalPages <= 7) {
+        for (let i = 1; i <= totalPages; i++) {
+            pages.push(i);
         }
 
         return pages;
-    };
+    }
+
+    if (page <= 4) {
+        pages.push(1, 2, 3, 4, 5, "...", totalPages);
+        return pages;
+    }
+
+    if (page >= totalPages - 3) {
+        pages.push(
+            1,
+            "...",
+            totalPages - 4,
+            totalPages - 3,
+            totalPages - 2,
+            totalPages - 1,
+            totalPages
+        );
+
+        return pages;
+    }
+    pages.push(
+        1,
+        "...",
+        page - 2,
+        page - 1,
+        page,
+        page + 1,
+        page + 2,
+        "...",
+        totalPages
+    );
+
+    return pages;
+};
 
 
 
