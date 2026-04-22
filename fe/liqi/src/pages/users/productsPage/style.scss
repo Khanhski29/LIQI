@@ -6,29 +6,101 @@
     padding: 64px 16px !important;
     .row {
         .product__left {
-
+            button{
+                width: 100%;
+                display: block;
+                font-size: 18px;
+                padding: 8px 16px;
+                font-weight: 500;
+                margin-bottom: 15px;
+                cursor: pointer;
+                border: 0.2px solid #161616;
+                background-color: #fc5f6c;
+                color: map.get($theme-color, "color");
+            }
         }
 
         .product__right{
             .items {
                 .item {
+                    cursor: pointer;
+                    // background-color: #ece8e1;
+                    margin-bottom: 16px;
+                    padding-bottom: 16px;
                     img {
                         object-fit: cover;
                         width: 100%;
-                        height: 200px;
+                        height: 170px;
                     }
 
                     .item__about {
+                        font-size: 16px;
 
+                        div{
+                            display: flex;
+                            justify-content: space-between;
+                            
+                            .id{
+                                font-size: 22px;
+                                font-weight: 600;
+                                color: map.get($theme-color, "ncolor");
+                            }
+
+                            .price{
+                                font-size: 18px;
+                                font-weight: 400;
+                                color: red;
+                                margin-right: 8px;
+                            }
+                        }
+
+                        .description {
+                            display: -webkit-box;
+                            -webkit-line-clamp: 2;
+                            -webkit-box-orient: vertical;
+                            overflow: hidden;
+                            font-size: 16px;
+                            color: map.get($theme-color, "sub-color");
+                            text-align: justify;
+                        }
                     }
 
-                    .description {
-
-                    }
+                    
                 }
             }
 
             .pagination {
+                padding: 10px 0px !important;
+                display: flex;
+                justify-content: flex-end;
+                
+                button{
+                    font-size: 18px;
+                    font-weight: 300;
+                    width: 32px;  
+                    height: 32px;
+                    border: 0.5px solid #fc5f6c;
+                    color: map.get($theme-color, "ncolor");
+                    margin: 0 12px;
+                    cursor: pointer;
+                    background-color: transparent;
+
+                    &.active{
+                        background-color: #fc5f6c;
+                        color: map.get($theme-color, "dcolor");
+                    }
+
+                    &:disabled {
+                        opacity: 0.8;
+                        cursor: not-allowed;
+                    }
+
+                    &:first-child,
+                    &:last-child {
+                        background-color: #fc5f6c;
+                        color: map.get($theme-color, "dcolor");
+                    }
+                }
 
             }
         }
