@@ -94,7 +94,7 @@ const ProductsPage = () => {
     return (
         <div className="products container wide">
             <div className="row">
-                <div className="product__left col lg-2">
+                <div className="product__left col lg-2 md-2 lmd-12 sm-12">
                     <button onClick={()=>{
                         setMinPrice(0);
                         setMaxPrice(Infinity);
@@ -123,13 +123,13 @@ const ProductsPage = () => {
                     
                 </div>
 
-                <div className="product__right col lg-10">
+                <div className="product__right col lg-10 md-10 lmd-12 sm-12">
                     <div className="row">
-                        <div className="items col lg-12">
+                        <div className="items col lg-12 md-12 lmd-12 sm-12">
                             <div className="row">
                                 {
                                     currentProducts.map((item) => (
-                                        <div className="col lg-4" key={item.id}>
+                                        <div className="col lg-4 md-4 lmd-6 sm-12" key={item.id}>
                                             <div className="item">
                                                 <img src={item.img} alt={item.id} />
                                                 <div className="item__about">
@@ -156,7 +156,7 @@ const ProductsPage = () => {
                             </div>
                         </div>
 
-                        <div className="pagination col lg-12">
+                        <div className="pagination col lg-12 md-12 lmd-12 sm-12">
                             <button disabled={page === 1} onClick={() => setPage(page - 1)}>{"<"}</button>
 
                             {
