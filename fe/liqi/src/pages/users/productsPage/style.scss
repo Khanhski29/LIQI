@@ -11,12 +11,18 @@
                 display: block;
                 font-size: 18px;
                 padding: 8px 16px;
-                font-weight: 500;
+                font-weight: 300;
                 margin-bottom: 15px;
                 cursor: pointer;
-                border: 0.2px solid #161616;
-                background-color: #fc5f6c;
-                color: map.get($theme-color, "color");
+                // border: 0.2px solid #161616;
+                border: none;
+                background-color: #ece8e1;
+                color: map.get($theme-color, "ncolor");
+
+                &.active {
+                    background-color: #fc5f6c;
+                    color: map.get($theme-color, "dcolor");
+                }
             }
         }
 

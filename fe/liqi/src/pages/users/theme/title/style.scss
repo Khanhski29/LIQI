@@ -1,0 +1,18 @@
+@use "sass:map" ; 
+@import "style/pages/theme.scss";
+
+
+.title {
+    margin: 20px -16px;
+
+    .name {
+        font-size:64px;
+        font-family: "BeaufortHeavyItalic";
+        text-transform: uppercase;
+        background: linear-gradient(to top, #C28F2D, #ebe1ce);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: unset;
+    }
+}
+
