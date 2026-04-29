@@ -1,6 +1,7 @@
-import { memo, useMemo, useState, useEffect } from "react";
+import { memo, useMemo, useState, useEffect, useRef } from "react";
 import "./style.scss";
 import img1 from "../../../components/IMG_20260420_142143-7h.webp";
+import Title from "../theme/title";
 
 const ProductsPage = () => {
 
@@ -14,6 +15,15 @@ const ProductsPage = () => {
             })),
         []
     );
+
+    const boxRef = useRef();
+    const setActive = (btn) => {
+        const buttons = boxRef.current.querySelectorAll("button");
+
+        buttons.forEach(item => item.classList.remove("active"));
+
+        btn.classList.add("active");
+    }
 
     //chia trang
     const [page, setPage] = useState(1);
@@ -93,31 +103,41 @@ const ProductsPage = () => {
 
     return (
         <div className="products container wide">
+
+            <Title name="Của Hàng"/>
+
+
+
             <div className="row">
-                <div className="product__left col lg-2 md-2 lmd-12 sm-12">
-                    <button onClick={()=>{
+                <div ref={boxRef} className="product__left col lg-2 md-2 lmd-12 sm-12">
+                    <button onClick={(e)=>{
                         setMinPrice(0);
                         setMaxPrice(Infinity);
+                        setActive(e.target);
                     }}>Tất Cả</button>
 
-                    <button onClick={()=>{
+                    <button onClick={(e)=>{
                         setMinPrice(0);
                         setMaxPrice(1000000);
+                        setActive(e.target);
                     }}>{"<1000"}</button>
 
-                    <button onClick={()=>{
+                    <button onClick={(e)=>{
                         setMinPrice(1000000);
                         setMaxPrice(2000000);
+                        setActive(e.target);
                     }}>1000-2000</button>
 
-                    <button onClick={()=>{
+                    <button onClick={(e)=>{
                         setMinPrice(2000000);
                         setMaxPrice(3000000);
+                        setActive(e.target);
                     }}>2000-3000</button>
 
-                    <button onClick={()=>{
+                    <button onClick={(e)=>{
                         setMinPrice(3000000);
                         setMaxPrice(10000000);
+                        setActive(e.target);
                     }}>3000-10000</button>
 
                     

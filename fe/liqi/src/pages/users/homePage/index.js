@@ -1,16 +1,17 @@
 import { memo } from "react";
 import "./style.scss"
 
-import img1 from '../../../components/pictures/p1.png';
-import img2 from '../../../components/pictures/p2.png';
-import img3 from '../../../components/pictures/p3.png';
-import card1 from '../../../components/pictures/slide/gojo.jpg';
-import card2 from '../../../components/pictures/slide/hay.jpg';
-import card3 from '../../../components/pictures/slide/nak.jpg';
-import card4 from '../../../components/pictures/slide/tel.jpg';
-import card5 from '../../../components/pictures/slide/tv.jpg';
-import card6 from '../../../components/pictures/slide/tulen.jpg';
-import card7 from '../../../components/pictures/slide/nk.jpg';
+import img1 from 'components/pictures/p1.png';
+import img2 from 'components/pictures/p2.png';
+import img3 from 'components/pictures/p3.png';
+import card1 from 'components/pictures/slide/gojo.jpg';
+import card2 from 'components/pictures/slide/hay.jpg';
+import card3 from 'components/pictures/slide/nak.jpg';
+import card4 from 'components/pictures/slide/tel.jpg';
+import card5 from 'components/pictures/slide/tv.jpg';
+import card6 from 'components/pictures/slide/tulen.jpg';
+import card7 from 'components/pictures/slide/nk.jpg';
+
 
 
 const HomePage = () => {
