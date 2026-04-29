@@ -2,6 +2,8 @@ import { memo, useMemo, useState, useEffect, useRef } from "react";
 import "./style.scss";
 import img1 from "../../../components/IMG_20260420_142143-7h.webp";
 import Title from "../theme/title";
+import { formatter } from 'utils/formatter';
+
 
 const ProductsPage = () => {
 
@@ -159,9 +161,7 @@ const ProductsPage = () => {
                                                         </p>
 
                                                         <p className="price">
-                                                            {item.price.toLocaleString(
-                                                                "vi-VN"
-                                                            )} đ
+                                                            {formatter(item.price)}
                                                         </p>
                                                     </div>
 
