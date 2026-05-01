@@ -1,6 +1,7 @@
 import HomePage from "./pages/users/homePage";
 import ProfilePage from "./pages/users/profilePage";
 import ProductsPage from "./pages/users/productsPage";
+import ProductPage from "./pages/users/productPage";
 import MaterLayout from "./pages/users/theme/materLayout";
 import { ROUTERS } from "./utils/router";
 import { Routes, Route } from "react-router-dom";
@@ -20,6 +21,10 @@ const renderUserRouter = () => {
         {
             path: ROUTERS.USER.PRODUCTS,
             component: <ProductsPage/>
+        },
+        {
+            path: ROUTERS.USER.PRODUCT,
+            component: <ProductPage/>
         }
     ]
 

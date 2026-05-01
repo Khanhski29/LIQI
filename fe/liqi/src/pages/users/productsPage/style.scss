@@ -28,6 +28,11 @@
 
         .product__right{
             .items {
+            
+            a {
+                text-decoration: none;
+                
+                
                 .item {
                     cursor: pointer;
                     // background-color: #ece8e1;
@@ -73,6 +78,9 @@
 
                     
                 }
+            }
+
+                
             }
 
             .pagination {

@@ -3,7 +3,8 @@ import "./style.scss";
 import img1 from "../../../components/IMG_20260420_142143-7h.webp";
 import Title from "../theme/title";
 import { formatter } from 'utils/formatter';
-
+import { generatePath, Link } from "react-router-dom";
+import { ROUTERS } from "utils/router";
 
 const ProductsPage = () => {
 
@@ -112,7 +113,7 @@ const ProductsPage = () => {
 
             <div className="row">
                 <div ref={boxRef} className="product__left col lg-2 md-2 lmd-12 sm-12">
-                    <button onClick={(e)=>{
+                    <button className="active" onClick={(e)=>{
                         setMinPrice(0);
                         setMaxPrice(Infinity);
                         setActive(e.target);
@@ -152,6 +153,7 @@ const ProductsPage = () => {
                                 {
                                     currentProducts.map((item) => (
                                         <div className="col lg-4 md-4 lmd-6 sm-12" key={item.id}>
+                                            <Link to={generatePath(ROUTERS.USER.PRODUCT, { id: 1})}> 
                                             <div className="item">
                                                 <img src={item.img} alt={item.id} />
                                                 <div className="item__about">
@@ -170,6 +172,7 @@ const ProductsPage = () => {
                                                     </p>
                                                 </div>
                                             </div>
+                                            </Link>
                                         </div>
                                     ))
                                 }
