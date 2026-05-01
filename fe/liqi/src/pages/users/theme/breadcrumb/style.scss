@@ -1,0 +1,36 @@
+@use "sass:map";
+@import "style/pages/theme.scss";
+
+.breadcrumb {
+    
+    ul {
+        list-style-type: none;
+        display: flex;
+        gap: 10px;
+        .link{      
+            a {
+                font-size: 16px;
+                color: map.get($theme-color, "ncolor");
+
+                &:hover {
+                    color: #fc5f6c;
+                }
+            }
+        }
+
+        li {
+            font-size: 16px;
+            font-style: italic;
+            color: map.get($theme-color, "ncolor");
+            position: relative;
+
+            &:not(:last-child)::after {
+                content:">";
+                display: block;
+                position: absolute;
+                right: -8px;
+                top: 3px;
+            }
+        }
+    }
+}
