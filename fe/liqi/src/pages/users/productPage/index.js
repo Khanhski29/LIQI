@@ -5,10 +5,19 @@ import Title from "../theme/title";
 import { formatter } from 'utils/formatter';
 import { useLocation, useParams} from "react-router-dom";
 import Breadcrumb from "../theme/breadcrumb";
-
+import { IoDiamond } from "react-icons/io5";
+import { RiCustomerService2Fill } from "react-icons/ri";
+import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { GrContactInfo } from "react-icons/gr";
 
 
 const ProductPage = () => {
+
+
+    const [selectedImage, setSelectedImage] = useState(null);
+    
+
+
 
     const { id } = useParams();
     const location = useLocation();
@@ -20,45 +29,74 @@ const ProductPage = () => {
             <Title name="Chi Tiết Sản Phẩm"/>
             <Breadcrumb name="Chi tiết sản phẩm" id={id} min={min} max={max} page={page} />
 
-            <div className="product__detail row">
-                <div className="img col lg-6">
-                    {/* <img src={img1}/> */}
+            <div className="product__detail row no-gutters">
+                <div className="img col lg-8">
+                    <img src={img1} 
+                        onClick={() => setSelectedImage(img1)} 
+                        style={{ cursor: "pointer" }}
+                    />
+
+                    {selectedImage && (
+                        <div 
+                            className="overlay"
+                            onClick={() => setSelectedImage(null)}
+                        >
+                            <img 
+                            src={selectedImage} 
+                            className="overlay-img"
+                            onClick={(e) => e.stopPropagation()}
+                            />
+                        </div>
+                    )}
+
                 </div>
                 
-                <div className="detail col lg-6">
-                    <p className="name">{id}</p>
+                <div className="detail col lg-4">
+                    <p className="name">#{id}</p>
                     <p className="price">{formatter(200000)}</p>
                     <div className="option__1 option">
-                        <button>Trả góp</button>
-                        <button>Trả tất</button>
+                        <button className="btn-l">Trả góp</button>
+                        <button className="btn-l">Trả tất</button>
                     </div>
 
                     <div className="option__2 option">
-                        <button>3 tháng</button>
-                        <button>6 tháng</button>
-                        <button>9 tháng</button>
+                        <button className="btn-l">3 tháng</button>
+                        <button className="btn-l">6 tháng</button>
+                        <button className="btn-l">9 tháng</button>
                     </div>
 
                     <button className="buy btn-l">Mua Ngay</button>
 
-                    <div className="box__service row">
+                    <div className="box__service row no-gutters">
                         <div className="item col lg-6">
+                            <IoDiamond />
+                            <div>
                             <p>Đặt uy tín lên hàng đầu</p>
+                            </div>
                         </div>
 
                         <div className="item col lg-6">
+                            <RiCustomerService2Fill />
+                            <div>
                             <p>Hỗ trợ 24/7</p>
                             <p>Liên hệ: 0123456789</p>
+                            </div>
                         </div>
                         
                         <div className="item col lg-6">
+                            <FaMoneyBillTransfer />
+                            <div>
                             <p>Hoàn tiền nếu gặp vấn đề</p>
                             <p>Trải nghiệm dịch vụ tốt nhất</p>
+                            </div>
                         </div>
 
                         <div className="item col lg-6">
+                            <GrContactInfo />
+                            <div>
                             <p>Thay thông tin nhanh chóng</p>
                             <p>Thay mail, đổi số, đổi avt</p>
+                            </div>
                         </div>
                     </div>
 
