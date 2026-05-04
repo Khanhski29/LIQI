@@ -1,8 +1,34 @@
 @use "sass:map";
 @import "../../../style/pages/theme.scss";
 
-.product__detail {
+.product {
     margin-top: 60px !important;
-    padding: 64px 16px !important;
-    
+    padding: 32px 16px !important;
+    background-color: pink;
+   
+
+    .product__detail {
+        .img{
+
+        }
+
+        .detail {
+
+        }
+
+        .buy {
+
+        }
+
+        .box__service {
+
+            .item {
+
+            }
+        }
+
+        .about {
+            
+        }
+    }
 }
