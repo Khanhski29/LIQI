@@ -3,8 +3,8 @@ import "./style.scss"
 
 const Title = (props) =>{
     return (
-        <div className='title'>
-            <div className='name'>
+        <div className='title__page'>
+            <div className='name__page'>
                 {props.name}
             </div>
         </div>  

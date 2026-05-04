@@ -3,7 +3,7 @@ import "./style.scss";
 import img1 from "../../../components/IMG_20260420_142143-7h.webp";
 import Title from "../theme/title";
 import { formatter } from 'utils/formatter';
-import { generatePath, Link } from "react-router-dom";
+import { generatePath, Link, useSearchParams } from "react-router-dom";
 import { ROUTERS } from "utils/router";
 
 const ProductsPage = () => {
@@ -29,10 +29,11 @@ const ProductsPage = () => {
     }
 
     //chia trang
-    const [page, setPage] = useState(1);
+    const [searchParams, setSearchParams] = useSearchParams();
     const limit = 6;
-    const [minPrice, setMinPrice] = useState(0);
-    const [maxPrice, setMaxPrice] = useState(Infinity);
+    const minPrice = Number(searchParams.get("min")) || 0;
+    const maxPrice = Number(searchParams.get("max")) || Infinity;
+    const page = Number(searchParams.get("page")) || 1;
 
 
     const filteredProducts = useMemo(() => {
@@ -42,10 +43,6 @@ const ProductsPage = () => {
                 item.price <= maxPrice
         );
     }, [products, minPrice, maxPrice]);
-
-    useEffect(() => {
-        setPage(1);
-    }, [minPrice, maxPrice]);
     
     const totalPages = Math.ceil(
         filteredProducts.length / limit
@@ -114,32 +111,27 @@ const ProductsPage = () => {
             <div className="row">
                 <div ref={boxRef} className="product__left col lg-2 md-2 lmd-12 sm-12">
                     <button className="active" onClick={(e)=>{
-                        setMinPrice(0);
-                        setMaxPrice(Infinity);
+                        setSearchParams({min:0, max: Infinity, page: 1});
                         setActive(e.target);
                     }}>Tất Cả</button>
 
                     <button onClick={(e)=>{
-                        setMinPrice(0);
-                        setMaxPrice(1000000);
+                        setSearchParams({min:0, max: 1000000, page: 1});
                         setActive(e.target);
                     }}>{"<1000"}</button>
 
                     <button onClick={(e)=>{
-                        setMinPrice(1000000);
-                        setMaxPrice(2000000);
+                        setSearchParams({min:1000000, max: 2000000, page: 1});
                         setActive(e.target);
                     }}>1000-2000</button>
 
                     <button onClick={(e)=>{
-                        setMinPrice(2000000);
-                        setMaxPrice(3000000);
+                        setSearchParams({min:2000000, max: 3000000, page: 1});
                         setActive(e.target);
                     }}>2000-3000</button>
 
                     <button onClick={(e)=>{
-                        setMinPrice(3000000);
-                        setMaxPrice(10000000);
+                        setSearchParams({min:3000000, max: 10000000, page: 1});
                         setActive(e.target);
                     }}>3000-10000</button>
 
@@ -153,7 +145,13 @@ const ProductsPage = () => {
                                 {
                                     currentProducts.map((item) => (
                                         <div className="col lg-4 md-4 lmd-6 sm-12" key={item.id}>
-                                            <Link to={generatePath(ROUTERS.USER.PRODUCT, { id: 1})}> 
+                                            <Link to={generatePath(ROUTERS.USER.PRODUCT, { id: item.id})} 
+                                                    state={{
+                                                        min: minPrice,
+                                                        max: maxPrice,
+                                                        page: page
+                                                    }}
+                                            > 
                                             <div className="item">
                                                 <img src={item.img} alt={item.id} />
                                                 <div className="item__about">
@@ -180,7 +178,7 @@ const ProductsPage = () => {
                         </div>
 
                         <div className="pagination col lg-12 md-12 lmd-12 sm-12">
-                            <button disabled={page === 1} onClick={() => setPage(page - 1)}>{"<"}</button>
+                            <button disabled={page === 1} onClick={() => setSearchParams({min: minPrice, max: maxPrice, page: page - 1})}>{"<"}</button>
 
                             {
                                 getPagination().map((item, index) => 
@@ -189,11 +187,11 @@ const ProductsPage = () => {
                                     ) : (
                                         <button key={index} className={
                                             page === item ? "active" : ""
-                                        } onClick={()=> setPage(item)} >{item}</button>
+                                        } onClick={()=> setSearchParams({min: minPrice, max: maxPrice, page: item})} >{item}</button>
                                     )
                                 )
                             }
-                            <button disabled={page === totalPages} onClick={() => setPage(page + 1)}>{">"}</button>
+                            <button disabled={page === totalPages} onClick={() => setSearchParams({min: minPrice, max: maxPrice, page: page + 1})}>{">"}</button>
 
                         </div>
                     </div>
