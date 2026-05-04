@@ -4,8 +4,18 @@ import ProductsPage from "./pages/users/productsPage";
 import ProductPage from "./pages/users/productPage";
 import MaterLayout from "./pages/users/theme/materLayout";
 import { ROUTERS } from "./utils/router";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 
 const renderUserRouter = () => {
@@ -30,6 +40,7 @@ const renderUserRouter = () => {
 
     return (
         <MaterLayout>
+            <ScrollToTop />
             <Routes>
             {
                 userRouters.map((item, key) => (

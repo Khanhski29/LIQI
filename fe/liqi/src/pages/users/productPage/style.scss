@@ -4,31 +4,124 @@
 .product {
     margin-top: 60px !important;
     padding: 32px 16px !important;
-    background-color: pink;
+    // background-color: pink;
    
 
     .product__detail {
+        padding: 16px;
         .img{
+            
+            img{
+                width: 100%;
+                height: 450px;
+                object-fit: cover;
+                border: 6px solid #797979;
+            }
+
+
+
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 999;
+                }
+
+                .overlay-img {
+                max-width: 60%;
+                max-height: auto;
+                height: auto;
+                }
 
         }
 
         .detail {
+            padding-left: 16px !important;
+            .name {
+                font-size:32px;
+                margin-top: -12px;
+            }
 
+            .price {
+                font-size: 24px;
+                color: map.get($theme-color, "price-color");
+                margin-bottom: 20px;
+            }
+
+            .option {
+                margin: 10px 0;
+                button{
+                    padding: 8px 16px;
+                    font-size: 16px;
+                    margin-right: 10px;
+                }
+
+                &.option__2 {
+                    margin-bottom: 30px;
+                }
+                
+            }
         }
 
         .buy {
+            background-color: map.get($theme-color, "background");
+            color: map.get($theme-color, "color");
+            padding: 16px 32px;
+            margin-bottom: 20px;
 
+            &:hover {
+                background-color: map.get($theme-color, "price-color");
+            }
         }
 
         .box__service {
+            border: 1px solid map.get($theme-color, "ncolor");
+            justify-content: space-between;
+            height: 165px;
+            padding: 24px 0px 24px 4px;
 
             .item {
+                margin-bottom: 15px;
+                display: flex;
 
+                svg{
+                        font-size: 24px;
+                        position: relative;
+                        top: 2px;
+                }
+
+                p{
+                    font-size: 15px;
+                    padding: 0 5px;
+                    color: map.get($theme-color, "sub-color");
+                    
+                    &:first-child {
+                        font-size: 16px;
+                        color: map.get($theme-color, "ncolor");
+                    }
+                }
             }
         }
 
         .about {
+            padding: 32px 0;
             
+            p{
+                text-align: justify;
+                font-size: 16px;
+                color: map.get($theme-color, "ncolor");
+                &:first-child {
+                    font-size: 24px;
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+            }
         }
     }
 }
