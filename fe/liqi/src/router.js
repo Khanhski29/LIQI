@@ -6,6 +6,7 @@ import MaterLayout from "./pages/users/theme/materLayout";
 import { ROUTERS } from "./utils/router";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import ServicePage from "pages/users/servicePage";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -35,6 +36,10 @@ const renderUserRouter = () => {
         {
             path: ROUTERS.USER.PRODUCT,
             component: <ProductPage/>
+        },
+        {
+            path: ROUTERS.USER.SERVICE,
+            component: <ServicePage/>
         }
     ]
 
