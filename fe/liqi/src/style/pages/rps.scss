@@ -87,6 +87,61 @@
     }
 
 
+
+    .product {
+        padding: 16px 8px !important;
+        .product__detail {
+
+            .img {
+                img{
+                    width: 100%;
+                    height: auto;
+                }
+            }
+
+
+            .detail {
+                padding: 32px 10px !important;
+
+                .box__service {
+                    height: auto;
+                    padding: 4px;
+
+                }
+            }
+        }
+    }
+
+
+
+    .service {
+        padding: 16px 8px !important;
+
+        .service__container {
+
+            margin-top: 20px;
+
+            .service__item {
+                margin-bottom: 45px;
+
+                p {
+
+                    &:first-child {
+                        font-size: 32px;
+                    }
+                }
+            }
+            
+            .service__about {
+                margin-top: 20px;
+
+            }
+        }
+    }
+
+
+
+
     .footer__bot {
         padding: 16px 8px !important;
 
@@ -140,6 +195,33 @@
             }
         }
     }
+
+
+
+    .service {
+        .service__container {
+
+            margin-top: 20px;
+
+            .service__item {
+                margin-bottom: 45px;
+
+                p {
+
+                    &:first-child {
+                        font-size: 32px;
+                    }
+                }
+            }
+            
+            .service__about {
+                margin-top: 20px;
+
+            }
+        }
+    }
+
+
 }
 
 
@@ -179,6 +261,24 @@
             }
         }
     }
+
+
+    .product {
+        padding: 32px 48px !important;
+        .product__detail {
+
+            .detail {
+                padding: 32px 0 !important;
+
+                .box__service {
+                    height: auto;
+                }
+            }
+        }
+    }
+
+
+
 
 
     .footer__bot {

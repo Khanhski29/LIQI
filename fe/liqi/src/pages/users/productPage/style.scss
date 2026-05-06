@@ -7,7 +7,7 @@
    
 
     .product__detail {
-        padding: 16px;
+        // padding: 16px;
         .img{
             
             img{
@@ -33,7 +33,7 @@
                 }
 
                 .overlay-img {
-                max-width: 60%;
+                max-width: 70%;
                 max-height: auto;
                 height: auto;
                 }
@@ -84,9 +84,10 @@
             justify-content: space-between;
             height: 165px;
             padding: 24px 0px 24px 4px;
-
+            margin-left: 0 !important;
+            margin-right: 0 !important;
             .item {
-                margin-bottom: 15px;
+                // margin-bottom: 15px;
                 display: flex;
 
                 svg{
