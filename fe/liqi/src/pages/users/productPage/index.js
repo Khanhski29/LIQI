@@ -30,7 +30,7 @@ const ProductPage = () => {
             <Breadcrumb name="Chi tiết sản phẩm" id={id} min={min} max={max} page={page} />
 
             <div className="product__detail row no-gutters">
-                <div className="img col lg-8">
+                <div className="img col lg-8 md-8 lmd-12 sm-12"> 
                     <img src={img1} 
                         onClick={() => setSelectedImage(img1)} 
                         style={{ cursor: "pointer" }}
@@ -51,7 +51,7 @@ const ProductPage = () => {
 
                 </div>
                 
-                <div className="detail col lg-4">
+                <div className="detail col lg-4 md-4 lmd-12 sm-12">
                     <p className="name">#{id}</p>
                     <p className="price">{formatter(200000)}</p>
                     <div className="option__1 option">
@@ -68,34 +68,34 @@ const ProductPage = () => {
                     <button className="buy btn-l">Mua Ngay</button>
 
                     <div className="box__service row no-gutters">
-                        <div className="item col lg-6">
+                        <div className="item col lg-6 md-6 lmd-2 sm-6">
                             <IoDiamond />
                             <div>
                             <p>Đặt uy tín lên hàng đầu</p>
                             </div>
                         </div>
 
-                        <div className="item col lg-6">
+                        <div className="item col lg-6 md-6 lmd-2 sm-6">
                             <RiCustomerService2Fill />
                             <div>
                             <p>Hỗ trợ 24/7</p>
-                            <p>Liên hệ: 0123456789</p>
+                            {/* <p>Liên hệ: 0123456789</p> */}
                             </div>
                         </div>
                         
-                        <div className="item col lg-6">
+                        <div className="item col lg-6 md-6 lmd-2 sm-6">
                             <FaMoneyBillTransfer />
                             <div>
                             <p>Hoàn tiền nếu gặp vấn đề</p>
-                            <p>Trải nghiệm dịch vụ tốt nhất</p>
+                            {/* <p>Trải nghiệm dịch vụ tốt nhất</p> */}
                             </div>
                         </div>
 
-                        <div className="item col lg-6">
+                        <div className="item col lg-6 md-6 lmd-2 sm-6">
                             <GrContactInfo />
                             <div>
                             <p>Thay thông tin nhanh chóng</p>
-                            <p>Thay mail, đổi số, đổi avt</p>
+                            {/* <p>Thay mail, đổi số, đổi avt</p> */}
                             </div>
                         </div>
                     </div>

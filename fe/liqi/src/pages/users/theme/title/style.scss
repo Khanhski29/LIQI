@@ -17,3 +17,15 @@
     }
 }
 
+
+@media (max-width: 719px) {
+
+    .title__page {
+        margin: 10px 0px;
+
+        .name__page {
+            font-size: 36px;
+            text-align: center;
+        }
+    }
+}
