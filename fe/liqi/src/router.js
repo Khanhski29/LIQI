@@ -7,6 +7,7 @@ import { ROUTERS } from "./utils/router";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import ServicePage from "pages/users/servicePage";
+import CheckoutPage from "pages/users/checkoutPage";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -40,6 +41,10 @@ const renderUserRouter = () => {
         {
             path: ROUTERS.USER.SERVICE,
             component: <ServicePage/>
+        },
+        {
+            path: ROUTERS.USER.CHECKOUT,
+            component: <CheckoutPage/>
         }
     ]
 

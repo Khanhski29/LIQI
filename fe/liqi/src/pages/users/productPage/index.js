@@ -3,17 +3,18 @@ import "./style.scss";
 import img1 from "../../../components/IMG_20260420_142143-7h.webp";
 import Title from "../theme/title";
 import { formatter } from 'utils/formatter';
-import { useLocation, useParams} from "react-router-dom";
+import { useLocation, useNavigate, useParams} from "react-router-dom";
 import Breadcrumb from "../theme/breadcrumb";
 import { IoDiamond } from "react-icons/io5";
 import { RiCustomerService2Fill } from "react-icons/ri";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { GrContactInfo } from "react-icons/gr";
+import { ROUTERS } from "utils/router";
 
 
 const ProductPage = () => {
 
-
+    const navigate = useNavigate();
     const [selectedImage, setSelectedImage] = useState(null);
     
 
@@ -65,7 +66,7 @@ const ProductPage = () => {
                         <button className="btn-l">9 tháng</button>
                     </div>
 
-                    <button className="buy btn-l">Mua Ngay</button>
+                    <button className="buy btn-l" onClick={() => navigate(ROUTERS.USER.CHECKOUT)}>Mua Ngay</button>
 
                     <div className="box__service row no-gutters">
                         <div className="item col lg-6 md-6 lmd-2 sm-6">
