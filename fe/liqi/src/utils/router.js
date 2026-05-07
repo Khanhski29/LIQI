@@ -4,6 +4,7 @@ export const ROUTERS = {
         PRODUCTS: "/cua-hang",
         PRODUCT: "/cua-hang/chi-tiet-acc/:id",
         SERVICE: "dich-vu",
-        PROFILE: "profile-user"
+        PROFILE: "profile-user",
+        CHECKOUT: "/thanh-toan"
     }
 }

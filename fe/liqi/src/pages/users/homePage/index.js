@@ -11,10 +11,16 @@ import card4 from 'components/pictures/slide/tel.jpg';
 import card5 from 'components/pictures/slide/tv.jpg';
 import card6 from 'components/pictures/slide/tulen.jpg';
 import card7 from 'components/pictures/slide/nk.jpg';
+import { useNavigate } from "react-router-dom";
+import { ROUTERS } from "utils/router";
 
 
 
 const HomePage = () => {
+
+    const navigate = useNavigate();
+
+
     return (
         
         <div className="container wide homepage">
@@ -53,7 +59,7 @@ const HomePage = () => {
                             <p>-Mức giá hợp lý để sở hữu skin hot nhất</p>
                             <p>-Đổi thông tin an toàn cho khách</p>
                             <p>-dịch vụ trả góp, trả trước 50% là log acc chơi</p>
-                            <button className="btn-l">Mua Ngay</button>
+                            <button className="btn-l" onClick={() => navigate(ROUTERS.USER.PRODUCTS)}>Mua Ngay</button>
                         </div>
                         <div className="col lg-4 md-6 lmd-6 sm-4 picture">
                             <img src={img2} />
