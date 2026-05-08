@@ -3,11 +3,14 @@ import ProfilePage from "./pages/users/profilePage";
 import ProductsPage from "./pages/users/productsPage";
 import ProductPage from "./pages/users/productPage";
 import MaterLayout from "./pages/users/theme/materLayout";
-import { ROUTERS } from "./utils/router";
+import { ROUTERS, ADMIN_PATH } from "./utils/router";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import ServicePage from "pages/users/servicePage";
 import CheckoutPage from "pages/users/checkoutPage";
+import LoginAdminPage from "pages/admin/loginPage";
+import AdminMaterLayout from 'pages/admin/theme/adminMaterLayout';
+
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -48,6 +51,7 @@ const renderUserRouter = () => {
         }
     ]
 
+
     return (
         <MaterLayout>
             <ScrollToTop />
@@ -62,9 +66,37 @@ const renderUserRouter = () => {
     )
 
 }
+
+const renderAdminRouter = () => {
+    
+    const adminRouters = [
+        {
+            path: ROUTERS.ADMIN.LOGIN,
+            component: <LoginAdminPage/>
+        }
+    ]
+
+    return (
+        <AdminMaterLayout>
+            <ScrollToTop />
+            <Routes>
+            {
+                adminRouters.map((item, key) => (
+                    <Route key={key} path={item.path} element={item.component} />
+                ))
+            } 
+            </Routes>
+        </AdminMaterLayout>
+    )
+
+}
  
  const RouterCustom = () => {
-    return renderUserRouter();
+    const location = useLocation();
+    const isAdminRouters = location.pathname.startsWith(ADMIN_PATH);
+
+
+    return isAdminRouters? renderAdminRouter() : renderUserRouter();
  }
 
 
