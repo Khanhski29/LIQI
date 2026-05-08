@@ -12,11 +12,11 @@ const CheckoutPage = () => {
             <Title name="Thanh Toán"/>
             <div className="row ">
                 {/* thông tin acc */}
-                <div className="info col lg-6">
-                    <p className="info__title">Thông tin acc</p>
+                <div className="info col lg-6 md-6 lmd-12 sm-12">
+                    <p className="checkout__sub__title">Thông tin acc</p>
                     
                     <div className="row infomation">
-                        <div className="img col lg-4"> 
+                        <div className="img col lg-4 md-6 lmd-6 sm-6"> 
                             <img src={img1} 
                                 onClick={() => setSelectedImage(img1)} 
                                 style={{ cursor: "pointer" }}
@@ -35,16 +35,17 @@ const CheckoutPage = () => {
                                 </div>
                             )}
                         </div>
-                        <p className="col lg-2">ID</p>
-                        <p className="col lg-2">{formatter(200000)}</p>
+                        <p className="col lg-2 md-2 lmd-2 sm-2">ID</p>
+                        <p className=" price col lg-2 md-2 lmd-2 sm-2">{formatter(200000)}</p>
                     </div>
                 </div>
 
                 {/* hình thức thanh toán  */}
-                <div className="form col lg-6">
-                    <p className="form__title">Hình thức</p>
+                <div className="checkout__option col lg-6 md-6 lmd-12 sm-12">
+                    <div className="checkout__option__container">
+                    <p className="checkout__sub__title">Hình thức</p>
                     
-                    <div className="formality">
+                    <div className="option">
                         <div className="option__1 option">
                             <button className="btn-l">Trả góp</button>
                             <button className="btn-l">Trả tất</button>
@@ -57,30 +58,31 @@ const CheckoutPage = () => {
                         </div>
                         <p className="">Mọi thông tin trả góp sẽ được gửi qua email của bạn.</p>
                     </div>
+                    </div>
 
                 </div>
 
 
                 {/* thông tin thanh toán */}
-                <div className="info__user col lg-12">
-                    <p className="info__user__title">Thông tin thanh toán</p>
+                <div className="info__user col lg-12 md-12 lmd-12 sm-12">
+                    <p className="checkout__sub__title">Thông tin thanh toán</p>
                     
                     <div className="form__user row">
-                        <div className="col lg-4">
+                        <div className="col lg-4 md-4 lmd-4 sm-12">
                             <input type="text" name="name" placeholder="Nhập họ tên"/>
                         </div>
 
-                        <div className="col lg-4">
+                        <div className="col lg-4 md-4 lmd-4 sm-12">
                             <input type="tel" name="phone" placeholder="Số điện thoại"/>
                         </div>
 
-                        <div className="col lg-4">
+                        <div className="col lg-4 md-4 lmd-4 sm-12">
                             <input type="email" name="email" placeholder="Nhập email"/>
                         </div>
                     </div>
                 </div>
                 
-                <div className="button__payment col lg-12">
+                <div className="button__payment col lg-12 md-12 lmd-12 sm-12">
                     <button className="btn-l ">Đặt Hàng</button>
                 </div>
 
