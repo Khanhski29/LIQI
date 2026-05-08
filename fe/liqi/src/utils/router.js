@@ -1,3 +1,5 @@
+export const ADMIN_PATH = "/quan-tri";
+
 export const ROUTERS = {
     USER : {
         HOME: "",
@@ -6,5 +8,10 @@ export const ROUTERS = {
         SERVICE: "dich-vu",
         PROFILE: "profile-user",
         CHECKOUT: "/thanh-toan"
+    },
+    ADMIN : {
+        LOGIN: `${ADMIN_PATH}/dang-nhap`
     }
+
+
 }
