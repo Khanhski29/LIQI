@@ -5,12 +5,14 @@
     margin-top: 60px !important;
     padding: 32px 0px !important;
 
+    .checkout__sub__title {
+        font-size: 32px;
+        text-transform: uppercase;
+        font-weight: 300;
+    }
 
     .info {
-        
-        .info__title {
 
-        }
 
         .infomation {
 
@@ -43,6 +45,65 @@
                     height: auto;
                 }
             }
+
+            p {
+                font-size: 24px;
+                &.price {
+                    color: map.get($theme-color, "price-color");
+                }
+            }
         }
     }
+
+
+    .checkout__option {
+
+        .checkout__option__container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .option {
+                margin: 10px 0;
+    
+                button{
+                    padding: 8px 16px;
+                    font-size: 16px;
+                    margin-right: 10px; 
+                }
+            }
+        }
+    }
+
+    .info__user {
+        margin-top: 50px;
+        .form__user {
+
+            input{
+                width: 100%;
+                padding: 16px 32px;
+                border-radius: 0;
+                border: 1px solid #000;
+                font-size: 16px;
+            }
+        }
+    }
+    
+    .button__payment {
+        margin-top: 50px;
+
+        button{
+            padding: 16px 64px;
+            font-size: 24px;
+            margin-right: 10px; 
+            color: map.get($theme-color, "color");
+            background-color: map.get($theme-color, "price-color");
+            font-weight: 300;
+            &:hover{
+
+                color: map.get($theme-color, "ncolor");
+                background-color: map.get($theme-color, "dcolor");
+            }
+        }
+    }
+
 }
