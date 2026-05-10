@@ -1,7 +1,7 @@
 import { memo } from "react";
-import Footer from "pages/users/theme/footer";
 import { useLocation } from "react-router-dom";
 import { ROUTERS } from "utils/router";
+import AdminSidebar from "../adminSidebar";
  
 const AdminMaterLayout = ({children, ...props}) => {
 
@@ -11,9 +11,9 @@ const AdminMaterLayout = ({children, ...props}) => {
 
     return (
     <div {...props}>
+        { !isLoginPage && <AdminSidebar/> }
         {children}
 
-        { !isLoginPage && <Footer/> }
     </div>
     ) 
     

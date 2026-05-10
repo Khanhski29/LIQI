@@ -1,0 +1,50 @@
+@use "sass:map";
+@import "../../../../style/pages/theme.scss";
+
+
+.sidebar {
+    background-color: map.get($theme-color, "background");
+    width: 200px;
+    padding: 32px 0px; 
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    .admin__sidebar {
+
+        .admin__sidebar-item {
+            cursor: pointer;
+            padding: 16px 32px;
+            span{
+                color: map.get($theme-color, "dcolor");
+                text-transform: uppercase;
+                font-weight: 300;
+            }
+
+            &:hover {
+                background-color: map.get($theme-color, "dcolor");
+                span {
+                    color: map.get($theme-color, "ncolor");
+                }
+            }
+        }
+
+        .admin__sidebar-item--active {
+            background-color: map.get($theme-color, "dcolor");
+
+            span{
+                color: map.get($theme-color, "price-color");
+
+            }
+
+            &:hover {
+                background-color: map.get($theme-color, "dcolor");
+
+                span{
+                    color: map.get($theme-color, "price-color");
+
+                }
+            }
+        }
+    }
+}

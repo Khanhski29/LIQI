@@ -10,7 +10,10 @@ export const ROUTERS = {
         CHECKOUT: "/thanh-toan"
     },
     ADMIN : {
-        LOGIN: `${ADMIN_PATH}/dang-nhap`
+        LOGIN: `${ADMIN_PATH}/dang-nhap`,
+        ORDERMANAGER: `${ADMIN_PATH}/don-hang`,
+        PRODUCT_MANAGER: `${ADMIN_PATH}/san-pham`,
+        LOGOUT: `${ADMIN_PATH}/dang-xuat`
     }
 
 
