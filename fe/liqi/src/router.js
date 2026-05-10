@@ -10,7 +10,8 @@ import ServicePage from "pages/users/servicePage";
 import CheckoutPage from "pages/users/checkoutPage";
 import LoginAdminPage from "pages/admin/loginPage";
 import AdminMaterLayout from 'pages/admin/theme/adminMaterLayout';
-
+import OrderManagePage from "pages/admin/orderManagePage";
+import ProductManagePage from "pages/admin/productManagePage";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -73,7 +74,16 @@ const renderAdminRouter = () => {
         {
             path: ROUTERS.ADMIN.LOGIN,
             component: <LoginAdminPage/>
+        },
+        {
+            path: ROUTERS.ADMIN.ORDERMANAGER,
+            component: <OrderManagePage/>
+        },
+        {
+            path: ROUTERS.ADMIN.PRODUCT_MANAGER,
+            component: <ProductManagePage/>
         }
+        
     ]
 
     return (
