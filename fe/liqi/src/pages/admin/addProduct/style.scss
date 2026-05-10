@@ -1,0 +1,66 @@
+@use "sass:map";
+@import "style/pages/theme.scss";
+
+.add__product {
+    margin-top: 50px;
+    &-form {
+        position: relative;
+    }
+
+    &-group {
+        margin: 10px 0px;
+        display: flex;
+        label {
+            font-size: 18px;
+            width: 200px;
+            display: block;
+        }
+
+        input:focus-visible,
+        textarea:focus-visible{
+            border-radius: 0;
+            border: 1px solid #e02424 !important;
+            outline: none;
+        }
+        .input--string {
+            width: 500px;
+            padding: 8px 16px;
+            font-size: 16px;
+            border-radius: 0;
+            border: 1px solid #000;
+        }
+        textarea{
+            padding: 8px 16px;
+            width: 500px;
+            height: 200px;
+            border-radius: 0;
+            border: 1px solid #000;
+        }
+        
+    }
+
+    &-preview {
+        position: absolute;
+        left: 50%;
+        img{
+            height: 400px;
+            width: auto;
+            object-fit: cover;
+        }
+    }
+
+    &-submit {
+        margin-top: 50px;
+        width: 200px;
+        padding: 8px 16px;
+        font-size: 18px;
+        text-transform: uppercase;
+        background-color: map.get($theme-color, "price-color");
+        color: map.get($theme-color, "dcolor");
+        border: none;
+        cursor: pointer;
+
+        
+    }
+   
+}

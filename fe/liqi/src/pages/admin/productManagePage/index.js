@@ -2,7 +2,7 @@ import { memo } from "react";
 import "./style.scss";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import ProductList from "../productList";
-
+import AddProduct from "../addProduct";
 
 
 
@@ -35,7 +35,7 @@ const ProductManagePage = () => {
                 </TabPanel>
 
                 <TabPanel className="product__tab-panel">
-                    <ProductList/>
+                    <AddProduct/>
                 </TabPanel>
 
             </Tabs>
