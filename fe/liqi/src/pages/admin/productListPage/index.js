@@ -1,6 +1,7 @@
 import { memo } from "react";
 import "./style.scss";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
+import ProductList from "../productList";
 
 
 
@@ -20,7 +21,7 @@ const ProductListPage = () => {
 
 
                 <TabPanel className="product__tab-panel">
-                    123
+                    <ProductList/>
                 </TabPanel>
 
                 <TabPanel className="product__tab-panel">
