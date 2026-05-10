@@ -11,8 +11,8 @@ export const ROUTERS = {
     },
     ADMIN : {
         LOGIN: `${ADMIN_PATH}/dang-nhap`,
-        ORDERMANAGER: `${ADMIN_PATH}/don-hang`,
-        PRODUCT_MANAGER: `${ADMIN_PATH}/san-pham`,
+        ORDERMANAGER: `${ADMIN_PATH}/quan-ly-don-hang`,
+        PRODUCT_MANAGER: `${ADMIN_PATH}/quan-ly-san-pham`,
         LOGOUT: `${ADMIN_PATH}/dang-xuat`
     }
 

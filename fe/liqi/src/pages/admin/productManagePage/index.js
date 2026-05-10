@@ -1,7 +1,7 @@
 import { memo } from "react";
 import "./style.scss";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
-import Title from "pages/users/theme/title";
+import ProductList from "../productList";
 
 
 
@@ -15,17 +15,27 @@ const ProductManagePage = () => {
 
                 <TabList className="product__tab-list">
                     <Tab className="product__tab-list-item">Tất cả sản phẩm</Tab>
+                    <Tab className="product__tab-list-item">Sản phẩm tồn kho</Tab>
+                    <Tab className="product__tab-list-item">Sản phẩm đã bán</Tab>
 
                     <Tab className="product__tab-list-item">Thêm sản phẩm</Tab>
                 </TabList>
 
 
                 <TabPanel className="product__tab-panel">
-                    123
+                    <ProductList/>
                 </TabPanel>
 
                 <TabPanel className="product__tab-panel">
-                    46
+                    <ProductList/>
+                </TabPanel>
+                
+                <TabPanel className="product__tab-panel">
+                    <ProductList/>
+                </TabPanel>
+
+                <TabPanel className="product__tab-panel">
+                    <ProductList/>
                 </TabPanel>
 
             </Tabs>
