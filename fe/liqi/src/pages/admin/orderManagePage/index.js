@@ -1,17 +1,33 @@
 import { memo } from "react";
 import "./style.scss";
-import { useLocation, useNavigate } from "react-router-dom";
-import { ROUTERS } from "utils/router";
-
+import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
+import OrderList from "../orderList";
 
 
 const OrderManagePage = () => {
     return (
-
         <div className="order__manage">
-            <h1>quan lys don hang day</h1>
+            <h1 className="title_manage">Quản Lý Đơn Hàng</h1>
+            <Tabs className="order__tab">
+
+                <TabList className="order__tab-list">
+                    <Tab className="order__tab-list-item">Tất cả đơn hàng</Tab>
+                    <Tab className="order__tab-list-item">Đơn hàng trả góp</Tab>
+                </TabList>
+
+
+                <TabPanel className="order__tab-panel">
+                    <OrderList />
+                </TabPanel>
+
+                <TabPanel className="order__tab-panel">
+                    <h1>Đang phát triển</h1>
+                </TabPanel>
+
+
+            </Tabs>
         </div>
-    )    
+    )
 };
 
 export default memo(OrderManagePage);
