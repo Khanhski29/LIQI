@@ -9,8 +9,8 @@
         font-size: 24px;
         gap: 50px;
         &-img {
-            width: 300px;
-            height: 150px;
+            width: 200px;
+            height: 130px;
             object-fit: cover;
             cursor: pointer;
         }
@@ -42,11 +42,31 @@
         }
 
         &-sold {
+            width: 100px;
             color: #198519;
             &--true {
                 color: #000;
             }
         }
+
+
+
+        .edit-btn {
+            font-size: 18px;
+            padding: 8px 64px;
+            height: fit-content;
+            border: none;
+            background-color: map.get($theme-color, "price-color");
+            color: map.get($theme-color, "dcolor");
+            cursor: pointer;
+
+            &:hover {
+                background-color: map.get($theme-color, "dcolor");
+                color: map.get($theme-color, "ncolor");
+            }
+        }
+
+
     }
 
 
