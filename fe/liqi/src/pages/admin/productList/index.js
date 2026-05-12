@@ -13,6 +13,8 @@ const ProductList = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
 
+
+    const type = searchParams.get("type");
     const data = [
         {
             img: img1,
@@ -221,14 +223,18 @@ const ProductList = () => {
                             ${item.sold ? "product__card-item-sold--true" : ""}
                             `}>{item.sold ? "đã bán" : "chưa bán"}</p>
 
-                        <button
-                            className="edit-btn"
-                            onClick={() =>
-                                navigate(`${ROUTERS.ADMIN.PRODUCT_MANAGER_EDIT}/${item.id}`)
-                            }
-                        >
-                            Sửa
-                        </button>
+                        {
+                            type == "stock" && (
+                                <button
+                                    className="edit-btn"
+                                    onClick={() =>
+                                        navigate(`${ROUTERS.ADMIN.PRODUCT_MANAGER_EDIT}/${item.id}`)
+                                    }
+                                >
+                                    Sửa
+                                </button>
+                            )
+                        }
                     </div>
                 ))
             }

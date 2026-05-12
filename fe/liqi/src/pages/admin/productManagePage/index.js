@@ -100,7 +100,7 @@ const ProductManagePage = () => {
                         className="product__tab-list-item"
                         selectedClassName="react-tabs__tab--selected"
                     >
-                        Thêm sản phẩm
+                        Thêm/Sửa sản phẩm
                     </Tab>
 
                 </TabList>
