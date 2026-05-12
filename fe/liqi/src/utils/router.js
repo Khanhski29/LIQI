@@ -13,6 +13,8 @@ export const ROUTERS = {
         LOGIN: `${ADMIN_PATH}/dang-nhap`,
         ORDERMANAGER: `${ADMIN_PATH}/quan-ly-don-hang`,
         PRODUCT_MANAGER: `${ADMIN_PATH}/quan-ly-san-pham`,
+        PRODUCT_MANAGER_ADD: `${ADMIN_PATH}/quan-ly-san-pham/them-san-pham`,
+        PRODUCT_MANAGER_EDIT: `${ADMIN_PATH}/quan-ly-san-pham/sua-san-pham`,
         LOGOUT: `${ADMIN_PATH}/dang-xuat`
     }
 
