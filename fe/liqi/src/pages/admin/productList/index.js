@@ -2,16 +2,17 @@ import { memo, useState } from "react";
 import "./style.scss";
 import img1 from 'components/IMG_20260420_142143-7h.webp';
 import { formatter } from "utils/formatter";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { ROUTERS } from "utils/router";
 
 const ProductList = () => {
     const [selectedImage, setSelectedImage] = useState(null);
-
+    const navigate = useNavigate();
 
     const itemsPerPage = 15;
 
     const [searchParams, setSearchParams] = useSearchParams();
-    
+
     const data = [
         {
             img: img1,
@@ -135,7 +136,7 @@ const ProductList = () => {
         }
     ]
 
-    const page = Number(searchParams.get("page")) || 1; 
+    const page = Number(searchParams.get("page")) || 1;
     const startIndex =
         (page - 1) * itemsPerPage;
 
@@ -147,9 +148,9 @@ const ProductList = () => {
 
     const totalPages =
         Math.ceil(data.length / itemsPerPage);
-        
 
-    
+
+
 
     const getPagination = () => {
         const pages = [];
@@ -201,16 +202,16 @@ const ProductList = () => {
             {
                 currentProducts.map((item) => (
                     <div className="product__card-item">
-                        <img src={item.img} onClick={() => setSelectedImage(item.img)} className="product__card-item-img"/>
+                        <img src={item.img} onClick={() => setSelectedImage(item.img)} className="product__card-item-img" />
                         {selectedImage && (
-                            <div 
+                            <div
                                 className="overlay__card"
                                 onClick={() => setSelectedImage(null)}
                             >
-                                <img 
-                                src={selectedImage} 
-                                className="overlay__card-img"
-                                onClick={(e) => e.stopPropagation()}
+                                <img
+                                    src={selectedImage}
+                                    className="overlay__card-img"
+                                    onClick={(e) => e.stopPropagation()}
                                 />
                             </div>
                         )}
@@ -219,24 +220,33 @@ const ProductList = () => {
                         <p className={`product__card-item-sold
                             ${item.sold ? "product__card-item-sold--true" : ""}
                             `}>{item.sold ? "đã bán" : "chưa bán"}</p>
+
+                        <button
+                            className="edit-btn"
+                            onClick={() =>
+                                navigate(`${ROUTERS.ADMIN.PRODUCT_MANAGER_EDIT}/${item.id}`)
+                            }
+                        >
+                            Sửa
+                        </button>
                     </div>
                 ))
             }
 
             <div className="pagination">
-                <button disabled={page === 1} onClick={() => setSearchParams({page: page - 1})}>{"<"}</button>
-                    {getPagination().map((item, index) => 
-                        item === "..." ? (
-                            <span key={index}>...</span>
-                            ) : (
-                            <button key={index} className={
+                <button disabled={page === 1} onClick={() => setSearchParams({ page: page - 1 })}>{"<"}</button>
+                {getPagination().map((item, index) =>
+                    item === "..." ? (
+                        <span key={index}>...</span>
+                    ) : (
+                        <button key={index} className={
                             page === item ? "active" : ""
-                            } onClick={()=> setSearchParams({page: item})} >{item}</button>
-                    ))}            
-                <button disabled={page === totalPages} onClick={() => setSearchParams({page: page + 1})}>{">"}</button>
+                        } onClick={() => setSearchParams({ page: item })} >{item}</button>
+                    ))}
+                <button disabled={page === totalPages} onClick={() => setSearchParams({ page: page + 1 })}>{">"}</button>
             </div>
         </div>
-    )    
+    )
 };
 
 export default memo(ProductList);
