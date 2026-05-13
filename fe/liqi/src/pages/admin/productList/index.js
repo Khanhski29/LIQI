@@ -1,9 +1,9 @@
 import { memo, useState } from "react";
 import "./style.scss";
-import img1 from 'components/IMG_20260420_142143-7h.webp';
 import { formatter } from "utils/formatter";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTERS } from "utils/router";
+import { useGetProductsUS } from "api/homepage";
 
 const ProductList = () => {
     const [selectedImage, setSelectedImage] = useState(null);
@@ -15,128 +15,7 @@ const ProductList = () => {
 
 
     const type = searchParams.get("type");
-    const data = [
-        {
-            img: img1,
-            id: "VIP001",
-            price: 200000,
-            sold: false,
-        },
-        {
-            img: img1,
-            id: "VIP004",
-            price: 300000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP009",
-            price: 800000,
-            sold: true,
-        },
-        {
-            img: img1,
-            id: "VIP000000",
-            price: 700000,
-            sold: true,
-        }
-    ]
+    const { data  } = useGetProductsUS({type});
 
     const page = Number(searchParams.get("page")) || 1;
     const startIndex =
@@ -146,10 +25,10 @@ const ProductList = () => {
         startIndex + itemsPerPage;
 
     const currentProducts =
-        data.slice(startIndex, endIndex);
+        data?.slice(startIndex, endIndex);
 
     const totalPages =
-        Math.ceil(data.length / itemsPerPage);
+        Math.ceil(data?.length / itemsPerPage);
 
 
 
@@ -202,7 +81,7 @@ const ProductList = () => {
 
         <div className="product__list">
             {
-                currentProducts.map((item) => (
+                currentProducts?.map((item) => (
                     <div className="product__card-item">
                         <img src={item.img} onClick={() => setSelectedImage(item.img)} className="product__card-item-img" />
                         {selectedImage && (
@@ -217,11 +96,11 @@ const ProductList = () => {
                                 />
                             </div>
                         )}
-                        <p className="product__card-item-id">{item.id}</p>
+                        <p className="product__card-item-id">{item.product_code}</p>
                         <p className="product__card-item-price">{formatter(item.price)}</p>
                         <p className={`product__card-item-sold
-                            ${item.sold ? "product__card-item-sold--true" : ""}
-                            `}>{item.sold ? "đã bán" : "chưa bán"}</p>
+                            ${item.status === "sold"  ? "product__card-item-sold--true" : ""}
+                            `}>{item.status === "sold" ? "đã bán" : "chưa bán"}</p>
 
                         {
                             type == "stock" && (
@@ -240,16 +119,16 @@ const ProductList = () => {
             }
 
             <div className="pagination">
-                <button disabled={page === 1} onClick={() => setSearchParams({ page: page - 1 })}>{"<"}</button>
+                <button disabled={page === 1} onClick={() => setSearchParams({ type, page: page - 1 })}>{"<"}</button>
                 {getPagination().map((item, index) =>
                     item === "..." ? (
                         <span key={index}>...</span>
                     ) : (
                         <button key={index} className={
                             page === item ? "active" : ""
-                        } onClick={() => setSearchParams({ page: item })} >{item}</button>
+                        } onClick={() => setSearchParams({ type, page: item })} >{item}</button>
                     ))}
-                <button disabled={page === totalPages} onClick={() => setSearchParams({ page: page + 1 })}>{">"}</button>
+                <button disabled={page === totalPages} onClick={() => setSearchParams({ type, page: page + 1 })}>{">"}</button>
             </div>
         </div>
     )

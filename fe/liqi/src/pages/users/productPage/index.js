@@ -22,7 +22,6 @@ const ProductPage = () => {
 
     const { id } = useParams();
     const { data: product, isLoading, error } = useGetProductUS(id);
-    console.log(product);
 
 
     const location = useLocation();

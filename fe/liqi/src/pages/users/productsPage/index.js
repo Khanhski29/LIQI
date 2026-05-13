@@ -9,7 +9,6 @@ import { useGetProductsUS } from "api/homepage";
 const ProductsPage = () => {
 
     const { data: products } = useGetProductsUS();
-    console.log("products", products);
     
 
     const boxRef = useRef();
