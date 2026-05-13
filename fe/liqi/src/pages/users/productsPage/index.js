@@ -5,6 +5,7 @@ import Title from "../theme/title";
 import { formatter } from 'utils/formatter';
 import { generatePath, Link, useSearchParams } from "react-router-dom";
 import { ROUTERS } from "utils/router";
+import { useGetProductsUS } from "api/homepage";
 
 const ProductsPage = () => {
 
@@ -43,7 +44,7 @@ const ProductsPage = () => {
                 item.price <= maxPrice
         );
     }, [products, minPrice, maxPrice]);
-    
+
     const totalPages = Math.ceil(
         filteredProducts.length / limit
     );
@@ -56,86 +57,88 @@ const ProductsPage = () => {
     }, [filteredProducts, page]);
 
     const getPagination = () => {
-    const pages = [];
+        const pages = [];
 
-    if (totalPages <= 7) {
-        for (let i = 1; i <= totalPages; i++) {
-            pages.push(i);
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) {
+                pages.push(i);
+            }
+
+            return pages;
         }
 
-        return pages;
-    }
+        if (page <= 4) {
+            pages.push(1, 2, 3, 4, 5, "...", totalPages);
+            return pages;
+        }
 
-    if (page <= 4) {
-        pages.push(1, 2, 3, 4, 5, "...", totalPages);
-        return pages;
-    }
+        if (page >= totalPages - 3) {
+            pages.push(
+                1,
+                "...",
+                totalPages - 4,
+                totalPages - 3,
+                totalPages - 2,
+                totalPages - 1,
+                totalPages
+            );
 
-    if (page >= totalPages - 3) {
+            return pages;
+        }
         pages.push(
             1,
             "...",
-            totalPages - 4,
-            totalPages - 3,
-            totalPages - 2,
-            totalPages - 1,
+            page - 2,
+            page - 1,
+            page,
+            page + 1,
+            page + 2,
+            "...",
             totalPages
         );
 
         return pages;
-    }
-    pages.push(
-        1,
-        "...",
-        page - 2,
-        page - 1,
-        page,
-        page + 1,
-        page + 2,
-        "...",
-        totalPages
-    );
+    };
 
-    return pages;
-};
-
+    const { data: productss } = useGetProductsUS();
+    console.log("products", productss);
 
 
     return (
         <div className="products container wide">
 
-            <Title name="Của Hàng"/>
+            <Title name="Của Hàng" />
 
 
 
             <div className="row">
                 <div ref={boxRef} className="product__left col lg-2 md-2 lmd-12 sm-12">
-                    <button className="active" onClick={(e)=>{
-                        setSearchParams({min:0, max: Infinity, page: 1});
+                    <button className="active" onClick={(e) => {
+                        setSearchParams({ min: 0, max: Infinity, page: 1 });
                         setActive(e.target);
                     }}>Tất Cả</button>
 
-                    <button onClick={(e)=>{
-                        setSearchParams({min:0, max: 1000000, page: 1});
+                    <button onClick={(e) => {
+                        setSearchParams({ min: 0, max: 1000000, page: 1 });
                         setActive(e.target);
                     }}>{"<1000"}</button>
 
-                    <button onClick={(e)=>{
-                        setSearchParams({min:1000000, max: 2000000, page: 1});
+                    <button onClick={(e) => {
+                        setSearchParams({ min: 1000000, max: 2000000, page: 1 });
                         setActive(e.target);
                     }}>1000-2000</button>
 
-                    <button onClick={(e)=>{
-                        setSearchParams({min:2000000, max: 3000000, page: 1});
+                    <button onClick={(e) => {
+                        setSearchParams({ min: 2000000, max: 3000000, page: 1 });
                         setActive(e.target);
                     }}>2000-3000</button>
 
-                    <button onClick={(e)=>{
-                        setSearchParams({min:3000000, max: 10000000, page: 1});
+                    <button onClick={(e) => {
+                        setSearchParams({ min: 3000000, max: 10000000, page: 1 });
                         setActive(e.target);
                     }}>3000-10000</button>
 
-                    
+
                 </div>
 
                 <div className="product__right col lg-10 md-10 lmd-12 sm-12">
@@ -145,31 +148,31 @@ const ProductsPage = () => {
                                 {
                                     currentProducts.map((item) => (
                                         <div className="col lg-4 md-4 lmd-6 sm-12" key={item.id}>
-                                            <Link to={generatePath(ROUTERS.USER.PRODUCT, { id: item.id})} 
-                                                    state={{
-                                                        min: minPrice,
-                                                        max: maxPrice,
-                                                        page: page
-                                                    }}
-                                            > 
-                                            <div className="item">
-                                                <img src={item.img} alt={item.id} />
-                                                <div className="item__about">
-                                                    <div>
-                                                        <p className="id">
-                                                            {item.id}
-                                                        </p>
+                                            <Link to={generatePath(ROUTERS.USER.PRODUCT, { id: item.id })}
+                                                state={{
+                                                    min: minPrice,
+                                                    max: maxPrice,
+                                                    page: page
+                                                }}
+                                            >
+                                                <div className="item">
+                                                    <img src={item.img} alt={item.id} />
+                                                    <div className="item__about">
+                                                        <div>
+                                                            <p className="id">
+                                                                {item.id}
+                                                            </p>
 
-                                                        <p className="price">
-                                                            {formatter(item.price)}
+                                                            <p className="price">
+                                                                {formatter(item.price)}
+                                                            </p>
+                                                        </div>
+
+                                                        <p className="description">
+                                                            {item.description}
                                                         </p>
                                                     </div>
-
-                                                    <p className="description">
-                                                        {item.description}
-                                                    </p>
                                                 </div>
-                                            </div>
                                             </Link>
                                         </div>
                                     ))
@@ -178,24 +181,24 @@ const ProductsPage = () => {
                         </div>
 
                         <div className="pagination col lg-12 md-12 lmd-12 sm-12">
-                            <button disabled={page === 1} onClick={() => setSearchParams({min: minPrice, max: maxPrice, page: page - 1})}>{"<"}</button>
+                            <button disabled={page === 1} onClick={() => setSearchParams({ min: minPrice, max: maxPrice, page: page - 1 })}>{"<"}</button>
 
                             {
-                                getPagination().map((item, index) => 
+                                getPagination().map((item, index) =>
                                     item === "..." ? (
                                         <span key={index}>...</span>
                                     ) : (
                                         <button key={index} className={
                                             page === item ? "active" : ""
-                                        } onClick={()=> setSearchParams({min: minPrice, max: maxPrice, page: item})} >{item}</button>
+                                        } onClick={() => setSearchParams({ min: minPrice, max: maxPrice, page: item })} >{item}</button>
                                     )
                                 )
                             }
-                            <button disabled={page === totalPages} onClick={() => setSearchParams({min: minPrice, max: maxPrice, page: page + 1})}>{">"}</button>
+                            <button disabled={page === totalPages} onClick={() => setSearchParams({ min: minPrice, max: maxPrice, page: page + 1 })}>{">"}</button>
 
                         </div>
                     </div>
-                </div>  
+                </div>
             </div>
         </div>
     )
