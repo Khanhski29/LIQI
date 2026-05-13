@@ -1,6 +1,5 @@
-import { memo, useMemo, useState, useEffect, useRef } from "react";
+import { memo, useMemo, useRef } from "react";
 import "./style.scss";
-import img1 from "../../../components/IMG_20260420_142143-7h.webp";
 import Title from "../theme/title";
 import { formatter } from 'utils/formatter';
 import { generatePath, Link, useSearchParams } from "react-router-dom";
@@ -9,16 +8,9 @@ import { useGetProductsUS } from "api/homepage";
 
 const ProductsPage = () => {
 
-    const products = useMemo(
-        () =>
-            Array.from({ length: 300 }, (_, index) => ({
-                img: img1,
-                id: `VIP${String(index + 1).padStart(4, "0")}`,
-                price: 300000 + index * 10000,
-                description: "Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần...Tu len tân thần, Nak vệ thần..."
-            })),
-        []
-    );
+    const { data: products } = useGetProductsUS();
+    console.log("products", products);
+    
 
     const boxRef = useRef();
     const setActive = (btn) => {
@@ -33,30 +25,32 @@ const ProductsPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const limit = 6;
     const minPrice = Number(searchParams.get("min")) || 0;
-    const maxPrice = Number(searchParams.get("max")) || Infinity;
+    const maxPrice = Number(searchParams.get("max")) || 9999999;
     const page = Number(searchParams.get("page")) || 1;
 
 
     const filteredProducts = useMemo(() => {
-        return products.filter(
+        return products?.filter(
             (item) =>
-                item.price >= minPrice &&
-                item.price <= maxPrice
+                item.status === "available" &&
+                Number(item.price) >= minPrice &&
+                Number(item.price) <= maxPrice
         );
     }, [products, minPrice, maxPrice]);
 
     const totalPages = Math.ceil(
-        filteredProducts.length / limit
+        filteredProducts?.length / limit
     );
 
     const currentProducts = useMemo(() => {
         const start = (page - 1) * limit;
         const end = start + limit;
 
-        return filteredProducts.slice(start, end);
+        return filteredProducts?.slice(start, end);
     }, [filteredProducts, page]);
 
     const getPagination = () => {
+        if (totalPages === 0) return [];
         const pages = [];
 
         if (totalPages <= 7) {
@@ -100,8 +94,6 @@ const ProductsPage = () => {
         return pages;
     };
 
-    const { data: productss } = useGetProductsUS();
-    console.log("products", productss);
 
 
     return (
@@ -114,7 +106,7 @@ const ProductsPage = () => {
             <div className="row">
                 <div ref={boxRef} className="product__left col lg-2 md-2 lmd-12 sm-12">
                     <button className="active" onClick={(e) => {
-                        setSearchParams({ min: 0, max: Infinity, page: 1 });
+                        setSearchParams({ min: 0, max: 9999999999, page: 1 });
                         setActive(e.target);
                     }}>Tất Cả</button>
 
@@ -146,7 +138,7 @@ const ProductsPage = () => {
                         <div className="items col lg-12 md-12 lmd-12 sm-12">
                             <div className="row">
                                 {
-                                    currentProducts.map((item) => (
+                                    currentProducts?.map((item) => (
                                         <div className="col lg-4 md-4 lmd-6 sm-12" key={item.id}>
                                             <Link to={generatePath(ROUTERS.USER.PRODUCT, { id: item.id })}
                                                 state={{
@@ -160,7 +152,7 @@ const ProductsPage = () => {
                                                     <div className="item__about">
                                                         <div>
                                                             <p className="id">
-                                                                {item.id}
+                                                                {item.product_code}
                                                             </p>
 
                                                             <p className="price">

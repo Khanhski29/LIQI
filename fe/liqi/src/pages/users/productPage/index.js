@@ -1,6 +1,5 @@
 import { memo, useMemo, useState, useEffect, useRef } from "react";
 import "./style.scss";
-import img1 from "../../../components/IMG_20260420_142143-7h.webp";
 import Title from "../theme/title";
 import { formatter } from 'utils/formatter';
 import { useLocation, useNavigate, useParams} from "react-router-dom";
@@ -10,6 +9,7 @@ import { RiCustomerService2Fill } from "react-icons/ri";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { GrContactInfo } from "react-icons/gr";
 import { ROUTERS } from "utils/router";
+import { useGetProductUS } from "api/homepage";
 
 
 const ProductPage = () => {
@@ -21,6 +21,10 @@ const ProductPage = () => {
 
 
     const { id } = useParams();
+    const { data: product, isLoading, error } = useGetProductUS(id);
+    console.log(product);
+
+
     const location = useLocation();
 
     const { min, max, page } = location.state || {};
@@ -32,8 +36,8 @@ const ProductPage = () => {
 
             <div className="product__detail row no-gutters">
                 <div className="img col lg-8 md-8 lmd-12 sm-12"> 
-                    <img src={img1} 
-                        onClick={() => setSelectedImage(img1)} 
+                    <img src={product?.img} 
+                        onClick={() => setSelectedImage(product?.img)} 
                         style={{ cursor: "pointer" }}
                     />
 
@@ -53,8 +57,8 @@ const ProductPage = () => {
                 </div>
                 
                 <div className="detail col lg-4 md-4 lmd-12 sm-12">
-                    <p className="name">#{id}</p>
-                    <p className="price">{formatter(200000)}</p>
+                    <p className="name">#{product?.product_code}</p>
+                    <p className="price">{formatter(product?.price)}</p>
                     <div className="option__1 option">
                         <button className="btn-l">Trả góp</button>
                         <button className="btn-l">Trả tất</button>
@@ -105,7 +109,7 @@ const ProductPage = () => {
 
                 <div className="about col lg-12">
                     <p>Chi tiết thông tin</p>
-                    <p>Chi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tihi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tihi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tihi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tihi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tihi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tihi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tihi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tihi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tihi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tihi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tinChi tiết thông tin</p>
+                    <p>{product?.description}</p>
                 </div>
             </div>
 
