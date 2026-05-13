@@ -10,3 +10,10 @@ export const getProductsAPI = async() => {
         method: "GET"
     });
 }
+
+export const getProductAPI = async (id) => {
+    return await axios({
+        url: `${END_POINT.PRODUCTS}/${id}`,
+        method: "GET"
+    });
+};
