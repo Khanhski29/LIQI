@@ -4,16 +4,26 @@ const END_POINT = {
     PRODUCTS: 'products',
 };
 
-export const getProductsAPI = async() => {
+export const getProductsAPI = async(params) => {
     return await axios({
         url: END_POINT.PRODUCTS,
-        method: "GET"
+        method: "GET",
+        params
     });
 }
 
-export const getProductAPI = async (id) => {
+export const getProductAPI = async (id, params) => {
     return await axios({
         url: `${END_POINT.PRODUCTS}/${id}`,
-        method: "GET"
+        method: "GET",
+        params
+    });
+};
+
+export const createProductAPI = async (data) => {
+    return await axios({
+        url: END_POINT.PRODUCTS,
+        method: "POST",
+        data,
     });
 };

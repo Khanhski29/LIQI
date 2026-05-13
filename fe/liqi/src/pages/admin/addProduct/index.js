@@ -1,81 +1,29 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import "./style.scss";
-import { useParams } from "react-router-dom";
+import { useCreateProductUS } from "api/homepage";
 
-import img1 from 'components/IMG_20260420_142143-7h.webp';
+const initialProduct = {
+    product_code: "",
+    price: "",
+    description: "",
+    img: "",
+    username_account: "",
+    password_account: "",
+    status: "available",
+};
 
 const AddProduct = () => {
 
-    const { id } = useParams();
-
-    const isEdit = !!id;
-
-    // giả lập data
-    const productData = [
-        {
-            id: "VIP001",
-            price: 200000,
-            description: "Acc VIP 001",
-            sold: false,
-            img: img1
-        },
-        {
-            id: "VIP004",
-            price: 300000,
-            description: "Acc VIP 004",
-            sold: true,
-            img: img1
-        }
-    ];
-
-    const initialProduct = {
-        id: "",
-        price: "",
-        description: "",
-        sold: false,
-        img: ""
-    };
-
     const [product, setProduct] = useState(initialProduct);
 
-    // load dữ liệu khi edit
-    useEffect(() => {
-
-        if (isEdit) {
-
-            const foundProduct = productData.find(
-                (item) => item.id === id
-            );
-
-            if (foundProduct) {
-                setProduct(foundProduct);
-            }
+    const { mutate: createProduct } = useCreateProductUS({
+        onSuccess: () => {
+            alert("Thêm sản phẩm thành công");
+            setProduct(initialProduct);
         }
-
-    }, [id]);
-
-    const handleReset = () => {
-
-        // edit thì reset về data cũ
-        if (isEdit) {
-
-            const foundProduct = productData.find(
-                (item) => item.id === id
-            );
-
-            if (foundProduct) {
-                setProduct(foundProduct);
-            }
-
-            return;
-        }
-
-        // add thì reset trắng
-        setProduct(initialProduct);
-    };
+    });
 
     const handleChange = (e) => {
-
         const { name, value } = e.target;
 
         setProduct({
@@ -85,11 +33,9 @@ const AddProduct = () => {
     };
 
     const handleImage = (e) => {
-
         const file = e.target.files[0];
 
         if (file) {
-
             setProduct({
                 ...product,
                 img: URL.createObjectURL(file)
@@ -98,94 +44,102 @@ const AddProduct = () => {
     };
 
     const handleSubmit = (e) => {
-
         e.preventDefault();
 
-        if (isEdit) {
+        createProduct({
+            ...product,
+            price: Number(product.price)
+        });
+    };
 
-            console.log("Cập nhật sản phẩm:", product);
-
-            // call api update ở đây
-
-        } else {
-
-            console.log("Thêm sản phẩm:", product);
-
-            // call api thêm ở đây
-        }
+    const handleReset = () => {
+        setProduct(initialProduct);
     };
 
     return (
-
         <div className="add__product">
 
-            <form
-                className="add__product-form"
-                onSubmit={handleSubmit}
-            >
+            <form className="add__product-form" onSubmit={handleSubmit}>
 
                 <div className="add__product-group">
                     <label>Ảnh sản phẩm</label>
-
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImage}
-                    />
+                    <input type="file" accept="image/*" onChange={handleImage} />
                 </div>
 
-                {
-                    product.img && (
-                        <div className="add__product-preview">
-                            <img
-                                src={product.img}
-                                alt="preview"
-                            />
-                        </div>
-                    )
-                }
+                {product.img && (
+                    <div className="add__product-preview">
+                        <img src={product.img} alt="preview" />
+                    </div>
+                )}
 
                 <div className="add__product-group">
-
                     <label>ID sản phẩm</label>
-
                     <input
                         className="input--string"
                         type="text"
-                        name="id"
-                        placeholder="VD: VIP0001"
-                        value={product.id}
+                        name="product_code"
+                        value={product.product_code}
                         onChange={handleChange}
+                        placeholder="VD: VIP0001"
                     />
-
                 </div>
 
                 <div className="add__product-group">
-
                     <label>Giá sản phẩm</label>
-
                     <input
                         className="input--string"
                         type="number"
                         name="price"
-                        placeholder="VD: 999000"
                         value={product.price}
                         onChange={handleChange}
+                        placeholder="VD: 999000"
                     />
-
                 </div>
 
                 <div className="add__product-group">
-
-                    <label>Mô tả sản phẩm</label>
-
+                    <label>Mô tả</label>
                     <textarea
                         name="description"
-                        placeholder="Nhập mô tả..."
                         value={product.description}
                         onChange={handleChange}
                     />
+                </div>
 
+                <div className="add__product-group">
+                    <label>Username acc</label>
+                    <input
+                        className="input--string"
+                        type="text"
+                        name="username_account"
+                        value={product.username_account}
+                        onChange={handleChange}
+                        placeholder="username game"
+                    />
+                </div>
+
+                <div className="add__product-group">
+                    <label>Password acc</label>
+                    <input
+                        className="input--string"
+                        type="text"
+                        name="password_account"
+                        value={product.password_account}
+                        onChange={handleChange}
+                        placeholder="password game"
+                    />
+                </div>
+
+                <div className="add__product-group">
+                    <label>Trạng thái</label>
+                    <select
+                        name="status"
+                        value={product.status}
+                        onChange={handleChange}
+                    >
+                        <option value="available">Available</option>
+                        <option value="reserved">Reserved</option>
+                        <option value="sold">Sold</option>
+                    </select>
                 </div>
 
                 <button
@@ -193,11 +147,7 @@ const AddProduct = () => {
                     style={{ marginLeft: "200px" }}
                     className="add__product-submit"
                 >
-                    {
-                        isEdit
-                            ? "Cập nhật sản phẩm"
-                            : "Thêm sản phẩm"
-                    }
+                    Thêm sản phẩm
                 </button>
 
                 <button
