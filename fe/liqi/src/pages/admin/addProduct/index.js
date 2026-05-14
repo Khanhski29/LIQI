@@ -15,6 +15,8 @@ const initialProduct = {
 const AddProduct = () => {
 
     const [product, setProduct] = useState(initialProduct);
+    const [preview, setPreview] = useState("");
+    const [isUploading, setIsUploading] = useState(false);
 
     const { mutate: createProduct } = useCreateProductUS({
         onSuccess: () => {
@@ -32,19 +34,51 @@ const AddProduct = () => {
         });
     };
 
-    const handleImage = (e) => {
+    const handleImage = async(e) => {
         const file = e.target.files[0];
+        if (!file) return;
 
-        if (file) {
-            setProduct({
-                ...product,
-                img: URL.createObjectURL(file)
-            });
+        // 1. Tạo preview cục bộ để người dùng thấy ngay
+        setPreview(URL.createObjectURL(file));
+        setIsUploading(true);
+
+        // 2. Chuẩn bị FormData theo thông tin từ file "Ảnh màn hình 2026-05-14 lúc 12.54.50.jpg"
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "liqi_upload"); // Lấy từ ảnh bạn gửi
+        formData.append("folder", "liqi/accounts");     // Thư mục lưu trữ
+
+        try {
+            // Thay "YOUR_CLOUD_NAME" bằng Cloud Name của bạn (xem ở Dashboard Cloudinary)
+            const response = await fetch(
+                `https://api.cloudinary.com/v1_1/drgoaizrr/image/upload`, 
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+            
+            const data = await response.json();
+
+            if (data.secure_url) {
+                setProduct((prev) => ({
+                    ...prev,
+                    img: data.secure_url // Lưu link chính thức vào state product
+                }));
+            }
+        } catch (error) {
+            console.error("Upload error:", error);
+            alert("Lỗi khi tải ảnh lên Cloudinary");
+        } finally {
+            setIsUploading(false);
         }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        if (isUploading) return alert("Đang tải ảnh, vui lòng đợi giây lát!");
+        if (!product.img) return alert("Vui lòng chọn và đợi ảnh tải lên xong!");
 
         createProduct({
             ...product,
@@ -144,10 +178,11 @@ const AddProduct = () => {
 
                 <button
                     type="submit"
+                    disabled={isUploading}
                     style={{ marginLeft: "200px" }}
                     className="add__product-submit"
                 >
-                    Thêm sản phẩm
+                    {isUploading ? "Đang xử lý..." : "Thêm sản phẩm"}
                 </button>
 
                 <button
