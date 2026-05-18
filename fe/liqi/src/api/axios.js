@@ -3,19 +3,22 @@ import axios from "axios";
 const baseURL = process.env.REACT_APP_API_URI;
 const timeout = +process.env.REACT_APP_API_TIMEOUT || 20000;
 
-
 const axiosInstance = axios.create({
     baseURL,
-    timeout
+    timeout,
 });
 
 axiosInstance.interceptors.request.use(
     function (config) {
         config.headers["Content-Type"] = "application/json";
-        config.headers["Access-Control-Allow-Origin"] = "*";
-        return config;
-    } ,
 
+        const token = localStorage.getItem("auth_token");
+        if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
+        }
+
+        return config;
+    },
     function (error) {
         return Promise.reject(error);
     }
@@ -26,10 +29,8 @@ axiosInstance.interceptors.response.use(
         if (response.data) {
             return response.data;
         }
-
         return response;
-    } ,
-
+    },
     function (error) {
         return Promise.reject(error);
     }
