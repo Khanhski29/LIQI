@@ -1,6 +1,7 @@
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
 import "./style.scss";
-import { useCreateProductUS } from "api/homepage";
+import { useParams } from "react-router-dom";
+import { useCreateProductUS, useGetProductForEditUS, useUpdateProductUS } from "api/homepage";
 
 const initialProduct = {
     product_code: "",
@@ -13,10 +14,27 @@ const initialProduct = {
 };
 
 const AddProduct = () => {
+    const { id } = useParams();
+    const isEditMode = !!id;
 
     const [product, setProduct] = useState(initialProduct);
-    const [preview, setPreview] = useState("");
     const [isUploading, setIsUploading] = useState(false);
+
+    const { data: productForEdit } = useGetProductForEditUS(id);
+
+    useEffect(() => {
+        if (productForEdit) {
+            setProduct({
+                product_code: productForEdit.product_code || "",
+                price: productForEdit.price || "",
+                description: productForEdit.description || "",
+                img: productForEdit.img || "",
+                username_account: productForEdit.username_account || "",
+                password_account: productForEdit.password_account || "",
+                status: productForEdit.status || "available",
+            });
+        }
+    }, [productForEdit]);
 
     const { mutate: createProduct } = useCreateProductUS({
         onSuccess: () => {
@@ -25,46 +43,38 @@ const AddProduct = () => {
         }
     });
 
+    const { mutate: updateProduct } = useUpdateProductUS({
+        onSuccess: () => {
+            alert("Cập nhật sản phẩm thành công");
+        }
+    });
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        setProduct({
-            ...product,
-            [name]: value
-        });
+        setProduct({ ...product, [name]: value });
     };
 
-    const handleImage = async(e) => {
+    const handleImage = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        // 1. Tạo preview cục bộ để người dùng thấy ngay
-        setPreview(URL.createObjectURL(file));
         setIsUploading(true);
 
-        // 2. Chuẩn bị FormData theo thông tin từ file "Ảnh màn hình 2026-05-14 lúc 12.54.50.jpg"
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("upload_preset", "liqi_upload"); // Lấy từ ảnh bạn gửi
-        formData.append("folder", "liqi/accounts");     // Thư mục lưu trữ
+        formData.append("upload_preset", "liqi_upload");
+        formData.append("folder", "liqi/accounts");
 
         try {
-            // Thay "YOUR_CLOUD_NAME" bằng Cloud Name của bạn (xem ở Dashboard Cloudinary)
             const response = await fetch(
-                `https://api.cloudinary.com/v1_1/drgoaizrr/image/upload`, 
-                {
-                    method: "POST",
-                    body: formData,
-                }
+                `https://api.cloudinary.com/v1_1/drgoaizrr/image/upload`,
+                { method: "POST", body: formData }
             );
-            
+
             const data = await response.json();
 
             if (data.secure_url) {
-                setProduct((prev) => ({
-                    ...prev,
-                    img: data.secure_url // Lưu link chính thức vào state product
-                }));
+                setProduct((prev) => ({ ...prev, img: data.secure_url }));
             }
         } catch (error) {
             console.error("Upload error:", error);
@@ -76,18 +86,33 @@ const AddProduct = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         if (isUploading) return alert("Đang tải ảnh, vui lòng đợi giây lát!");
         if (!product.img) return alert("Vui lòng chọn và đợi ảnh tải lên xong!");
 
-        createProduct({
-            ...product,
-            price: Number(product.price)
-        });
+        const payload = { ...product, price: Number(product.price) };
+
+        if (isEditMode) {
+            updateProduct({ id, data: payload });
+        } else {
+            createProduct(payload);
+        }
     };
 
     const handleReset = () => {
-        setProduct(initialProduct);
+        if (isEditMode && productForEdit) {
+            setProduct({
+                product_code: productForEdit.product_code || "",
+                price: productForEdit.price || "",
+                description: productForEdit.description || "",
+                img: productForEdit.img || "",
+                username_account: productForEdit.username_account || "",
+                password_account: productForEdit.password_account || "",
+                status: productForEdit.status || "available",
+            });
+        } else {
+            setProduct(initialProduct);
+        }
     };
 
     return (
@@ -182,7 +207,7 @@ const AddProduct = () => {
                     style={{ marginLeft: "200px" }}
                     className="add__product-submit"
                 >
-                    {isUploading ? "Đang xử lý..." : "Thêm sản phẩm"}
+                    {isUploading ? "Đang xử lý..." : isEditMode ? "Cập nhật sản phẩm" : "Thêm sản phẩm"}
                 </button>
 
                 <button

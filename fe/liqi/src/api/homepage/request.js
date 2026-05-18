@@ -27,3 +27,18 @@ export const createProductAPI = async (data) => {
         data,
     });
 };
+
+export const getProductForEditAPI = async (id) => {
+    return await axios({
+        url: `${END_POINT.PRODUCTS}/${id}/edit`,
+        method: "GET",
+    });
+};
+
+export const updateProductAPI = async ({ id, data }) => {
+    return await axios({
+        url: `${END_POINT.PRODUCTS}/${id}`,
+        method: "PUT",
+        data,
+    });
+};
