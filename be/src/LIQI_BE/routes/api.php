@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +20,14 @@ Route::prefix('auth')->group(function () {
 // Public: người dùng xem shop
 Route::get('/products',      [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
+
+// Public: đặt hàng (guest checkout)
+Route::post('/orders', [OrderController::class, 'store']);
+
+// Payments
+Route::post('/payments/create',   [PaymentController::class, 'create']);
+Route::post('/payments/webhook',  [PaymentController::class, 'webhook']);
+Route::post('/payments/cancel',   [PaymentController::class, 'cancel']);
 
 // Protected: chỉ admin
 Route::middleware('auth:sanctum')->group(function () {

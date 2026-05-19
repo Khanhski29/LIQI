@@ -7,7 +7,9 @@ export const ROUTERS = {
         PRODUCT: "/cua-hang/chi-tiet-acc/:id",
         SERVICE: "dich-vu",
         PROFILE: "profile-user",
-        CHECKOUT: "/thanh-toan"
+        CHECKOUT: "/thanh-toan/:id",
+        ORDER_SUCCESS: "/dat-hang-thanh-cong/:orderId",
+        ORDER_FAIL: "/thanh-toan-that-bai/:orderId"
     },
     ADMIN : {
         LOGIN: `${ADMIN_PATH}/dang-nhap`,
