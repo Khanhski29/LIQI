@@ -1,0 +1,138 @@
+.payment-page {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+
+    &__box {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+        padding: 40px 32px;
+        max-width: 480px;
+        width: 100%;
+        text-align: center;
+    }
+
+    &__title {
+        font-size: 2rem;
+        margin-bottom: 24px;
+        font-weight: 600;
+    }
+
+    &__qr {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 28px;
+
+        svg {
+            border: 8px solid #fff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+            border-radius: 8px;
+        }
+    }
+
+    &__info {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+        text-align: left;
+
+        &__row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 1.4rem;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            span {
+                color: #666;
+            }
+
+            strong {
+                max-width: 60%;
+                text-align: right;
+                word-break: break-all;
+            }
+        }
+    }
+
+    &__amount {
+        color: #e74c3c;
+        font-size: 1.6rem !important;
+    }
+
+    &__desc {
+        color: #2563eb;
+        font-size: 1.5rem !important;
+    }
+
+    &__status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-size: 1.4rem;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    &__spinner {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border: 2px solid #ddd;
+        border-top-color: #2563eb;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    &__countdown {
+        font-size: 1.4rem;
+        color: #555;
+        margin-bottom: 16px;
+
+        strong {
+            font-size: 1.6rem;
+            color: #2563eb;
+        }
+
+        &--warn strong {
+            color: #e74c3c;
+            animation: blink 1s step-start infinite;
+        }
+    }
+
+    &__cancel {
+        background: transparent;
+        color: #999;
+        border: 1px solid #ddd;
+        font-size: 1.3rem;
+
+        &:hover {
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+    }
+
+    &__error {
+        text-align: center;
+        font-size: 1.5rem;
+        color: #e74c3c;
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes blink {
+    50% { opacity: 0.3; }
+}

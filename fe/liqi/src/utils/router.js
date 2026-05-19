@@ -8,6 +8,7 @@ export const ROUTERS = {
         SERVICE: "dich-vu",
         PROFILE: "profile-user",
         CHECKOUT: "/thanh-toan/:id",
+        PAYMENT: "/thanh-toan-qr/:orderId",
         ORDER_SUCCESS: "/dat-hang-thanh-cong/:orderId",
         ORDER_FAIL: "/thanh-toan-that-bai/:orderId"
     },

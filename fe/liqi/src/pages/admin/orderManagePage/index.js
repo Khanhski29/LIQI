@@ -12,18 +12,21 @@ const OrderManagePage = () => {
 
                 <TabList className="order__tab-list">
                     <Tab className="order__tab-list-item">Tất cả đơn hàng</Tab>
+                    <Tab className="order__tab-list-item">Chờ giao dịch</Tab>
                     <Tab className="order__tab-list-item">Đơn hàng trả góp</Tab>
                 </TabList>
-
 
                 <TabPanel className="order__tab-panel">
                     <OrderList />
                 </TabPanel>
 
                 <TabPanel className="order__tab-panel">
-                    <h1>Đang phát triển</h1>
+                    <OrderList status="pending" />
                 </TabPanel>
 
+                <TabPanel className="order__tab-panel">
+                    <h1>Đang phát triển</h1>
+                </TabPanel>
 
             </Tabs>
         </div>

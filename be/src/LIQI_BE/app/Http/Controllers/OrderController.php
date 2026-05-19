@@ -50,4 +50,67 @@ class OrderController extends Controller
             'order_id' => $order->id,
         ], 201);
     }
+
+    public function index(Request $request)
+    {
+        $status = $request->query('status');
+        $perPage = 15;
+
+        $query = Order::with('product')
+            ->orderBy('created_at', 'desc');
+
+        if ($status) {
+            $query->where('payment_status', $status);
+        }
+
+        $orders = $query->paginate($perPage);
+
+        $data = $orders->map(function ($order) {
+            return [
+                'id'             => $order->id,
+                'product_code'   => $order->product?->product_code,
+                'snapshot_img'   => $order->snapshot_img,
+                'snapshot_price' => $order->snapshot_price,
+                'payment_status' => $order->payment_status,
+                'user_name'      => $order->snapshot_user_name,
+                'user_phone'     => $order->snapshot_phone,
+                'user_email'     => $order->snapshot_email,
+                'created_at'     => $order->created_at?->format('Y-m-d H:i:s'),
+            ];
+        });
+
+        return response()->json([
+            'data'         => $data,
+            'current_page' => $orders->currentPage(),
+            'last_page'    => $orders->lastPage(),
+            'total'        => $orders->total(),
+        ]);
+    }
+
+    public function status(string $id)
+    {
+        $order = Order::with('payment', 'product')->findOrFail($id);
+
+        // Tự hủy nếu đơn pending quá 5 phút
+        if (
+            $order->payment_status === 'pending' &&
+            $order->created_at->diffInMinutes(now()) >= 5
+        ) {
+            DB::transaction(function () use ($order) {
+                $order->update(['payment_status' => 'cancel']);
+                $order->product?->update(['status' => 'available']);
+                if ($order->payment) {
+                    $order->payment->update(['status' => 'failed']);
+                }
+            });
+
+            return response()->json([
+                'payment_status' => 'cancel',
+            ]);
+        }
+
+        return response()->json([
+            'payment_status' => $order->payment_status,
+        ]);
+    }
 }

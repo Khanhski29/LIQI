@@ -22,7 +22,8 @@ Route::get('/products',      [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
 
 // Public: đặt hàng (guest checkout)
-Route::post('/orders', [OrderController::class, 'store']);
+Route::post('/orders',              [OrderController::class, 'store']);
+Route::get('/orders/{id}/status',   [OrderController::class, 'status']);
 
 // Payments
 Route::post('/payments/create',   [PaymentController::class, 'create']);
@@ -31,6 +32,8 @@ Route::post('/payments/cancel',   [PaymentController::class, 'cancel']);
 
 // Protected: chỉ admin
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/orders', [OrderController::class, 'index']);
+
     Route::get('/products/{id}/edit',  [ProductController::class, 'edit']);
     Route::post('/products',           [ProductController::class, 'store']);
     Route::put('/products/{id}',       [ProductController::class, 'update']);

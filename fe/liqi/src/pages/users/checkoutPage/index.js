@@ -19,7 +19,9 @@ const CheckoutPage = () => {
 
     const { mutate: createPayment, isPending: isCreatingPayment } = useCreatePaymentUS({
         onSuccess: (data) => {
-            window.location.href = data.payment_url;
+            navigate(`/thanh-toan-qr/${data.order_id}`, {
+                state: { paymentInfo: data },
+            });
         },
         onError: () => {
             setFormError("Tạo link thanh toán thất bại, vui lòng thử lại.");
