@@ -58,7 +58,15 @@ class PaymentController extends Controller
         ]);
 
         return response()->json([
-            'payment_url' => $response['checkoutUrl'],
+            'payment_url'    => $response['checkoutUrl'],
+            'qr_code'        => $response['qrCode'],
+            'order_code'     => $response['orderCode'],
+            'amount'         => $response['amount'],
+            'description'    => $response['description'],
+            'account_number' => $response['accountNumber'],
+            'account_name'   => $response['accountName'],
+            'bin'            => $response['bin'],
+            'order_id'       => $order->id,
         ]);
     }
 
@@ -94,6 +102,7 @@ class PaymentController extends Controller
             ]);
 
             $payment->order->update(['payment_status' => 'done']);
+            $payment->order->product->update(['status' => 'sold']);
         } else {
             $payment->update([
                 'status'       => 'failed',

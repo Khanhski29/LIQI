@@ -33,36 +33,46 @@
                 height: auto;
             }
 
+        &--g {
+            flex-shrink: 0;
+        }
+
         &-id {
-            // width: auto;
+            width: 70px;
         }
 
         &-price {
-            color:map.get($theme-color, "price-color");
+            color: map.get($theme-color, "price-color");
+            width: 100px;
         }
 
-        &-user{
+        &-user {
             color: #d29213;
+            width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &:nth-of-type(5) { width: 110px; } // phone
+            &:nth-of-type(6) { width: 180px; } // email
         }
 
-        &-type{
+        &-type {
             color: #1316d2;
-
+            width: 70px;
         }
 
-        &-time{
+        &-time {
             color: #a41fa4;
-
+            width: 155px;
         }
 
-        &-status{
-            color: #13d22c;
+        &-status {
+            width: 120px;
 
-        }
-
-        &--g {
-            max-width: 100px;
-            width: 100%;
+            &.status--pending { color: #f39c12; }
+            &.status--done    { color: #13d22c; }
+            &.status--cancel  { color: #e74c3c; }
         }
 
     }

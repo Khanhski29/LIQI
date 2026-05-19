@@ -10,6 +10,7 @@ import ServicePage from "pages/users/servicePage";
 import CheckoutPage from "pages/users/checkoutPage";
 import OrderSuccessPage from "pages/users/orderSuccessPage";
 import OrderFailPage from "pages/users/orderFailPage";
+import PaymentPage from "pages/users/paymentPage";
 import LoginAdminPage from "pages/admin/loginPage";
 import AdminMaterLayout from 'pages/admin/theme/adminMaterLayout';
 import OrderManagePage from "pages/admin/orderManagePage";
@@ -34,6 +35,7 @@ const renderUserRouter = () => {
         { path: ROUTERS.USER.PRODUCT,  component: <ProductPage /> },
         { path: ROUTERS.USER.SERVICE,  component: <ServicePage /> },
         { path: ROUTERS.USER.CHECKOUT,      component: <CheckoutPage /> },
+        { path: ROUTERS.USER.PAYMENT,       component: <PaymentPage /> },
         { path: ROUTERS.USER.ORDER_SUCCESS, component: <OrderSuccessPage /> },
         { path: ROUTERS.USER.ORDER_FAIL,    component: <OrderFailPage /> },
     ];

@@ -6,11 +6,11 @@
     .product__card-item {
         display: flex;
         margin: 15px 0px;
-        font-size: 24px;
+        font-size: 16px;
         gap: 50px;
         &-img {
-            width: 200px;
-            height: 130px;
+            width: 100px;
+            height: 70px;
             object-fit: cover;
             cursor: pointer;
         }
@@ -39,6 +39,8 @@
 
         &-price {
             color:map.get($theme-color, "price-color");
+            width: 100px;
+
         }
 
         &-sold {
@@ -52,8 +54,8 @@
 
 
         .edit-btn {
-            font-size: 18px;
-            padding: 8px 64px;
+            font-size: 14px;
+            padding: 8px 32px;
             height: fit-content;
             border: none;
             background-color: map.get($theme-color, "price-color");
