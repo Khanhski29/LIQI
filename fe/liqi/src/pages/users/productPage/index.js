@@ -69,7 +69,7 @@ const ProductPage = () => {
                         <button className="btn-l">9 tháng</button>
                     </div>
 
-                    <button className="buy btn-l" onClick={() => navigate(ROUTERS.USER.CHECKOUT)}>Mua Ngay</button>
+                    <button className="buy btn-l" onClick={() => navigate(`/thanh-toan/${id}`)}>Mua Ngay</button>
 
                     <div className="box__service row no-gutters">
                         <div className="item col lg-6 md-6 lmd-2 sm-6">
