@@ -72,6 +72,7 @@ class PaymentController extends Controller
             'account_name'   => $response['accountName'],
             'bin'            => $response['bin'],
             'order_id'       => $order->id,
+            'cancel_token'   => $order->cancel_token,
         ]);
     }
 

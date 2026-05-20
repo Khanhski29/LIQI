@@ -42,3 +42,10 @@ export const updateProductAPI = async ({ id, data }) => {
         data,
     });
 };
+
+export const deleteProductAPI = async (id) => {
+    return await axios({
+        url: `${END_POINT.PRODUCTS}/${id}`,
+        method: "DELETE",
+    });
+};

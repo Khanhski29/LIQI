@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createProductAPI, getProductAPI, getProductsAPI, getProductForEditAPI, updateProductAPI } from "./request";
+import { createProductAPI, deleteProductAPI, getProductAPI, getProductsAPI, getProductForEditAPI, updateProductAPI } from "./request";
 import { optionUseQuery } from "utils/common";
 
 export const useGetProductsUS = (params, option) => {
@@ -68,6 +68,22 @@ export const useUpdateProductUS = (option) => {
             });
             queryClient.invalidateQueries({
                 queryKey: ["getProductForEditAPI"],
+            });
+        },
+
+        ...option,
+    });
+};
+
+export const useDeleteProductUS = (option) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (id) => deleteProductAPI(id),
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["getProductsAPI"],
             });
         },
 
