@@ -20,6 +20,7 @@ class Order extends Model
         'snapshot_username_account',
         'snapshot_password_account',
         'payment_status',
+        'cancel_token',
     ];
 
     protected function casts(): array

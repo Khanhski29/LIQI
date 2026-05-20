@@ -5,9 +5,10 @@ import { useSearchParams } from "react-router-dom";
 import { useGetOrdersUS } from "api/orders";
 
 const STATUS_LABEL = {
-    pending: { text: "Chờ thanh toán", cls: "status--pending" },
-    done:    { text: "Đã thanh toán",  cls: "status--done" },
-    cancel:  { text: "Đã hủy",         cls: "status--cancel" },
+    pending:       { text: "Chờ thanh toán", cls: "status--pending" },
+    done:          { text: "Đã thanh toán",  cls: "status--done" },
+    cancel:        { text: "Đã hủy",         cls: "status--cancel" },
+    refund_needed: { text: "Cần hoàn tiền",  cls: "status--refund" },
 };
 
 const OrderList = ({ status }) => {

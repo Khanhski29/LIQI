@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
@@ -38,6 +39,7 @@ class OrderController extends Controller
                 'snapshot_username_account'  => $product->username_account,
                 'snapshot_password_account'  => $product->password_account,
                 'payment_status'             => 'pending',
+                'cancel_token'               => Str::random(64),
             ]);
 
             $product->update(['status' => 'reserved']);
@@ -46,8 +48,9 @@ class OrderController extends Controller
         });
 
         return response()->json([
-            'message'  => 'Đặt hàng thành công',
-            'order_id' => $order->id,
+            'message'      => 'Đặt hàng thành công',
+            'order_id'     => $order->id,
+            'cancel_token' => $order->cancel_token,
         ], 201);
     }
 
@@ -87,9 +90,13 @@ class OrderController extends Controller
         ]);
     }
 
-    public function status(string $id)
+    public function status(Request $request, string $id)
     {
         $order = Order::with('payment', 'product')->findOrFail($id);
+
+        if ($order->cancel_token !== $request->query('cancel_token')) {
+            return response()->json(['message' => 'Không có quyền thực hiện thao tác này.'], 403);
+        }
 
         // Tự hủy nếu đơn pending quá 5 phút
         if (

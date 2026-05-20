@@ -1,6 +1,6 @@
 import { memo } from "react";
 import "../orderSuccessPage/style.scss";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { ROUTERS } from "utils/router";
 import { useCancelPaymentUS } from "api/payments";
 import { useEffect } from "react";
@@ -8,14 +8,17 @@ import { useEffect } from "react";
 const OrderFailPage = () => {
     const { orderId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const cancelToken = location.state?.cancelToken;
 
     const { mutate: cancelPayment } = useCancelPaymentUS();
 
     useEffect(() => {
-        if (orderId) {
-            cancelPayment({ order_id: Number(orderId) });
+        if (orderId && cancelToken) {
+            cancelPayment({ order_id: Number(orderId), cancel_token: cancelToken });
         }
-    }, [orderId]);
+    }, [orderId, cancelToken]);
 
     return (
         <div className="order-result container wide">
