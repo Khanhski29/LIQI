@@ -3,19 +3,25 @@ import "./style.scss";
 import { formatter } from "utils/formatter";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTERS } from "utils/router";
-import { useGetProductsUS } from "api/homepage";
+import { useGetProductsUS, useDeleteProductUS } from "api/homepage";
 
 const ProductList = () => {
     const [selectedImage, setSelectedImage] = useState(null);
+    const [confirmDeleteId, setConfirmDeleteId] = useState(null);
     const navigate = useNavigate();
 
     const itemsPerPage = 15;
 
     const [searchParams, setSearchParams] = useSearchParams();
 
-
     const type = searchParams.get("type");
     const { data  } = useGetProductsUS({type});
+
+    const { mutate: deleteProduct, isPending: isDeleting } = useDeleteProductUS({
+        onError: (error) => {
+            alert(error?.response?.data?.message || "Xoá sản phẩm thất bại.");
+        },
+    });
 
     const page = Number(searchParams.get("page")) || 1;
     const startIndex =
@@ -102,21 +108,54 @@ const ProductList = () => {
                             ${item.status === "sold"  ? "product__card-item-sold--true" : ""}
                             `}>{item.status === "sold" ? "đã bán" : "chưa bán"}</p>
 
-                        {
-                            type == "stock" && (
-                                <button
-                                    className="edit-btn"
-                                    onClick={() =>
-                                        navigate(`${ROUTERS.ADMIN.PRODUCT_MANAGER_EDIT}/${item.id}`)
-                                    }
-                                >
-                                    Sửa
-                                </button>
-                            )
-                        }
+                        {type === "stock" && (
+                            <button
+                                className="edit-btn"
+                                onClick={() =>
+                                    navigate(`${ROUTERS.ADMIN.PRODUCT_MANAGER_EDIT}/${item.id}`)
+                                }
+                            >
+                                Sửa
+                            </button>
+                        )}
+
+                        {(type === "stock" || type === "sold") && (
+                            <button
+                                className="delete-btn"
+                                onClick={() => setConfirmDeleteId(item.id)}
+                            >
+                                Xoá
+                            </button>
+                        )}
                     </div>
                 ))
             }
+
+            {confirmDeleteId && (
+                <div className="confirm-overlay" onClick={() => setConfirmDeleteId(null)}>
+                    <div className="confirm-dialog" onClick={(e) => e.stopPropagation()}>
+                        <p>Bạn có chắc muốn xoá sản phẩm này không?</p>
+                        <div className="confirm-dialog__actions">
+                            <button
+                                className="btn-confirm-delete"
+                                disabled={isDeleting}
+                                onClick={() => {
+                                    deleteProduct(confirmDeleteId);
+                                    setConfirmDeleteId(null);
+                                }}
+                            >
+                                Xoá
+                            </button>
+                            <button
+                                className="btn-confirm-cancel"
+                                onClick={() => setConfirmDeleteId(null)}
+                            >
+                                Huỷ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="pagination">
                 <button disabled={page === 1} onClick={() => setSearchParams({ type, page: page - 1 })}>{"<"}</button>

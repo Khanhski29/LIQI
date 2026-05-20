@@ -119,6 +119,18 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $product = ProductModel::findOrFail($id);
+
+        if ($product->status === 'reserved') {
+            return response()->json([
+                'message' => 'Không thể xoá sản phẩm đang có đơn hàng chờ thanh toán.',
+            ], 409);
+        }
+
+        $product->delete();
+
+        return response()->json([
+            'message' => 'Xoá sản phẩm thành công.',
+        ]);
     }
 }
