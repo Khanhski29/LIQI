@@ -4,10 +4,19 @@ import "./style.scss"
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ROUTERS } from "../../../../utils/router";
 import React from "react";
+import { useLogoutUS } from "api/auth";
 
 const AdminSidebar = ({children, ...props}) =>{
     const location = useLocation();
     const navigate = useNavigate();
+
+    const { mutate: logout } = useLogoutUS({
+        onSettled: () => {
+            localStorage.removeItem("auth_token");
+            localStorage.removeItem("auth_user");
+            navigate(ROUTERS.ADMIN.LOGIN, { replace: true });
+        },
+    });
     
     const navItems = [
         {
@@ -23,7 +32,7 @@ const AdminSidebar = ({children, ...props}) =>{
         {
             path: ROUTERS.ADMIN.LOGOUT,
             label: "Đăng Xuất",
-            onClick: () => {},
+            onClick: () => logout(),
         }
     ]
 

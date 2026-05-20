@@ -30,7 +30,10 @@ const CheckoutPage = () => {
 
     const { mutate: createOrder, isPending: isCreatingOrder } = useCreateOrderUS({
         onSuccess: (data) => {
-            createPayment({ order_id: data.order_id });
+            createPayment({
+                order_id:     data.order_id,
+                cancel_token: data.cancel_token,
+            });
         },
         onError: (error) => {
             const msg =

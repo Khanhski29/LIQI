@@ -20,9 +20,10 @@ export const createOrderAPI = async (data) => {
     });
 };
 
-export const getOrderStatusAPI = async (id) => {
+export const getOrderStatusAPI = async (id, cancelToken) => {
     return await axios({
         url: `${END_POINT.ORDERS}/${id}/status`,
         method: "GET",
+        params: { cancel_token: cancelToken },
     });
 };

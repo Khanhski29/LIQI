@@ -23,10 +23,15 @@ class PaymentController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'order_id' => 'required|integer|exists:orders,id',
+            'order_id'     => 'required|integer|exists:orders,id',
+            'cancel_token' => 'required|string',
         ]);
 
         $order = Order::findOrFail($request->order_id);
+
+        if ($order->cancel_token !== $request->cancel_token) {
+            return response()->json(['message' => 'Không có quyền thực hiện thao tác này.'], 403);
+        }
 
         if ($order->payment_status !== 'pending') {
             return response()->json(['message' => 'Đơn hàng này đã được xử lý.'], 409);
@@ -94,6 +99,19 @@ class PaymentController extends Controller
             return response()->json(['message' => 'Payment not found'], 404);
         }
 
+        // Đơn đã được xử lý rồi
+        if ($payment->status !== 'pending') {
+            // PayOS báo success nhưng đơn đã cancel → khách chuyển tiền muộn
+            if ($status === '00') {
+                $payment->update([
+                    'status'       => 'success',
+                    'raw_response' => $data,
+                ]);
+                $payment->order->update(['payment_status' => 'refund_needed']);
+            }
+            return response()->json(['message' => 'ok']);
+        }
+
         if ($status === '00') {
             $payment->update([
                 'status'         => 'success',
@@ -119,10 +137,15 @@ class PaymentController extends Controller
     public function cancel(Request $request)
     {
         $request->validate([
-            'order_id' => 'required|integer|exists:orders,id',
+            'order_id'     => 'required|integer|exists:orders,id',
+            'cancel_token' => 'required|string',
         ]);
 
         $order = Order::with('payment', 'product')->findOrFail($request->order_id);
+
+        if ($order->cancel_token !== $request->cancel_token) {
+            return response()->json(['message' => 'Không có quyền thực hiện thao tác này.'], 403);
+        }
 
         if ($order->payment_status === 'pending') {
             $order->update(['payment_status' => 'cancel']);

@@ -73,6 +73,7 @@
             &.status--pending { color: #f39c12; }
             &.status--done    { color: #13d22c; }
             &.status--cancel  { color: #e74c3c; }
+            &.status--refund  { color: #8e44ad; font-weight: 600; }
         }
 
     }

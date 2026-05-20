@@ -17,11 +17,11 @@ export const useCreateOrderUS = (option) => {
     });
 };
 
-export const useOrderStatusUS = (id, option) => {
+export const useOrderStatusUS = (id, cancelToken, option) => {
     return useQuery({
         queryKey: ["orderStatus", id],
-        queryFn: () => getOrderStatusAPI(id),
-        enabled: !!id,
+        queryFn: () => getOrderStatusAPI(id, cancelToken),
+        enabled: !!id && !!cancelToken,
         refetchInterval: 3000,
         retry: 0,
         ...option,

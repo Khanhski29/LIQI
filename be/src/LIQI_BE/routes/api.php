@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
@@ -31,7 +30,7 @@ Route::post('/payments/webhook',  [PaymentController::class, 'webhook']);
 Route::post('/payments/cancel',   [PaymentController::class, 'cancel']);
 
 // Protected: chỉ admin
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/orders', [OrderController::class, 'index']);
 
     Route::get('/products/{id}/edit',  [ProductController::class, 'edit']);
@@ -39,5 +38,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/products/{id}',       [ProductController::class, 'update']);
     Route::delete('/products/{id}',    [ProductController::class, 'destroy']);
 
-    Route::apiResource('categories', CategoryController::class);
+    // Route::apiResource('categories', CategoryController::class); // Chưa sử dụng
 });
