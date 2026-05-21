@@ -1,28 +1,31 @@
 
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import "./style.scss"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ROUTERS } from "../../../../utils/router";
-import React, { useState } from "react";
+import { useLogoutUS } from "api/auth";
 
-const Header = () =>{
+const Header = () => {
+    const navigate = useNavigate();
 
-    const [menus, setMenus] = useState([
-        {
-            name: "Giới Thiệu",
-            path: ROUTERS.USER.HOME
+    const authUser = (() => {
+        try { return JSON.parse(localStorage.getItem("auth_user")); } catch { return null; }
+    })();
+    const isLoggedIn = !!localStorage.getItem("auth_token") && authUser?.role === "user";
+
+    const { mutate: logout } = useLogoutUS({
+        onSettled: () => {
+            localStorage.removeItem("auth_token");
+            localStorage.removeItem("auth_user");
+            navigate(ROUTERS.USER.HOME);
         },
-        {
-            name: "Cửa Hàng",
-            path: ROUTERS.USER.PRODUCTS
-        },
-        {
-            name: "Dịch Vụ",
-            path: ROUTERS.USER.SERVICE
-        }
-    ]);
+    });
 
-
+    const menus = [
+        { name: "Giới Thiệu", path: ROUTERS.USER.HOME },
+        { name: "Cửa Hàng",   path: ROUTERS.USER.PRODUCTS },
+        { name: "Dịch Vụ",    path: ROUTERS.USER.SERVICE },
+    ];
 
     return (
         <div className='container wide header__top'>
@@ -56,9 +59,9 @@ const Header = () =>{
                 <div className='col lg-5 md-5 lmd-8 sm-4'>
                     <nav className='header__menu'>
                         <ul className='row no-gutters'>
-                            {menus?.map((menu, menuKey) => (
+                            {menus.map((menu, menuKey) => (
                                 <li key={menuKey} className='col lg-4 md-4 lmd-3 sm-0'>
-                                    <Link to={menu?.path} > {menu?.name}</Link>
+                                    <Link to={menu.path}>{menu.name}</Link>
                                 </li>
                             ))}
                         </ul>
@@ -67,19 +70,36 @@ const Header = () =>{
 
                 {/* authentication */}
                 <div className='col lg-6 md-6 lmd-3 sm-4 header__authentication'>
-                    <ul className='row no-gutters'>
-                        <li className='col lg-o-6 lg-3 md-o-5 md-3 lmd-12 sm-12'>
-                            <Link to="#" >Đăng Nhập</Link>
-                        </li>
-                        <li className='col lg-3 md-3 lmd-0 sm-0'>
-                            <Link to="#" >Đăng Ký</Link>
-                        </li>
-                    </ul>
+                    {isLoggedIn ? (
+                        <ul className='row no-gutters'>
+                            <li className='col lg-o-3 lg-5 md-o-2 md-5 lmd-12 sm-12'>
+                                <Link to={ROUTERS.USER.PROFILE}>
+                                    Xin chào, {authUser.name}
+                                </Link>
+                            </li>
+                            <li className='col lg-3 md-3 lmd-0 sm-0'>
+                                <span
+                                    className='header__logout'
+                                    onClick={() => logout()}
+                                >
+                                    Đăng Xuất
+                                </span>
+                            </li>
+                        </ul>
+                    ) : (
+                        <ul className='row no-gutters'>
+                            <li className='col lg-o-6 lg-3 md-o-5 md-3 lmd-12 sm-12'>
+                                <Link to={ROUTERS.USER.LOGIN}>Đăng Nhập</Link>
+                            </li>
+                            <li className='col lg-3 md-3 lmd-0 sm-0'>
+                                <Link to={ROUTERS.USER.REGISTER}>Đăng Ký</Link>
+                            </li>
+                        </ul>
+                    )}
                 </div>
             </div>
-
         </div>
-    )
-}
+    );
+};
 
 export default memo(Header);

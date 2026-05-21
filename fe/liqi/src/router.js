@@ -1,5 +1,7 @@
 import HomePage from "./pages/users/homePage";
 import ProfilePage from "./pages/users/profilePage";
+import LoginPage from "./pages/users/loginPage";
+import RegisterPage from "./pages/users/registerPage";
 import ProductsPage from "./pages/users/productsPage";
 import ProductPage from "./pages/users/productPage";
 import MaterLayout from "./pages/users/theme/materLayout";
@@ -29,11 +31,13 @@ function ScrollToTop() {
 
 const renderUserRouter = () => {
     const userRouters = [
-        { path: ROUTERS.USER.HOME,     component: <HomePage /> },
-        { path: ROUTERS.USER.PROFILE,  component: <ProfilePage /> },
-        { path: ROUTERS.USER.PRODUCTS, component: <ProductsPage /> },
-        { path: ROUTERS.USER.PRODUCT,  component: <ProductPage /> },
-        { path: ROUTERS.USER.SERVICE,  component: <ServicePage /> },
+        { path: ROUTERS.USER.HOME,          component: <HomePage /> },
+        { path: ROUTERS.USER.PROFILE,       component: <ProfilePage /> },
+        { path: ROUTERS.USER.LOGIN,         component: <LoginPage /> },
+        { path: ROUTERS.USER.REGISTER,      component: <RegisterPage /> },
+        { path: ROUTERS.USER.PRODUCTS,      component: <ProductsPage /> },
+        { path: ROUTERS.USER.PRODUCT,       component: <ProductPage /> },
+        { path: ROUTERS.USER.SERVICE,       component: <ServicePage /> },
         { path: ROUTERS.USER.CHECKOUT,      component: <CheckoutPage /> },
         { path: ROUTERS.USER.PAYMENT,       component: <PaymentPage /> },
         { path: ROUTERS.USER.ORDER_SUCCESS, component: <OrderSuccessPage /> },

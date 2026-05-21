@@ -8,11 +8,13 @@ use Illuminate\Support\Facades\Route;
 
 // Auth
 Route::prefix('auth')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login',    [AuthController::class, 'login']);
 
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/logout', [AuthController::class, 'logout']);
-        Route::get('/me',     [AuthController::class, 'me']);
+        Route::post('/logout',          [AuthController::class, 'logout']);
+        Route::get('/me',               [AuthController::class, 'me']);
+        Route::post('/change-password', [AuthController::class, 'changePassword']);
     });
 });
 
@@ -28,6 +30,11 @@ Route::get('/orders/{id}/status',   [OrderController::class, 'status']);
 Route::post('/payments/create',   [PaymentController::class, 'create']);
 Route::post('/payments/webhook',  [PaymentController::class, 'webhook']);
 Route::post('/payments/cancel',   [PaymentController::class, 'cancel']);
+
+// Protected: user đã đăng nhập
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/orders/my', [OrderController::class, 'myOrders']);
+});
 
 // Protected: chỉ admin
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {

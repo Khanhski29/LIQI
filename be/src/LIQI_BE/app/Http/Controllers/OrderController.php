@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class OrderController extends Controller
 {
@@ -27,9 +28,18 @@ class OrderController extends Controller
             ], 409);
         }
 
-        $order = DB::transaction(function () use ($validated, $product) {
+        // Detect user từ Bearer token nếu có (route là public nhưng hỗ trợ optional auth)
+        $userId = null;
+        if ($bearerToken = $request->bearerToken()) {
+            $pat = PersonalAccessToken::findToken($bearerToken);
+            if ($pat && $pat->tokenable_type === \App\Models\User::class) {
+                $userId = $pat->tokenable_id;
+            }
+        }
+
+        $order = DB::transaction(function () use ($validated, $product, $userId) {
             $order = Order::create([
-                'user_id'                    => null,
+                'user_id'                    => $userId,
                 'product_id'                 => $product->id,
                 'snapshot_user_name'         => $validated['name'],
                 'snapshot_phone'             => $validated['phone'],
@@ -118,6 +128,36 @@ class OrderController extends Controller
 
         return response()->json([
             'payment_status' => $order->payment_status,
+        ]);
+    }
+
+    public function myOrders(Request $request)
+    {
+        $perPage = 10;
+
+        $orders = Order::where('user_id', $request->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+
+        $data = $orders->map(function ($order) {
+            $isDone = $order->payment_status === 'done';
+
+            return [
+                'id'              => $order->id,
+                'snapshot_img'    => $order->snapshot_img,
+                'snapshot_price'  => $order->snapshot_price,
+                'payment_status'  => $order->payment_status,
+                'created_at'      => $order->created_at?->format('Y-m-d H:i:s'),
+                'username_account' => $isDone ? $order->snapshot_username_account : null,
+                'password_account' => $isDone ? $order->snapshot_password_account : null,
+            ];
+        });
+
+        return response()->json([
+            'data'         => $data,
+            'current_page' => $orders->currentPage(),
+            'last_page'    => $orders->lastPage(),
+            'total'        => $orders->total(),
         ]);
     }
 }
