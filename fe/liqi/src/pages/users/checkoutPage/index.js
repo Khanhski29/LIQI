@@ -11,10 +11,19 @@ const CheckoutPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const authUser = (() => {
+        try { return JSON.parse(localStorage.getItem("auth_user")); } catch { return null; }
+    })();
+    const isLoggedIn = !!localStorage.getItem("auth_token") && authUser?.role === "user";
+
     const { data: product, isLoading, error } = useGetProductUS(id);
 
     const [selectedImage, setSelectedImage] = useState(null);
-    const [form, setForm] = useState({ name: "", phone: "", email: "" });
+    const [form, setForm] = useState({
+        name:  isLoggedIn ? (authUser?.name  || "") : "",
+        phone: isLoggedIn ? (authUser?.phone || "") : "",
+        email: isLoggedIn ? (authUser?.email || "") : "",
+    });
     const [formError, setFormError] = useState("");
 
     const { mutate: createPayment, isPending: isCreatingPayment } = useCreatePaymentUS({

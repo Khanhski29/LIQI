@@ -1,0 +1,256 @@
+@use "sass:map";
+@import "style/pages/theme.scss";
+
+.profile {
+    padding-top: 30px;
+    padding-bottom: 60px;
+    min-height: 70vh;
+
+    &__info {
+        margin: 16px 0 32px;
+        padding: 20px 24px;
+        border: 1px solid #333;
+
+        p {
+            font-size: 15px;
+            color: map.get($theme-color, "ncolor");
+            margin-bottom: 6px;
+
+            span {
+                color: #aaa;
+                margin-right: 8px;
+            }
+        }
+    }
+
+    .btn-change-pw {
+        margin-top: 14px;
+        padding: 7px 20px;
+        font-size: 13px;
+        border: 1px solid #555;
+        background: transparent;
+        color: #ccc;
+        cursor: pointer;
+
+        &:hover {
+            border-color: map.get($theme-color, "price-color");
+            color: map.get($theme-color, "price-color");
+        }
+    }
+
+    .change-pw-form {
+        margin-top: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 360px;
+
+        input {
+            padding: 11px 12px;
+            border: 1px solid #444;
+            background: transparent;
+            color: map.get($theme-color, "ncolor");
+            font-size: 14px;
+            outline: none;
+
+            &::placeholder { color: #666; }
+            &:focus { border-color: map.get($theme-color, "price-color"); }
+        }
+
+        .btn-pw-submit {
+            padding: 10px;
+            font-size: 14px;
+            align-self: flex-start;
+            padding-left: 28px;
+            padding-right: 28px;
+        }
+    }
+
+    .pw-msg {
+        font-size: 13px;
+
+        &--error   { color: #e74c3c; }
+        &--success { color: #2ecc71; }
+    }
+
+    &__section-title {
+        font-size: 18px;
+        font-family: "BeaufortBold";
+        text-transform: uppercase;
+        color: map.get($theme-color, "ncolor");
+        margin-bottom: 16px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 8px;
+    }
+
+    &__loading,
+    &__empty {
+        color: #aaa;
+        font-size: 15px;
+        padding: 20px 0;
+    }
+
+    &__orders {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__order-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 16px;
+        border: 1px solid #2a2a2a;
+        background: #111;
+
+        &__left {
+            img {
+                width: 90px;
+                height: 64px;
+                object-fit: cover;
+                cursor: pointer;
+            }
+        }
+
+        &__info {
+            flex: 1;
+
+            .order-id {
+                font-size: 13px;
+                color: #888;
+                margin-bottom: 4px;
+            }
+
+            .order-price {
+                font-size: 16px;
+                color: map.get($theme-color, "price-color");
+                font-weight: bold;
+                margin-bottom: 4px;
+            }
+
+            .order-date {
+                font-size: 13px;
+                color: #777;
+                margin-bottom: 8px;
+            }
+
+            .order-status {
+                display: inline-block;
+                font-size: 12px;
+                padding: 3px 10px;
+
+                &--pending { background: #7a5c00; color: #ffd966; }
+                &--done    { background: #1a4a1a; color: #5af55a; }
+                &--cancel  { background: #3a1a1a; color: #f55a5a; }
+                &--refund  { background: #3a1a3a; color: #e879e8; }
+            }
+        }
+
+        &__creds {
+            min-width: 200px;
+
+            .btn-creds {
+                font-size: 13px;
+                padding: 6px 16px;
+                border: 1px solid map.get($theme-color, "price-color");
+                background: transparent;
+                color: map.get($theme-color, "price-color");
+                cursor: pointer;
+                white-space: nowrap;
+
+                &:hover {
+                    background: map.get($theme-color, "price-color");
+                    color: map.get($theme-color, "dcolor");
+                }
+            }
+
+            .creds-box {
+                margin-top: 10px;
+                padding: 12px;
+                background: #1a1a1a;
+                border: 1px solid #333;
+                font-size: 13px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .creds-row {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: wrap;
+
+                &__value {
+                    color: map.get($theme-color, "ncolor");
+                    word-break: break-all;
+                    flex: 1;
+                }
+            }
+
+            .btn-copy {
+                padding: 3px 12px;
+                font-size: 12px;
+                border: 1px solid #555;
+                background: transparent;
+                color: #ccc;
+                cursor: pointer;
+                white-space: nowrap;
+                transition: all 0.15s;
+
+                &:hover {
+                    border-color: map.get($theme-color, "price-color");
+                    color: map.get($theme-color, "price-color");
+                }
+
+                &--done {
+                    border-color: #2ecc71;
+                    color: #2ecc71;
+                }
+            }
+        }
+    }
+
+    &__pagination {
+        margin-top: 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        button {
+            padding: 6px 16px;
+            border: 1px solid #fc5f6c;
+            background: transparent;
+            color: map.get($theme-color, "ncolor");
+            cursor: pointer;
+            font-size: 16px;
+
+            &:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+        }
+
+        span {
+            font-size: 14px;
+            color: #aaa;
+        }
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.75);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+
+        .overlay-img {
+            max-height: 80%;
+            max-width: 90%;
+        }
+    }
+}
