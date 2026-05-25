@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Services\OrderCancellationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -100,7 +101,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function status(Request $request, string $id)
+    public function status(Request $request, string $id, OrderCancellationService $cancellationService)
     {
         $order = Order::with('payment', 'product')->findOrFail($id);
 
@@ -113,13 +114,7 @@ class OrderController extends Controller
             $order->payment_status === 'pending' &&
             $order->created_at->diffInMinutes(now()) >= 5
         ) {
-            DB::transaction(function () use ($order) {
-                $order->update(['payment_status' => 'cancel']);
-                $order->product?->update(['status' => 'available']);
-                if ($order->payment) {
-                    $order->payment->update(['status' => 'failed']);
-                }
-            });
+            $cancellationService->cancelPendingOrder($order, 'Hết hạn thanh toán');
 
             return response()->json([
                 'payment_status' => 'cancel',
@@ -136,6 +131,7 @@ class OrderController extends Controller
         $perPage = 10;
 
         $orders = Order::where('user_id', $request->user()->id)
+            ->where('payment_status', 'done')
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
 

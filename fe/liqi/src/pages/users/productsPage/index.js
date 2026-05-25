@@ -5,6 +5,7 @@ import { formatter } from 'utils/formatter';
 import { generatePath, Link, useSearchParams } from "react-router-dom";
 import { ROUTERS } from "utils/router";
 import { useGetProductsUS } from "api/homepage";
+import ReviewsSection from "../theme/reviewsSection";
 
 const ProductsPage = () => {
 
@@ -191,6 +192,8 @@ const ProductsPage = () => {
                     </div>
                 </div>
             </div>
+
+            <ReviewsSection />
         </div>
     )
 

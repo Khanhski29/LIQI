@@ -10,6 +10,7 @@ import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { GrContactInfo } from "react-icons/gr";
 import { ROUTERS } from "utils/router";
 import { useGetProductUS } from "api/homepage";
+import ReviewsSection from "../theme/reviewsSection";
 
 
 const ProductPage = () => {
@@ -112,6 +113,7 @@ const ProductPage = () => {
                 </div>
             </div>
 
+            <ReviewsSection />
         </div>
     )
 

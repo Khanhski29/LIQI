@@ -1,0 +1,85 @@
+@use "sass:map";
+@import "style/pages/theme.scss";
+
+.reviews-section {
+    margin-top: 48px;
+    padding: 32px 0 16px;
+    border-top: 1px solid #333;
+
+    &__title {
+        font-size: 18px;
+        font-family: "BeaufortBold";
+        text-transform: uppercase;
+        color: map.get($theme-color, "ncolor");
+        margin-bottom: 20px;
+    }
+
+    &__msg {
+        color: #888;
+        font-size: 14px;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    &__card {
+        padding: 16px 18px;
+        border: 1px solid #2a2a2a;
+        background: #111;
+
+        &-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+
+            strong {
+                color: map.get($theme-color, "ncolor");
+                font-size: 14px;
+            }
+
+            span {
+                color: #777;
+                font-size: 12px;
+                white-space: nowrap;
+            }
+        }
+
+        &-content {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+    }
+
+    &__pagination {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        button {
+            padding: 6px 16px;
+            border: 1px solid #fc5f6c;
+            background: transparent;
+            color: map.get($theme-color, "ncolor");
+            cursor: pointer;
+
+            &:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+        }
+
+        span {
+            font-size: 14px;
+            color: #aaa;
+        }
+    }
+}
