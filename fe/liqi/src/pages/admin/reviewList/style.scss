@@ -1,0 +1,87 @@
+@use "sass:map";
+@import "style/pages/theme.scss";
+
+.review__list {
+    &__msg {
+        color: #888;
+        padding: 20px 0;
+    }
+
+    .review__card-item {
+        display: grid;
+        grid-template-columns: 60px 80px 120px 1fr 140px 100px 120px;
+        gap: 12px;
+        align-items: center;
+        padding: 14px 12px;
+        border-bottom: 1px solid #333;
+        font-size: 14px;
+
+        &--g {
+            margin: 0;
+            color: map.get($theme-color, "ncolor");
+        }
+
+        &-content {
+            word-break: break-word;
+            line-height: 1.4;
+        }
+
+        &-status {
+            font-size: 12px;
+            padding: 3px 8px;
+            text-align: center;
+
+            &.status--pending  { background: #7a5c00; color: #ffd966; }
+            &.status--visible  { background: #1a4a1a; color: #5af55a; }
+        }
+
+        &-actions {
+            display: flex;
+            gap: 8px;
+
+            button {
+                padding: 5px 12px;
+                font-size: 12px;
+                border: 1px solid;
+                background: transparent;
+                cursor: pointer;
+
+                &:disabled { opacity: 0.5; cursor: not-allowed; }
+            }
+
+            .btn-approve {
+                border-color: #2ecc71;
+                color: #2ecc71;
+                &:hover:not(:disabled) { background: #2ecc71; color: #111; }
+            }
+
+            .btn-hide {
+                border-color: #e74c3c;
+                color: #e74c3c;
+                &:hover:not(:disabled) { background: #e74c3c; color: #fff; }
+            }
+        }
+    }
+
+    .pagination {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        button {
+            padding: 4px 12px;
+            border: 1px solid #fc5f6c;
+            background: transparent;
+            color: map.get($theme-color, "ncolor");
+            cursor: pointer;
+
+            &.active, &:hover:not(:disabled) {
+                background: #fc5f6c;
+                color: #fff;
+            }
+
+            &:disabled { opacity: 0.4; cursor: not-allowed; }
+        }
+    }
+}

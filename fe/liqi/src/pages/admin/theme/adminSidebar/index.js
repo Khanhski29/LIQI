@@ -30,6 +30,11 @@ const AdminSidebar = ({children, ...props}) =>{
             onClick: () => navigate(ROUTERS.ADMIN.PRODUCT_MANAGER),
         },
         {
+            path: ROUTERS.ADMIN.REVIEW_MANAGER,
+            label: "Quản Lý Đánh Giá",
+            onClick: () => navigate(ROUTERS.ADMIN.REVIEW_MANAGER),
+        },
+        {
             path: ROUTERS.ADMIN.LOGOUT,
             label: "Đăng Xuất",
             onClick: () => logout(),

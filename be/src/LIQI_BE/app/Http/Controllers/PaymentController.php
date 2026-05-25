@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\OrderSuccessMail;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Services\OrderCancellationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use PayOS\PayOS;
@@ -140,7 +141,7 @@ class PaymentController extends Controller
         return response()->json(['message' => 'ok']);
     }
 
-    public function cancel(Request $request)
+    public function cancel(Request $request, OrderCancellationService $cancellationService)
     {
         $request->validate([
             'order_id'     => 'required|integer|exists:orders,id',
@@ -153,14 +154,7 @@ class PaymentController extends Controller
             return response()->json(['message' => 'Không có quyền thực hiện thao tác này.'], 403);
         }
 
-        if ($order->payment_status === 'pending') {
-            $order->update(['payment_status' => 'cancel']);
-            $order->product->update(['status' => 'available']);
-
-            if ($order->payment) {
-                $order->payment->update(['status' => 'failed']);
-            }
-        }
+        $cancellationService->cancelPendingOrder($order, 'Khách hàng hủy đơn hàng');
 
         return response()->json(['message' => 'Đã hủy đơn hàng.']);
     }

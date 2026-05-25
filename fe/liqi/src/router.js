@@ -17,6 +17,7 @@ import LoginAdminPage from "pages/admin/loginPage";
 import AdminMaterLayout from 'pages/admin/theme/adminMaterLayout';
 import OrderManagePage from "pages/admin/orderManagePage";
 import ProductManagePage from "pages/admin/productManagePage";
+import ReviewManagePage from "pages/admin/reviewManagePage";
 import ProtectedAdminRoute from "pages/admin/protectedRoute";
 
 function ScrollToTop() {
@@ -62,6 +63,7 @@ const renderAdminRouter = () => {
         { path: ROUTERS.ADMIN.PRODUCT_MANAGER,                   component: <ProductManagePage /> },
         { path: ROUTERS.ADMIN.PRODUCT_MANAGER_ADD,               component: <ProductManagePage /> },
         { path: `${ROUTERS.ADMIN.PRODUCT_MANAGER_EDIT}/:id`,     component: <ProductManagePage /> },
+        { path: ROUTERS.ADMIN.REVIEW_MANAGER,                    component: <ReviewManagePage /> },
     ];
 
     return (

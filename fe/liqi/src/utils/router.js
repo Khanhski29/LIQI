@@ -20,6 +20,7 @@ export const ROUTERS = {
         PRODUCT_MANAGER: `${ADMIN_PATH}/quan-ly-san-pham`,
         PRODUCT_MANAGER_ADD: `${ADMIN_PATH}/quan-ly-san-pham/them-san-pham`,
         PRODUCT_MANAGER_EDIT: `${ADMIN_PATH}/quan-ly-san-pham/sua-san-pham`,
+        REVIEW_MANAGER: `${ADMIN_PATH}/quan-ly-danh-gia`,
         LOGOUT: `${ADMIN_PATH}/dang-xuat`
     }
 
