@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderSuccessMail;
 use App\Models\Order;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use PayOS\PayOS;
 
 class PaymentController extends Controller
@@ -120,8 +122,11 @@ class PaymentController extends Controller
                 'raw_response'   => $data,
             ]);
 
-            $payment->order->update(['payment_status' => 'done']);
-            $payment->order->product->update(['status' => 'sold']);
+            $order = $payment->order;
+            $order->update(['payment_status' => 'done']);
+            $order->product->update(['status' => 'sold']);
+
+            Mail::to($order->snapshot_email)->queue(new OrderSuccessMail($order));
         } else {
             $payment->update([
                 'status'       => 'failed',
