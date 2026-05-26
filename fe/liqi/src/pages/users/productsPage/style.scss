@@ -3,8 +3,10 @@
 
 .products {
     margin-top: 60px !important;
-    padding: 32px 16px 64px !important;
-    
+    .products__container {
+        padding: 32px 16px 64px !important;
+        
+    }
     
     .row {
         .product__left {

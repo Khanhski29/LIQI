@@ -1,50 +1,81 @@
-import { memo } from "react";
-import "./style.scss"
-
-import img1 from 'components/pictures/p1.png';
-import img2 from 'components/pictures/p2.png';
-import img3 from 'components/pictures/p3.png';
-import card1 from 'components/pictures/slide/gojo.jpg';
-import card2 from 'components/pictures/slide/hay.jpg';
-import card3 from 'components/pictures/slide/nak.jpg';
-import card4 from 'components/pictures/slide/tel.jpg';
-import card5 from 'components/pictures/slide/tv.jpg';
-import card6 from 'components/pictures/slide/tulen.jpg';
-import card7 from 'components/pictures/slide/nk.jpg';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import "./style.scss";
 import { useNavigate } from "react-router-dom";
 import { ROUTERS } from "utils/router";
+import { HOME_IMAGES, SLIDER_TRACK } from "constants/homeImages";
 
-
+const SLIDER_SOURCES = [...new Set(SLIDER_TRACK)];
 
 const HomePage = () => {
-
     const navigate = useNavigate();
+    const trackRef = useRef(null);
+    const [isSliderReady, setIsSliderReady] = useState(false);
 
+    const restartSliderAnimation = useCallback(() => {
+        if (!trackRef.current) return;
+
+        const track = trackRef.current;
+        track.style.animation = "none";
+        void track.offsetHeight;
+        track.style.animation = "";
+    }, []);
+
+    useEffect(() => {
+        let cancelled = false;
+        setIsSliderReady(false);
+
+        let loaded = 0;
+        const markReady = () => {
+            loaded += 1;
+            if (!cancelled && loaded >= SLIDER_SOURCES.length) {
+                setIsSliderReady(true);
+            }
+        };
+
+        SLIDER_SOURCES.forEach((src) => {
+            const img = new Image();
+            img.onload = markReady;
+            img.onerror = markReady;
+            img.src = src;
+        });
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!isSliderReady) return;
+        restartSliderAnimation();
+    }, [isSliderReady, restartSliderAnimation]);
+
+    useEffect(() => {
+        const onVisibilityChange = () => {
+            if (document.visibilityState === "visible" && isSliderReady) {
+                restartSliderAnimation();
+            }
+        };
+
+        document.addEventListener("visibilitychange", onVisibilityChange);
+        return () => document.removeEventListener("visibilitychange", onVisibilityChange);
+    }, [isSliderReady, restartSliderAnimation]);
+
+    const trackClassName = useMemo(
+        () => `slider__track${isSliderReady ? " slider__track--ready" : ""}`,
+        [isSliderReady]
+    );
 
     return (
-        
         <div className="container wide homepage">
             <div className="slider">
-                <div className="slider__track">
-                    <div className="card"><img src={card1}/></div>
-                    <div className="card"><img src={card2}/></div>
-                    <div className="card"><img src={card3}/></div>
-                    <div className="card"><img src={card4}/></div>
-                    <div className="card"><img src={card5}/></div>
-                    <div className="card"><img src={card6}/></div>
-                    <div className="card"><img src={card7}/></div>
-                    {/*  */}
-                    <div className="card"><img src={card1}/></div>
-                    <div className="card"><img src={card2}/></div>
-                    <div className="card"><img src={card5}/></div>
-                    <div className="card"><img src={card3}/></div>
-                    <div className="card"><img src={card6}/></div>
-                    <div className="card"><img src={card4}/></div>
-                    <div className="card"><img src={card7}/></div>
-                    
+                <div className={trackClassName} ref={trackRef}>
+                    {SLIDER_TRACK.map((src, index) => (
+                        <div className="card" key={index}>
+                            <img src={src} alt="" decoding="async" />
+                        </div>
+                    ))}
                 </div>
 
-                
                 <div className="slider__text">
                     <p>LiQi Shop</p>
                     <p>Shop acc liên quân uy tín - giá rẻ - an toàn. Đa dạng lựa chọn, tìm acc theo yêu cầu, giao lưu lên đời và trả góp 0%.</p>
@@ -62,15 +93,15 @@ const HomePage = () => {
                             <button className="btn-l" onClick={() => navigate(ROUTERS.USER.PRODUCTS)}>Mua Ngay</button>
                         </div>
                         <div className="col lg-4 md-6 lmd-6 sm-4 picture">
-                            <img src={img2} />
+                            <img src={HOME_IMAGES.blocks.p2} alt="" loading="lazy" />
                         </div>
                     </div>
                 </div>
-                
+
                 <div className="container block block2">
                     <div className="row">
                         <div className="col lg-4 md-6 lmd-6 sm-4 picture">
-                            <img src={img1} />
+                            <img src={HOME_IMAGES.blocks.p1} alt="" loading="lazy" />
                         </div>
                         <div className="col lg-8 md-6 lmd-6 sm-8 text">
                             <p>Shop có thu lại acc không ?</p>
@@ -78,7 +109,6 @@ const HomePage = () => {
                             <p>-Thu lại acc giá tốt trên 50%</p>
                             <button className="btn-l">Bán Ngay</button>
                         </div>
-                        
                     </div>
                 </div>
 
@@ -92,15 +122,13 @@ const HomePage = () => {
                             <button className="btn-l">Đăng Ký Ngay</button>
                         </div>
                         <div className="col lg-4 md-6 lmd-6 sm-4 picture">
-                            <img src={img3} />
+                            <img src={HOME_IMAGES.blocks.p3} alt="" loading="lazy" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-    )   
-   
-}
+    );
+};
 
 export default memo(HomePage);
