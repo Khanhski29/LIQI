@@ -12,7 +12,10 @@ export const ROUTERS = {
         CHECKOUT: "/thanh-toan/:id",
         PAYMENT: "/thanh-toan-qr/:orderId",
         ORDER_SUCCESS: "/dat-hang-thanh-cong/:orderId",
-        ORDER_FAIL: "/thanh-toan-that-bai/:orderId"
+        ORDER_FAIL: "/thanh-toan-that-bai/:orderId",
+        TERMS: "/dieu-khoan-su-dung",
+        PRIVACY: "/chinh-sach-bao-mat",
+        SUPPORT: "/lien-he",
     },
     ADMIN : {
         LOGIN: `${ADMIN_PATH}/dang-nhap`,

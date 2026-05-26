@@ -1,0 +1,181 @@
+@use "sass:map";
+@import "../../../style/pages/theme.scss";
+
+.terms {
+    background-color: map.get($theme-color, "dcolor");
+
+    margin-top: 60px !important;
+    padding: 32px 32px 80px !important;
+    color: map.get($theme-color, "dcolor");
+
+    .terms__updated {
+        margin-top: 8px;
+        font-size: 16px;
+        color: map.get($theme-color, "background");
+        font-style: italic;
+    }
+
+    .terms__related {
+        margin-top: 8px;
+        font-size: 16px;
+        color: map.get($theme-color, "background");
+
+        a {
+            color: map.get($theme-color, "price-color");
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .terms__content {
+        margin-top: 48px;
+        max-width: 900px;
+        padding: 40px 48px;
+        border-radius: 2px;
+    }
+
+    .terms__section {
+        margin-bottom: 40px;
+        scroll-margin-top: 80px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .terms__heading {
+        font-family: "BeaufortBold";
+        font-size: 28px;
+        color: map.get($theme-color, "ncolor");
+        margin-bottom: 16px;
+        text-transform: uppercase;
+    }
+
+    .terms__subtitle {
+        font-family: "BeaufortMedium";
+        font-size: 20px;
+        color: map.get($theme-color, "background");
+        margin: 20px 0 12px;
+    }
+
+    .terms__content p {
+        font-size: 18px;
+        line-height: 1.7;
+        color: map.get($theme-color, "ncolor");
+        margin-bottom: 12px;
+        text-align: justify;
+    }
+
+    .terms__content ul {
+        margin: 0 0 16px 24px;
+        padding: 0;
+
+        li {
+            font-size: 18px;
+            line-height: 1.7;
+            color: map.get($theme-color, "ncolor");
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+    }
+
+    .terms__subsection {
+        margin-top: 8px;
+    }
+
+    .terms__contact {
+        list-style: none;
+        margin-left: 0;
+
+        li {
+            text-align: left;
+            color: map.get($theme-color, "ncolor");
+
+            strong {
+                color: map.get($theme-color, "background");
+                font-weight: 400;
+            }
+        }
+    }
+
+    .terms__section--intro {
+        padding-bottom: 32px;
+        margin-bottom: 48px;
+        border-bottom: 1px solid rgba(15, 25, 35, 0.15);
+    }
+
+    .terms__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 20px;
+
+        &--intro {
+            margin-top: 24px;
+        }
+    }
+
+    .terms__action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        font-size: 16px;
+        text-decoration: none;
+        text-transform: uppercase;
+        color: map.get($theme-color, "ncolor");
+        background: transparent;
+        border: 1px solid map.get($theme-color, "background");
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+
+        svg {
+            font-size: 18px;
+        }
+
+        &:hover {
+            background: map.get($theme-color, "background");
+            color: map.get($theme-color, "dcolor");
+        }
+
+        &--primary {
+            background: map.get($theme-color, "price-color");
+            border-color: map.get($theme-color, "price-color");
+            color: #fff;
+
+            &:hover {
+                background: darken(#fc5f6c, 8%);
+                border-color: darken(#fc5f6c, 8%);
+                color: #fff;
+            }
+        }
+    }
+}
+
+@media (max-width: 719px) {
+    .terms {
+        margin-top: 40px !important;
+        padding: 24px 16px 64px !important;
+
+        .terms__content {
+            margin-top: 32px;
+            padding: 24px 20px;
+        }
+
+        .terms__heading {
+            font-size: 22px;
+        }
+
+        .terms__subtitle {
+            font-size: 18px;
+        }
+
+        .terms__content p,
+        .terms__content ul li {
+            font-size: 16px;
+        }
+    }
+}

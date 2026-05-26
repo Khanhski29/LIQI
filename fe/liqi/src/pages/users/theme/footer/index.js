@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import "./style.scss"
 import { Link } from 'react-router-dom';
+import { ROUTERS } from 'utils/router';
 import { FaFacebook , FaTiktok , FaYoutube , FaInstagram , FaPhoneFlip , FaClock , FaMapLocationDot } from "react-icons/fa6";
 import { SiZalo } from "react-icons/si";
 
@@ -89,11 +90,11 @@ const Footer = () =>{
                             <span className='title'>Luật</span>
                             <ul>
                                 <li>
-                                    <Link to="" >Chính sách bảo mật</Link>
+                                    <Link to={ROUTERS.USER.PRIVACY}>Chính sách bảo mật</Link>
                                 </li>
 
                                 <li>
-                                    <Link to="" >Điều khoản sử dụng</Link>
+                                    <Link to={ROUTERS.USER.TERMS}>Điều khoản sử dụng</Link>
                                 </li>
                             </ul>
                         </div>
@@ -102,15 +103,15 @@ const Footer = () =>{
                             <span className='title'>Liên Hệ</span>
                             <ul>
                                 <li>
-                                    <Link to="" >Hỗ trợ khách hàng</Link>
+                                    <Link to={`${ROUTERS.USER.SUPPORT}#ho-tro-khach-hang`}>Hỗ trợ khách hàng</Link>
                                 </li>
 
                                 <li>
-                                    <Link to="" >Hợp tác với chúng tôi</Link>
+                                    <Link to={`${ROUTERS.USER.SUPPORT}#hop-tac`}>Hợp tác với chúng tôi</Link>
                                 </li>
 
                                 <li>
-                                    <Link to="" >Báo cáo sự cố</Link>
+                                    <Link to={`${ROUTERS.USER.SUPPORT}#bao-cao-su-co`}>Báo cáo sự cố</Link>
                                 </li>
                             </ul>
                         </div>
