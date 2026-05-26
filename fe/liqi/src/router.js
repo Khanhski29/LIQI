@@ -9,6 +9,9 @@ import { ROUTERS, ADMIN_PATH } from "./utils/router";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import ServicePage from "pages/users/servicePage";
+import TermsOfUsePage from "pages/users/termsOfUsePage";
+import PrivacyPolicyPage from "pages/users/privacyPolicyPage";
+import SupportPage from "pages/users/supportPage";
 import CheckoutPage from "pages/users/checkoutPage";
 import OrderSuccessPage from "pages/users/orderSuccessPage";
 import OrderFailPage from "pages/users/orderFailPage";
@@ -39,6 +42,9 @@ const renderUserRouter = () => {
         { path: ROUTERS.USER.PRODUCTS,      component: <ProductsPage /> },
         { path: ROUTERS.USER.PRODUCT,       component: <ProductPage /> },
         { path: ROUTERS.USER.SERVICE,       component: <ServicePage /> },
+        { path: ROUTERS.USER.TERMS,        component: <TermsOfUsePage /> },
+        { path: ROUTERS.USER.PRIVACY,     component: <PrivacyPolicyPage /> },
+        { path: ROUTERS.USER.SUPPORT,    component: <SupportPage /> },
         { path: ROUTERS.USER.CHECKOUT,      component: <CheckoutPage /> },
         { path: ROUTERS.USER.PAYMENT,       component: <PaymentPage /> },
         { path: ROUTERS.USER.ORDER_SUCCESS, component: <OrderSuccessPage /> },
