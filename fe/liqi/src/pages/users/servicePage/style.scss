@@ -28,19 +28,19 @@
 .bg-default {
     opacity: 1;
     transform: scale(1);
-    background-image: url("../../../components/pictures/background\ 3.jpg");
+    background-image: url("https://res.cloudinary.com/drgoaizrr/image/upload/v1779829306/service_w7fmhk.jpg");
 }
 
 
 .bg-sell {
-    background-image: url("../../../components/pictures/service_sell.jpg");
+    background-image: url("https://res.cloudinary.com/drgoaizrr/image/upload/v1779829596/service_sell_wqeq5u.jpg");
 }
 
 .bg-order {
-    background-image: url("../../../components/pictures/service_order.jpg");
+    background-image: url("https://res.cloudinary.com/drgoaizrr/image/upload/v1779829601/service_order_q0zua3.jpg");
 }
 .bg-trans {
-    background-image: url("../../../components/pictures/service_trans.jpg");
+    background-image: url("https://res.cloudinary.com/drgoaizrr/image/upload/v1779829598/service_trans_otsf8p.jpg");
 }
 
 .service:has(.title__sell:hover) .bg-sell {

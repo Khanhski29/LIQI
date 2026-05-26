@@ -10,7 +10,7 @@ import ReviewsSection from "../theme/reviewsSection";
 const ProductsPage = () => {
 
     const { data: products } = useGetProductsUS();
-    
+
 
     const boxRef = useRef();
     const setActive = (btn) => {
@@ -99,95 +99,95 @@ const ProductsPage = () => {
     return (
         <div className="products container wide">
 
-            <Title name="Của Hàng" />
+            <div className="products__container">
+                <Title name="Của Hàng" />
+
+                <div className="row">
+                    <div ref={boxRef} className="product__left col lg-2 md-2 lmd-12 sm-12">
+                        <button className="active" onClick={(e) => {
+                            setSearchParams({ min: 0, max: 9999999999, page: 1 });
+                            setActive(e.target);
+                        }}>Tất Cả</button>
+
+                        <button onClick={(e) => {
+                            setSearchParams({ min: 0, max: 1000000, page: 1 });
+                            setActive(e.target);
+                        }}>{"<1000"}</button>
+
+                        <button onClick={(e) => {
+                            setSearchParams({ min: 1000000, max: 2000000, page: 1 });
+                            setActive(e.target);
+                        }}>1000-2000</button>
+
+                        <button onClick={(e) => {
+                            setSearchParams({ min: 2000000, max: 3000000, page: 1 });
+                            setActive(e.target);
+                        }}>2000-3000</button>
+
+                        <button onClick={(e) => {
+                            setSearchParams({ min: 3000000, max: 10000000, page: 1 });
+                            setActive(e.target);
+                        }}>3000-10000</button>
 
 
+                    </div>
 
-            <div className="row">
-                <div ref={boxRef} className="product__left col lg-2 md-2 lmd-12 sm-12">
-                    <button className="active" onClick={(e) => {
-                        setSearchParams({ min: 0, max: 9999999999, page: 1 });
-                        setActive(e.target);
-                    }}>Tất Cả</button>
+                    <div className="product__right col lg-10 md-10 lmd-12 sm-12">
+                        <div className="row">
+                            <div className="items col lg-12 md-12 lmd-12 sm-12">
+                                <div className="row">
+                                    {
+                                        currentProducts?.map((item) => (
+                                            <div className="col lg-4 md-4 lmd-6 sm-12" key={item.id}>
+                                                <Link to={generatePath(ROUTERS.USER.PRODUCT, { id: item.id })}
+                                                    state={{
+                                                        min: minPrice,
+                                                        max: maxPrice,
+                                                        page: page
+                                                    }}
+                                                >
+                                                    <div className="item">
+                                                        <img src={item.img} alt={item.id} />
+                                                        <div className="item__about">
+                                                            <div>
+                                                                <p className="id">
+                                                                    {item.product_code}
+                                                                </p>
 
-                    <button onClick={(e) => {
-                        setSearchParams({ min: 0, max: 1000000, page: 1 });
-                        setActive(e.target);
-                    }}>{"<1000"}</button>
+                                                                <p className="price">
+                                                                    {formatter(item.price)}
+                                                                </p>
+                                                            </div>
 
-                    <button onClick={(e) => {
-                        setSearchParams({ min: 1000000, max: 2000000, page: 1 });
-                        setActive(e.target);
-                    }}>1000-2000</button>
-
-                    <button onClick={(e) => {
-                        setSearchParams({ min: 2000000, max: 3000000, page: 1 });
-                        setActive(e.target);
-                    }}>2000-3000</button>
-
-                    <button onClick={(e) => {
-                        setSearchParams({ min: 3000000, max: 10000000, page: 1 });
-                        setActive(e.target);
-                    }}>3000-10000</button>
-
-
-                </div>
-
-                <div className="product__right col lg-10 md-10 lmd-12 sm-12">
-                    <div className="row">
-                        <div className="items col lg-12 md-12 lmd-12 sm-12">
-                            <div className="row">
-                                {
-                                    currentProducts?.map((item) => (
-                                        <div className="col lg-4 md-4 lmd-6 sm-12" key={item.id}>
-                                            <Link to={generatePath(ROUTERS.USER.PRODUCT, { id: item.id })}
-                                                state={{
-                                                    min: minPrice,
-                                                    max: maxPrice,
-                                                    page: page
-                                                }}
-                                            >
-                                                <div className="item">
-                                                    <img src={item.img} alt={item.id} />
-                                                    <div className="item__about">
-                                                        <div>
-                                                            <p className="id">
-                                                                {item.product_code}
-                                                            </p>
-
-                                                            <p className="price">
-                                                                {formatter(item.price)}
+                                                            <p className="description">
+                                                                {item.description}
                                                             </p>
                                                         </div>
-
-                                                        <p className="description">
-                                                            {item.description}
-                                                        </p>
                                                     </div>
-                                                </div>
-                                            </Link>
-                                        </div>
-                                    ))
-                                }
+                                                </Link>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="pagination col lg-12 md-12 lmd-12 sm-12">
-                            <button disabled={page === 1} onClick={() => setSearchParams({ min: minPrice, max: maxPrice, page: page - 1 })}>{"<"}</button>
+                            <div className="pagination col lg-12 md-12 lmd-12 sm-12">
+                                <button disabled={page === 1} onClick={() => setSearchParams({ min: minPrice, max: maxPrice, page: page - 1 })}>{"<"}</button>
 
-                            {
-                                getPagination().map((item, index) =>
-                                    item === "..." ? (
-                                        <span key={index}>...</span>
-                                    ) : (
-                                        <button key={index} className={
-                                            page === item ? "active" : ""
-                                        } onClick={() => setSearchParams({ min: minPrice, max: maxPrice, page: item })} >{item}</button>
+                                {
+                                    getPagination().map((item, index) =>
+                                        item === "..." ? (
+                                            <span key={index}>...</span>
+                                        ) : (
+                                            <button key={index} className={
+                                                page === item ? "active" : ""
+                                            } onClick={() => setSearchParams({ min: minPrice, max: maxPrice, page: item })} >{item}</button>
+                                        )
                                     )
-                                )
-                            }
-                            <button disabled={page === totalPages} onClick={() => setSearchParams({ min: minPrice, max: maxPrice, page: page + 1 })}>{">"}</button>
+                                }
+                                <button disabled={page === totalPages} onClick={() => setSearchParams({ min: minPrice, max: maxPrice, page: page + 1 })}>{">"}</button>
 
+                            </div>
                         </div>
                     </div>
                 </div>
