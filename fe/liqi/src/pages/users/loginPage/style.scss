@@ -2,7 +2,7 @@
 @import "style/pages/theme.scss";
 
 .auth-page {
-    display: flex;
+    display: flex !important;
     min-height: 80vh;
     justify-content: center;
     align-items: center;

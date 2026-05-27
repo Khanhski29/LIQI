@@ -1,10 +1,20 @@
 @use "sass:map";
 @import "style/pages/theme.scss";
 
+@keyframes reviews-slider {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
 .reviews-section {
-    margin-top: 48px;
-    padding: 32px 0 16px;
+    // margin-top: 48px;
+    padding: 32px 16px;
     border-top: 1px solid #333;
+
     &__title {
         font-size: 18px;
         font-family: "BeaufortBold";
@@ -18,16 +28,35 @@
         font-size: 14px;
     }
 
-    &__list {
+    &__slider {
+        overflow: hidden;
+        width: 100%;
+        container-type: inline-size;
+        container-name: reviews-slider;
+    }
+
+    &__track {
         display: flex;
-        flex-direction: column;
-        gap: 14px;
+        flex-wrap: nowrap;
+        width: max-content;
+        align-items: stretch;
+        gap: 10px;
+        animation: none;
+
+        &--ready {
+            animation: reviews-slider 40s linear infinite;
+        }
     }
 
     &__card {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        width: 100cqw;
         padding: 16px 18px;
         border: 1px solid #2a2a2a;
         background: #111;
+        box-sizing: border-box;
 
         &-header {
             display: flex;
@@ -35,6 +64,7 @@
             align-items: center;
             gap: 12px;
             margin-bottom: 8px;
+            flex-shrink: 0;
 
             strong {
                 color: map.get($theme-color, "ncolor");
@@ -49,36 +79,25 @@
         }
 
         &-content {
+            flex: 1;
             color: #ccc;
             font-size: 14px;
             line-height: 1.6;
             white-space: pre-wrap;
             word-break: break-word;
+            margin: 0;
         }
     }
+}
 
-    &__pagination {
-        margin-top: 20px;
-        display: flex;
-        align-items: center;
-        gap: 16px;
+@container reviews-slider (min-width: 720px) {
+    .reviews-section__card {
+        width: calc((100cqw - 10px) / 2);
+    }
+}
 
-        button {
-            padding: 6px 16px;
-            border: 1px solid #fc5f6c;
-            background: transparent;
-            color: map.get($theme-color, "ncolor");
-            cursor: pointer;
-
-            &:disabled {
-                opacity: 0.4;
-                cursor: not-allowed;
-            }
-        }
-
-        span {
-            font-size: 14px;
-            color: #aaa;
-        }
+@container reviews-slider (min-width: 960px) {
+    .reviews-section__card {
+        width: calc((100cqw - 20px) / 3);
     }
 }

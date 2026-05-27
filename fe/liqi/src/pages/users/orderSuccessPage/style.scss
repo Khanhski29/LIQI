@@ -1,9 +1,10 @@
 .order-result {
     min-height: 60vh;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
-
+    margin-top: 60px !important;
+    
     &__box {
         text-align: center;
         padding: 48px 32px;
