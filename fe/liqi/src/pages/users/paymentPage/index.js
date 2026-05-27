@@ -6,6 +6,7 @@ import { formatter } from "utils/formatter";
 import { ROUTERS } from "utils/router";
 import { useOrderStatusUS } from "api/orders";
 import { useCancelPaymentUS } from "api/payments";
+import Title from "../theme/title";
 
 const BANK_NAME_MAP = {
     "970422": "MB Bank",
@@ -99,6 +100,7 @@ const PaymentPage = () => {
         <div className="payment-page container wide">
             <div className="payment-page__box">
                 <h2 className="payment-page__title">Quét mã QR để thanh toán</h2>
+                {/* <Title name="Quét mã QR để thanh toán" /> */}
 
                 <div className="payment-page__qr">
                     <QRCodeSVG

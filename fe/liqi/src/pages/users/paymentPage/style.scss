@@ -1,14 +1,14 @@
 .payment-page {
-    min-height: 70vh;
-    display: flex;
+    min-height: 80vh;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     padding: 40px 0;
+    margin-top: 60px !important;
 
     &__box {
         background: #fff;
         border-radius: 12px;
-        box-shadow: 0 2px 16px rgba(0,0,0,0.08);
         padding: 40px 32px;
         max-width: 480px;
         width: 100%;
