@@ -27,12 +27,12 @@ const ProductPage = () => {
 
     const location = useLocation();
 
-    const { min, max, page } = location.state || {};
+    const { min, max, page, code } = location.state || {};
 
     return (
         <div className="container wide product">
             <Title name="Chi Tiết Sản Phẩm"/>
-            <Breadcrumb name="Chi tiết sản phẩm" id={id} min={min} max={max} page={page} />
+            <Breadcrumb name="Chi tiết sản phẩm" id={id} min={min} max={max} page={page} code={code} />
 
             <div className="product__detail row no-gutters">
                 <div className="img col lg-8 md-8 lmd-12 sm-12"> 

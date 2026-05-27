@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import "./style.scss";
 import Title from "../theme/title";
 import { formatter } from 'utils/formatter';
@@ -27,16 +27,40 @@ const ProductsPage = () => {
     const minPrice = Number(searchParams.get("min")) || 0;
     const maxPrice = Number(searchParams.get("max")) || 9999999;
     const page = Number(searchParams.get("page")) || 1;
+    const codeQuery = searchParams.get("code")?.trim() || "";
 
+    const [codeInput, setCodeInput] = useState(codeQuery);
+
+    useEffect(() => {
+        setCodeInput(codeQuery);
+    }, [codeQuery]);
+
+    const buildParams = ({ min = minPrice, max = maxPrice, page: nextPage = page, code = codeQuery } = {}) => {
+        const params = { min, max, page: nextPage };
+
+        if (code) {
+            params.code = code;
+        }
+
+        return params;
+    };
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        setSearchParams(buildParams({ page: 1, code: codeInput.trim() }));
+    };
 
     const filteredProducts = useMemo(() => {
+        const keyword = codeQuery.toLowerCase();
+
         return products?.filter(
             (item) =>
                 item.status === "available" &&
                 Number(item.price) >= minPrice &&
-                Number(item.price) <= maxPrice
+                Number(item.price) <= maxPrice &&
+                (!keyword || item.product_code?.toLowerCase().includes(keyword))
         );
-    }, [products, minPrice, maxPrice]);
+    }, [products, minPrice, maxPrice, codeQuery]);
 
     const totalPages = Math.ceil(
         filteredProducts?.length / limit
@@ -105,27 +129,27 @@ const ProductsPage = () => {
                 <div className="row">
                     <div ref={boxRef} className="product__left col lg-2 md-2 lmd-12 sm-12">
                         <button className="active" onClick={(e) => {
-                            setSearchParams({ min: 0, max: 9999999999, page: 1 });
+                            setSearchParams(buildParams({ min: 0, max: 9999999999, page: 1 }));
                             setActive(e.target);
                         }}>Tất Cả</button>
 
                         <button onClick={(e) => {
-                            setSearchParams({ min: 0, max: 1000000, page: 1 });
+                            setSearchParams(buildParams({ min: 0, max: 1000000, page: 1 }));
                             setActive(e.target);
                         }}>{"<1000"}</button>
 
                         <button onClick={(e) => {
-                            setSearchParams({ min: 1000000, max: 2000000, page: 1 });
+                            setSearchParams(buildParams({ min: 1000000, max: 2000000, page: 1 }));
                             setActive(e.target);
                         }}>1000-2000</button>
 
                         <button onClick={(e) => {
-                            setSearchParams({ min: 2000000, max: 3000000, page: 1 });
+                            setSearchParams(buildParams({ min: 2000000, max: 3000000, page: 1 }));
                             setActive(e.target);
                         }}>2000-3000</button>
 
                         <button onClick={(e) => {
-                            setSearchParams({ min: 3000000, max: 10000000, page: 1 });
+                            setSearchParams(buildParams({ min: 3000000, max: 10000000, page: 1 }));
                             setActive(e.target);
                         }}>3000-10000</button>
 
@@ -133,9 +157,26 @@ const ProductsPage = () => {
                     </div>
 
                     <div className="product__right col lg-10 md-10 lmd-12 sm-12">
+                        <form className="product__search" onSubmit={handleSearch}>
+                            <input
+                                type="text"
+                                value={codeInput}
+                                onChange={(e) => setCodeInput(e.target.value)}
+                                placeholder="Tìm theo mã sản phẩm..."
+                            />
+                            <button type="submit">Tìm kiếm</button>
+                        </form>
+
                         <div className="row">
                             <div className="items col lg-12 md-12 lmd-12 sm-12">
                                 <div className="row">
+                                    {currentProducts?.length === 0 && (
+                                        <div className="product__empty col lg-12 md-12 lmd-12 sm-12">
+                                            {codeQuery
+                                                ? `Không tìm thấy sản phẩm với mã "${codeQuery}".`
+                                                : "Không có sản phẩm trong khoảng giá này."}
+                                        </div>
+                                    )}
                                     {
                                         currentProducts?.map((item) => (
                                             <div className="col lg-4 md-4 lmd-6 sm-12" key={item.id}>
@@ -143,7 +184,8 @@ const ProductsPage = () => {
                                                     state={{
                                                         min: minPrice,
                                                         max: maxPrice,
-                                                        page: page
+                                                        page: page,
+                                                        code: codeQuery,
                                                     }}
                                                 >
                                                     <div className="item">
@@ -172,7 +214,7 @@ const ProductsPage = () => {
                             </div>
 
                             <div className="pagination col lg-12 md-12 lmd-12 sm-12">
-                                <button disabled={page === 1} onClick={() => setSearchParams({ min: minPrice, max: maxPrice, page: page - 1 })}>{"<"}</button>
+                                <button disabled={page === 1} onClick={() => setSearchParams(buildParams({ page: page - 1 }))}>{"<"}</button>
 
                                 {
                                     getPagination().map((item, index) =>
@@ -181,11 +223,11 @@ const ProductsPage = () => {
                                         ) : (
                                             <button key={index} className={
                                                 page === item ? "active" : ""
-                                            } onClick={() => setSearchParams({ min: minPrice, max: maxPrice, page: item })} >{item}</button>
+                                            } onClick={() => setSearchParams(buildParams({ page: item }))} >{item}</button>
                                         )
                                     )
                                 }
-                                <button disabled={page === totalPages} onClick={() => setSearchParams({ min: minPrice, max: maxPrice, page: page + 1 })}>{">"}</button>
+                                <button disabled={page === totalPages || totalPages === 0} onClick={() => setSearchParams(buildParams({ page: page + 1 }))}>{">"}</button>
 
                             </div>
                         </div>
