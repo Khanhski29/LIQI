@@ -13,6 +13,27 @@ const BreadCrumb = (props) =>{
 
 
 
+    const getFilterLabel = () => {
+        if (props.code) return props.code;
+        return getPriceLabel(props.min, props.max);
+    };
+
+    const getProductsLink = () => {
+        const params = new URLSearchParams({
+            min: props.min ?? 0,
+            max: props.max ?? 9999999,
+            page: props.page ?? 1,
+        });
+
+        if (props.code) {
+            params.set("code", props.code);
+        }
+
+        return `${ROUTERS.USER.PRODUCTS}?${params.toString()}`;
+    };
+
+
+
     return (
         <div className='breadcrumb'>
             <ul>
@@ -21,7 +42,7 @@ const BreadCrumb = (props) =>{
                 </li>
 
                 <li className='link'>
-                    <Link to={`${ROUTERS.USER.PRODUCTS}?min=${props.min}&max=${props.max}&page=${props.page}`}>{getPriceLabel(props.min, props.max)}</Link>
+                    <Link to={getProductsLink()}>{getFilterLabel()}</Link>
                 </li>
 
                 <li>
