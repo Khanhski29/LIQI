@@ -72,9 +72,9 @@ const Header = () => {
                 <div className='col lg-6 md-6 lmd-3 sm-4 header__authentication'>
                     {isLoggedIn ? (
                         <ul className='row no-gutters'>
-                            <li className='col lg-o-3 lg-5 md-o-2 md-5 lmd-12 sm-12'>
+                            <li className='col lg-o-6 lg-3 md-o-5 md-3 lmd-12 sm-12'>
                                 <Link to={ROUTERS.USER.PROFILE}>
-                                    Xin chào, {authUser.name}
+                                    Hồ Sơ 
                                 </Link>
                             </li>
                             <li className='col lg-3 md-3 lmd-0 sm-0'>

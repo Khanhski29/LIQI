@@ -40,9 +40,9 @@
         flex-wrap: nowrap;
         width: max-content;
         align-items: stretch;
-        gap: 10px;
+        gap: 20px;
         animation: none;
-
+        padding: 20px 0;
         &--ready {
             animation: reviews-slider 40s linear infinite;
         }
@@ -52,10 +52,11 @@
         flex-shrink: 0;
         display: flex;
         flex-direction: column;
-        width: 100cqw;
+        width: calc(100cqw - 20px);
         padding: 16px 18px;
         border: 1px solid #2a2a2a;
-        background: #111;
+        background: #ffffff;
+        box-shadow: 6px 5px 3px 0 rgb(0 0 0 / 65%);
         box-sizing: border-box;
 
         &-header {
@@ -80,8 +81,8 @@
 
         &-content {
             flex: 1;
-            color: #ccc;
-            font-size: 14px;
+            color: map.get($theme-color, "sub-color");
+            font-size: 13px;
             line-height: 1.6;
             white-space: pre-wrap;
             word-break: break-word;
