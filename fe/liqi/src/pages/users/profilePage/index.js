@@ -2,7 +2,7 @@ import { memo, useState } from "react";
 import "./style.scss";
 import { useNavigate } from "react-router-dom";
 import { ROUTERS } from "utils/router";
-import { useMyOrdersUS, useChangePasswordUS } from "api/auth";
+import { useMyOrdersUS, useChangePasswordUS, useLogoutUS } from "api/auth";
 import { formatter } from "utils/formatter";
 import Title from "pages/users/theme/title";
 
@@ -27,17 +27,16 @@ const CopyCredentials = ({ username, password }) => {
 };
 
 const STATUS_LABEL = {
-    pending:        { text: "Chờ thanh toán", cls: "status--pending" },
-    done:           { text: "Thành công",     cls: "status--done"    },
-    cancel:         { text: "Đã huỷ",         cls: "status--cancel"  },
-    refund_needed:  { text: "Cần hoàn tiền",  cls: "status--refund"  },
+    pending: { text: "Chờ thanh toán", cls: "status--pending" },
+    done: { text: "Thành công", cls: "status--done" },
+    cancel: { text: "Đã huỷ", cls: "status--cancel" },
+    refund_needed: { text: "Cần hoàn tiền", cls: "status--refund" },
 };
 
 const ProfilePage = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const [selectedImage, setSelectedImage] = useState(null);
-    const [visibleCreds, setVisibleCreds] = useState({});
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [pwForm, setPwForm] = useState({ current_password: "", new_password: "", confirm_password: "" });
     const [pwError, setPwError] = useState("");
@@ -48,6 +47,14 @@ const ProfilePage = () => {
     })();
 
     const { data, isLoading } = useMyOrdersUS({ page });
+
+    const { mutate: logout } = useLogoutUS({
+        onSettled: () => {
+            localStorage.removeItem("auth_token");
+            localStorage.removeItem("auth_user");
+            navigate(ROUTERS.USER.HOME);
+        },
+    });
 
     const { mutate: changePassword, isPending: isChangingPw } = useChangePasswordUS({
         onSuccess: () => {
@@ -81,10 +88,6 @@ const ProfilePage = () => {
         return null;
     }
 
-    const toggleCreds = (id) => {
-        setVisibleCreds((prev) => ({ ...prev, [id]: !prev[id] }));
-    };
-
     return (
         <div className="profile container wide">
             <Title name="Tài Khoản Của Tôi" />
@@ -93,12 +96,17 @@ const ProfilePage = () => {
                 <p><span>Tên:</span> {authUser.name}</p>
                 <p><span>Email:</span> {authUser.email}</p>
                 {authUser.phone && <p><span>Số điện thoại:</span> {authUser.phone}</p>}
-                <button
-                    className="btn-change-pw"
-                    onClick={() => { setShowChangePassword((v) => !v); setPwError(""); setPwSuccess(""); }}
-                >
-                    {showChangePassword ? "Huỷ" : "Đổi mật khẩu"}
-                </button>
+                <div className="profile__info-actions">
+                    <button
+                        className="btn-change-pw"
+                        onClick={() => { setShowChangePassword((v) => !v); setPwError(""); setPwSuccess(""); }}
+                    >
+                        {showChangePassword ? "Huỷ" : "Đổi mật khẩu"}
+                    </button>
+                    <button className="btn-logout" type="button" onClick={() => logout()}>
+                        Đăng xuất
+                    </button>
+                </div>
 
                 {showChangePassword && (
                     <form className="change-pw-form" onSubmit={handleSubmitPw}>
@@ -126,7 +134,7 @@ const ProfilePage = () => {
                             onChange={handleChangePw}
                             required
                         />
-                        {pwError   && <p className="pw-msg pw-msg--error">{pwError}</p>}
+                        {pwError && <p className="pw-msg pw-msg--error">{pwError}</p>}
                         {pwSuccess && <p className="pw-msg pw-msg--success">{pwSuccess}</p>}
                         <button type="submit" className="btn-l btn-pw-submit" disabled={isChangingPw}>
                             {isChangingPw ? "Đang lưu..." : "Xác nhận"}
@@ -135,18 +143,20 @@ const ProfilePage = () => {
                 )}
             </div>
 
-            <h3 className="profile__section-title">Lịch sử đơn hàng</h3>
 
-            {isLoading && <p className="profile__loading">Đang tải...</p>}
-
-            {!isLoading && data?.data?.length === 0 && (
-                <p className="profile__empty">Bạn chưa có đơn hàng nào.</p>
-            )}
 
             <div className="profile__orders">
+
+                <h3 className="profile__section-title">Lịch sử đơn hàng</h3>
+
+                {isLoading && <p className="profile__loading">Đang tải...</p>}
+
+                {!isLoading && data?.data?.length === 0 && (
+                    <p className="profile__empty">Bạn chưa có đơn hàng nào.</p>
+                )}
+
                 {data?.data?.map((order) => {
                     const status = STATUS_LABEL[order.payment_status] || { text: order.payment_status, cls: "" };
-                    const showCreds = visibleCreds[order.id];
 
                     return (
                         <div key={order.id} className="profile__order-card">
@@ -158,31 +168,25 @@ const ProfilePage = () => {
                                 />
                             </div>
 
-                            <div className="profile__order-card__info">
-                                <p className="order-id">Đơn #{order.id}</p>
-                                <p className="order-price">{formatter(order.snapshot_price)}</p>
-                                <p className="order-date">{order.created_at}</p>
-                                <span className={`order-status ${status.cls}`}>{status.text}</span>
-                            </div>
+                            <div className="profile__order-card__info row">
+                                <p className="order-id col lg-1 md-1 lmd-2 sm-6">Đơn #{order.id}</p>
+                                <p className="order-price col lg-2 md-2 lmd-2 sm-6">{formatter(order.snapshot_price)}</p>
+                                <p className="order-date col lg-3 md-3 lmd-3 sm-6">{order.created_at}</p>
+                                <span className={`order-status ${status.cls} col lg-2 md-2 lmd-2 sm-6`}>{status.text}</span>
 
-                            {order.payment_status === "done" && (
-                                <div className="profile__order-card__creds">
-                                    <button
-                                        className="btn-creds"
-                                        onClick={() => toggleCreds(order.id)}
-                                    >
-                                        {showCreds ? "Ẩn thông tin acc" : "Xem thông tin acc"}
-                                    </button>
-                                    {showCreds && (
+                                {order.payment_status === "done" && (
+                                    <div className="profile__order-card__creds col lg-3 md-3 lmd-3 sm-4">
                                         <div className="creds-box">
                                             <CopyCredentials
                                                 username={order.username_account}
                                                 password={order.password_account}
                                             />
                                         </div>
-                                    )}
-                                </div>
-                            )}
+                                    </div>
+                                )}
+                            </div>
+
+
                         </div>
                     );
                 })}

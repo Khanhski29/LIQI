@@ -4,7 +4,7 @@
 .products {
     margin-top: 60px !important;
     .products__container {
-        padding: 32px 16px 64px !important;
+        padding: 32px 16px 0 !important;
         
     }
     
@@ -74,7 +74,7 @@
             }
 
             .items {
-                min-height: 600px;
+                min-height: 550px;
             a {
                 text-decoration: none;
                 
