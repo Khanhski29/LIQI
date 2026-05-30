@@ -53,18 +53,61 @@
                 margin-bottom: 20px;
             }
 
-            .option {
-                margin: 10px 0;
-                button{
-                    padding: 8px 16px;
-                    font-size: 16px;
-                    margin-right: 10px;
+            .price-row {
+                display: flex;
+                align-items: baseline;
+                flex-wrap: wrap;
+                gap: 16px;
+                margin-bottom: 20px;
+
+                .price {
+                    margin-bottom: 0;
                 }
 
-                &.option__2 {
+                .price-monthly {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+                    font-size: 14px;
+                    color: map.get($theme-color, "sub-color");
+
+                    strong {
+                        font-size: 20px;
+                        font-weight: 300;
+                        color: map.get($theme-color, "price-color");
+                    }
+                }
+            }
+
+            .option {
+                margin: 10px 0;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                border-top: 1px solid map.get($theme-color, "ncolor");
+                padding-top: 5px;
+
+                button {
+                    padding: 8px 16px;
+                    font-size: 16px;
+                    margin-right: 0;
+                    background-color: #ece8e1;
+                    color: map.get($theme-color, "ncolor");
+
+                    &.active {
+                        background-color: #fc5f6c;
+                        color: map.get($theme-color, "dcolor");
+                    }
+                }
+
+                &.option__3 {
                     margin-bottom: 30px;
                 }
-                
+
+                &.option--dimmed {
+                    opacity: 0.35;
+                    pointer-events: none;
+                }
             }
         }
 
@@ -80,12 +123,14 @@
         }
 
         .box__service {
+
             border: 1px solid map.get($theme-color, "ncolor");
             justify-content: space-between;
             height: 165px;
             padding: 24px 0px 24px 4px;
             margin-left: 0 !important;
             margin-right: 0 !important;
+            max-width: 400px;
             .item {
                 // margin-bottom: 15px;
                 display: flex;
