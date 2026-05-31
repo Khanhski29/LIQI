@@ -48,7 +48,6 @@ const ProductPage = () => {
                         type: PAYMENT_TYPES.INSTALLMENT,
                         months,
                         downPayment,
-                        total: installment.total,
                         upfront: installment.upfront,
                         monthly: installment.monthly,
                     }
@@ -140,7 +139,7 @@ const ProductPage = () => {
 
                     {isInstallment ? (
                         <div className="price-row">
-                            <p className="price">{formatter(installment.total)}</p>
+                            <p className="price">{formatter(installment.upfront)}</p>
                             <p className="price-monthly">
                                 <span>Trả hàng tháng</span>
                                 <strong>{formatter(installment.monthly)}</strong>
