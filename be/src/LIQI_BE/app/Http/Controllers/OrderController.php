@@ -99,29 +99,57 @@ class OrderController extends Controller
 
     public function index(Request $request)
     {
-        $status = $request->query('status');
+        $status      = $request->query('status');
+        $paymentType = $request->query('payment_type');
+        $installmentStatus = $request->query('installment_status');
         $perPage = 15;
 
-        $query = Order::with('product')
+        $query = Order::with(['product', 'installmentSchedules'])
             ->orderBy('created_at', 'desc');
 
         if ($status) {
             $query->where('payment_status', $status);
         }
 
+        if ($paymentType) {
+            $query->where('payment_type', $paymentType);
+        }
+
+        if ($installmentStatus) {
+            $query->where('installment_status', $installmentStatus);
+        }
+
         $orders = $query->paginate($perPage);
 
         $data = $orders->map(function ($order) {
+            $paidPeriods = $order->installmentSchedules
+                ->where('status', 'paid')
+                ->count();
+
+            $nextSchedule = $order->installmentSchedules
+                ->whereIn('status', ['pending', 'overdue'])
+                ->sortBy('period')
+                ->first();
+
             return [
-                'id'             => $order->id,
-                'product_code'   => $order->product?->product_code,
-                'snapshot_img'   => $order->snapshot_img,
-                'snapshot_price' => $order->snapshot_price,
-                'payment_status' => $order->payment_status,
-                'user_name'      => $order->snapshot_user_name,
-                'user_phone'     => $order->snapshot_phone,
-                'user_email'     => $order->snapshot_email,
-                'created_at'     => $order->created_at?->format('Y-m-d H:i:s'),
+                'id'                         => $order->id,
+                'product_code'               => $order->product?->product_code,
+                'snapshot_img'               => $order->snapshot_img,
+                'snapshot_price'             => $order->snapshot_price,
+                'payment_status'             => $order->payment_status,
+                'payment_type'               => $order->payment_type,
+                'installment_status'         => $order->installment_status,
+                'installment_months'         => $order->installment_months,
+                'installment_down_payment_pct' => $order->installment_down_payment_pct,
+                'installment_monthly'        => $order->installment_monthly,
+                'installment_paid_periods'   => $paidPeriods,
+                'installment_next_due'       => $nextSchedule?->due_date?->format('Y-m-d'),
+                'installment_next_amount'    => $nextSchedule?->amount,
+                'installment_next_status'    => $nextSchedule?->status,
+                'user_name'                  => $order->snapshot_user_name,
+                'user_phone'                 => $order->snapshot_phone,
+                'user_email'                 => $order->snapshot_email,
+                'created_at'                 => $order->created_at?->format('Y-m-d H:i:s'),
             ];
         });
 
@@ -161,31 +189,77 @@ class OrderController extends Controller
     public function myOrders(Request $request)
     {
         $perPage = 10;
+        $userId  = $request->user()->id;
 
-        $orders = Order::where('user_id', $request->user()->id)
+        $orders = Order::with(['product', 'installmentSchedules'])
+            ->where('user_id', $userId)
             ->where('payment_status', 'done')
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
 
-        $data = $orders->map(function ($order) {
-            $isDone = $order->payment_status === 'done';
+        $installmentOrders = Order::with(['product', 'installmentSchedules'])
+            ->where('user_id', $userId)
+            ->where('payment_status', 'done')
+            ->where('payment_type', 'installment')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(fn ($order) => $this->mapMyOrder($order));
 
-            return [
-                'id'              => $order->id,
-                'snapshot_img'    => $order->snapshot_img,
-                'snapshot_price'  => $order->snapshot_price,
-                'payment_status'  => $order->payment_status,
-                'created_at'      => $order->created_at?->format('Y-m-d H:i:s'),
-                'username_account' => $isDone ? $order->snapshot_username_account : null,
-                'password_account' => $isDone ? $order->snapshot_password_account : null,
-            ];
-        });
+        $data = $orders->map(fn ($order) => $this->mapMyOrder($order));
 
         return response()->json([
-            'data'         => $data,
-            'current_page' => $orders->currentPage(),
-            'last_page'    => $orders->lastPage(),
-            'total'        => $orders->total(),
+            'data'               => $data,
+            'installment_orders' => $installmentOrders,
+            'current_page'       => $orders->currentPage(),
+            'last_page'          => $orders->lastPage(),
+            'total'              => $orders->total(),
         ]);
+    }
+
+    private function mapMyOrder(Order $order): array
+    {
+        $isDone = $order->payment_status === 'done';
+
+        $paidPeriods = $order->installmentSchedules
+            ->where('status', 'paid')
+            ->count();
+
+        $nextSchedule = $order->installmentSchedules
+            ->whereIn('status', ['pending', 'overdue'])
+            ->sortBy('period')
+            ->first();
+
+        $payload = [
+            'id'               => $order->id,
+            'product_code'     => $order->product?->product_code,
+            'snapshot_img'     => $order->snapshot_img,
+            'snapshot_price'   => $order->snapshot_price,
+            'payment_status'   => $order->payment_status,
+            'payment_type'     => $order->payment_type,
+            'created_at'       => $order->created_at?->format('Y-m-d H:i:s'),
+            'username_account' => $isDone ? $order->snapshot_username_account : null,
+            'password_account' => $isDone ? $order->snapshot_password_account : null,
+        ];
+
+        if ($order->payment_type === 'installment') {
+            $payload['installment'] = [
+                'status'           => $order->installment_status,
+                'months'           => $order->installment_months,
+                'down_payment_pct' => $order->installment_down_payment_pct,
+                'monthly'          => $order->installment_monthly,
+                'paid_periods'     => $paidPeriods,
+                'next_period'      => $nextSchedule ? [
+                    'period'          => $nextSchedule->period,
+                    'amount'          => $nextSchedule->amount,
+                    'due_date'        => $nextSchedule->due_date->format('d/m/Y'),
+                    'grace_until'     => $nextSchedule->grace_until->format('d/m/Y'),
+                    'schedule_status' => $nextSchedule->status,
+                    'payment_token'   => $nextSchedule->payment_token,
+                    'can_pay'         => $nextSchedule->isPayable(),
+                ] : null,
+            ];
+        }
+
+        return $payload;
     }
 }

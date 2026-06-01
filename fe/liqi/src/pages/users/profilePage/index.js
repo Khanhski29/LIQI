@@ -1,6 +1,6 @@
 import { memo, useState } from "react";
 import "./style.scss";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link, generatePath } from "react-router-dom";
 import { ROUTERS } from "utils/router";
 import { useMyOrdersUS, useChangePasswordUS, useLogoutUS } from "api/auth";
 import { formatter } from "utils/formatter";
@@ -31,6 +31,12 @@ const STATUS_LABEL = {
     done: { text: "Thành công", cls: "status--done" },
     cancel: { text: "Đã huỷ", cls: "status--cancel" },
     refund_needed: { text: "Cần hoàn tiền", cls: "status--refund" },
+};
+
+const INSTALLMENT_STATUS_LABEL = {
+    active:    { text: "Đang trả góp", cls: "installment--active" },
+    completed: { text: "Hoàn tất", cls: "installment--done" },
+    defaulted: { text: "Đã thu hồi", cls: "installment--defaulted" },
 };
 
 const ProfilePage = () => {
@@ -88,6 +94,8 @@ const ProfilePage = () => {
         return null;
     }
 
+    const installmentOrders = data?.installment_orders || [];
+
     return (
         <div className="profile container wide">
             <Title name="Tài Khoản Của Tôi" />
@@ -143,7 +151,85 @@ const ProfilePage = () => {
                 )}
             </div>
 
+            {installmentOrders.length > 0 && (
+                <div className="profile__installments">
+                    <h3 className="profile__section-title">Acc trả góp</h3>
+                    {installmentOrders.map((order) => {
+                        const inst = order.installment;
+                        const instStatus = INSTALLMENT_STATUS_LABEL[inst.status] || { text: inst.status, cls: "" };
+                        const next = inst.next_period;
 
+                        return (
+                            <div key={`inst-${order.id}`} className="profile__installment-card">
+                                <div className="profile__installment-card__left">
+                                    <img
+                                        src={order.snapshot_img}
+                                        alt={order.product_code}
+                                        onClick={() => setSelectedImage(order.snapshot_img)}
+                                    />
+                                </div>
+                                <div className="profile__installment-card__body">
+                                    <p className="installment-code">
+                                        #{order.product_code || order.id} · Đơn #{order.id}
+                                    </p>
+                                    <p className="installment-plan">
+                                        {inst.months} tháng · Trả trước {inst.down_payment_pct}% ·{" "}
+                                        {formatter(inst.monthly)}/tháng
+                                    </p>
+                                    <p className="installment-progress">
+                                        Đã trả: {inst.paid_periods}/{inst.months} kỳ
+                                    </p>
+                                    <span className={`installment-status ${instStatus.cls}`}>
+                                        {instStatus.text}
+                                    </span>
+
+                                    {order.username_account && order.password_account && (
+                                        <div className="installment-creds">
+                                            <CopyCredentials
+                                                username={order.username_account}
+                                                password={order.password_account}
+                                            />
+                                        </div>
+                                    )}
+
+                                    {inst.status === "active" && next && (
+                                        <div className="installment-next">
+                                            <p>
+                                                Kỳ {next.period}: {formatter(next.amount)} · Hạn {next.due_date}
+                                                {next.schedule_status === "overdue" && " (quá hạn)"}
+                                            </p>
+                                            {next.can_pay ? (
+                                                <Link
+                                                    className="btn-l installment-pay"
+                                                    to={generatePath(ROUTERS.USER.INSTALLMENT_PAY, {
+                                                        token: next.payment_token,
+                                                    })}
+                                                >
+                                                    Thanh toán kỳ {next.period}
+                                                </Link>
+                                            ) : (
+                                                <p className="installment-wait">
+                                                    Thanh toán mở từ ngày {next.due_date}
+                                                </p>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {inst.status === "completed" && (
+                                        <p className="installment-note">Bạn đã hoàn tất trả góp acc này.</p>
+                                    )}
+
+                                    {inst.status === "defaulted" && (
+                                        <p className="installment-note installment-note--warn">
+                                            Acc đã bị thu hồi do quá hạn. Liên hệ shop nếu cần hỗ trợ.
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
 
             <div className="profile__orders">
 

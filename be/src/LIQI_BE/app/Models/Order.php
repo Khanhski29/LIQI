@@ -23,6 +23,9 @@ class Order extends Model
         'installment_down_payment_pct',
         'installment_monthly',
         'installment_total',
+        'installment_status',
+        'installment_anchor_day',
+        'installment_started_at',
         'snapshot_username_account',
         'snapshot_password_account',
         'payment_status',
@@ -36,6 +39,7 @@ class Order extends Model
             'pay_amount'          => 'decimal:2',
             'installment_monthly' => 'decimal:2',
             'installment_total'   => 'decimal:2',
+            'installment_started_at' => 'datetime',
         ];
     }
 
@@ -51,6 +55,16 @@ class Order extends Model
 
     public function payment()
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasOne(Payment::class)->whereNull('installment_schedule_id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function installmentSchedules()
+    {
+        return $this->hasMany(InstallmentSchedule::class)->orderBy('period');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\OrderSuccessMail;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Services\InstallmentScheduleService;
 use App\Services\OrderCancellationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -14,7 +15,7 @@ class PaymentController extends Controller
 {
     private PayOS $payOS;
 
-    public function __construct()
+    public function __construct(private InstallmentScheduleService $scheduleService)
     {
         $this->payOS = new PayOS(
             env('PAYOS_CLIENT_ID'),
@@ -60,6 +61,7 @@ class PaymentController extends Controller
 
         Payment::create([
             'order_id'         => $order->id,
+            'installment_schedule_id' => null,
             'provider'         => 'payos',
             'amount'           => $amount,
             'payment_link'     => $response['checkoutUrl'],
@@ -99,7 +101,9 @@ class PaymentController extends Controller
         $orderCode = $data['orderCode'] ?? null;
         $status    = $data['code'] ?? null;  // '00' = thành công
 
-        $payment = Payment::where('payos_order_code', (string) $orderCode)->first();
+        $payment = Payment::with(['installmentSchedule', 'order.product'])
+            ->where('payos_order_code', (string) $orderCode)
+            ->first();
 
         if (! $payment) {
             return response()->json(['message' => 'Payment not found'], 404);
@@ -125,19 +129,29 @@ class PaymentController extends Controller
                 'raw_response'   => $data,
             ]);
 
-            $order = $payment->order;
-            $order->update(['payment_status' => 'done']);
-            $order->product->update(['status' => 'sold']);
+            if ($payment->installment_schedule_id) {
+                $this->scheduleService->markPeriodPaid($payment->installmentSchedule);
+            } else {
+                $order = $payment->order;
+                $order->update(['payment_status' => 'done']);
+                $order->product->update(['status' => 'sold']);
 
-            Mail::to($order->snapshot_email)->queue(new OrderSuccessMail($order));
+                if ($order->payment_type === 'installment') {
+                    $this->scheduleService->activateAfterUpfrontPaid($order);
+                }
+
+                Mail::to($order->snapshot_email)->queue(new OrderSuccessMail($order));
+            }
         } else {
             $payment->update([
                 'status'       => 'failed',
                 'raw_response' => $data,
             ]);
 
-            $payment->order->update(['payment_status' => 'cancel']);
-            $payment->order->product->update(['status' => 'available']);
+            if (! $payment->installment_schedule_id) {
+                $payment->order->update(['payment_status' => 'cancel']);
+                $payment->order->product->update(['status' => 'available']);
+            }
         }
 
         return response()->json(['message' => 'ok']);

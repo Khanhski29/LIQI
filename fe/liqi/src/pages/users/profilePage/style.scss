@@ -113,6 +113,96 @@
         gap: 16px;
     }
 
+    &__installments {
+        margin-bottom: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__installment-card {
+        display: flex;
+        gap: 20px;
+        padding: 16px 0;
+        border-bottom: 1px solid #000;
+
+        &__left img {
+            width: 90px;
+            height: 64px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        &__body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+
+            .installment-code {
+                font-size: 16px;
+                color: #000;
+            }
+
+            .installment-plan,
+            .installment-progress {
+                font-size: 15px;
+                color: map.get($theme-color, "sub-color");
+            }
+
+            .installment-status {
+                display: inline-block;
+                font-size: 14px;
+                padding: 2px 8px;
+                width: fit-content;
+
+                &.installment--active { color: #f39c12; }
+                &.installment--done { color: #2ecc71; }
+                &.installment--defaulted { color: #e74c3c; }
+            }
+
+            .installment-next {
+                margin-top: 8px;
+
+                p {
+                    font-size: 15px;
+                    color: map.get($theme-color, "ncolor");
+                    margin-bottom: 8px;
+                }
+            }
+
+            .installment-pay {
+                display: inline-block;
+                padding: 10px 20px;
+                font-size: 14px;
+                background: map.get($theme-color, "price-color");
+                color: map.get($theme-color, "dcolor");
+                text-decoration: none;
+                text-align: center;
+                width: fit-content;
+
+                &:hover {
+                    opacity: 0.9;
+                }
+            }
+
+            .installment-wait {
+                font-size: 14px;
+                color: #888;
+            }
+
+            .installment-note {
+                font-size: 14px;
+                color: map.get($theme-color, "sub-color");
+                margin-top: 4px;
+
+                &--warn {
+                    color: #e74c3c;
+                }
+            }
+        }
+    }
+
     &__order-card {
         display: flex;
         align-items: flex-start;

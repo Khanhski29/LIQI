@@ -30,7 +30,10 @@ const OrderManagePage = () => {
                 </TabPanel>
 
                 <TabPanel className="order__tab-panel">
-                    <h1>Đang phát triển</h1>
+                    <OrderList
+                        paymentType="installment"
+                        showInstallmentActions
+                    />
                 </TabPanel>
 
             </Tabs>

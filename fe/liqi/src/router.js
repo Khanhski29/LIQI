@@ -16,6 +16,7 @@ import CheckoutPage from "pages/users/checkoutPage";
 import OrderSuccessPage from "pages/users/orderSuccessPage";
 import OrderFailPage from "pages/users/orderFailPage";
 import PaymentPage from "pages/users/paymentPage";
+import InstallmentPayPage from "pages/users/installmentPayPage";
 import LoginAdminPage from "pages/admin/loginPage";
 import AdminMaterLayout from 'pages/admin/theme/adminMaterLayout';
 import OrderManagePage from "pages/admin/orderManagePage";
@@ -47,6 +48,7 @@ const renderUserRouter = () => {
         { path: ROUTERS.USER.SUPPORT,    component: <SupportPage /> },
         { path: ROUTERS.USER.CHECKOUT,      component: <CheckoutPage /> },
         { path: ROUTERS.USER.PAYMENT,       component: <PaymentPage /> },
+        { path: ROUTERS.USER.INSTALLMENT_PAY, component: <InstallmentPayPage /> },
         { path: ROUTERS.USER.ORDER_SUCCESS, component: <OrderSuccessPage /> },
         { path: ROUTERS.USER.ORDER_FAIL,    component: <OrderFailPage /> },
     ];
