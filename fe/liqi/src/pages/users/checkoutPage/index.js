@@ -1,15 +1,23 @@
-import { memo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import "./style.scss";
 import Title from "../theme/title";
 import { formatter } from "utils/formatter";
-import { useParams, useNavigate } from "react-router-dom";
+import { calcInstallment } from "utils/installment";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useGetProductUS } from "api/homepage";
 import { useCreateOrderUS } from "api/orders";
 import { useCreatePaymentUS } from "api/payments";
 
+const PAYMENT_TYPES = {
+    FULL: "full",
+    INSTALLMENT: "installment",
+};
+
 const CheckoutPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+    const paymentSelection = location.state?.payment ?? { type: PAYMENT_TYPES.FULL };
 
     const authUser = (() => {
         try { return JSON.parse(localStorage.getItem("auth_user")); } catch { return null; }
@@ -17,6 +25,17 @@ const CheckoutPage = () => {
     const isLoggedIn = !!localStorage.getItem("auth_token") && authUser?.role === "user";
 
     const { data: product, isLoading, error } = useGetProductUS(id);
+
+    const isInstallment = paymentSelection.type === PAYMENT_TYPES.INSTALLMENT;
+
+    const installment = useMemo(() => {
+        if (!isInstallment || !product?.price) return null;
+        return calcInstallment(
+            product.price,
+            paymentSelection.months,
+            paymentSelection.downPayment
+        );
+    }, [isInstallment, product?.price, paymentSelection.months, paymentSelection.downPayment]);
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [form, setForm] = useState({
@@ -72,6 +91,14 @@ const CheckoutPage = () => {
             name: form.name.trim(),
             phone: form.phone.trim(),
             email: form.email.trim(),
+            payment_type: paymentSelection.type,
+            ...(isInstallment && installment && {
+                installment_months: paymentSelection.months,
+                installment_down_payment_pct: paymentSelection.downPayment,
+                installment_upfront: installment.upfront,
+                installment_monthly: installment.monthly,
+                installment_total: installment.total,
+            }),
         });
     };
 
@@ -126,18 +153,34 @@ const CheckoutPage = () => {
                         </div>
 
                         <p className="col lg-2 md-2 lmd-2 sm-12">#{product.product_code}</p>
-                        <p className="price col lg-2 md-2 lmd-2 sm-12">{formatter(product.price)}</p>
+                        <p className="price col lg-2 md-2 lmd-2 sm-12">{formatter(installment.upfront)}</p>
                     </div>
                 </div>
 
-                {/* Hình thức thanh toán — trả góp ẩn tạm */}
                 <div className="checkout__option col lg-6 md-6 lmd-12 sm-12">
                     <div className="checkout__option__container">
                         <p className="checkout__sub__title">Hình thức</p>
-                        <div className="option">
-                            <div className="option__1 option">
-                                <button type="button" className="btn-l active">Trả tất</button>
-                            </div>
+                        <div className="checkout__payment-info">
+                            <p className="checkout__payment-type">
+                                {isInstallment ? "Trả góp" : "Trả hết"}
+                            </p>
+                            {isInstallment && installment ? (
+                                <div className="checkout__installment-detail">
+                                    <p className="checkout__installment-term">
+                                        {paymentSelection.months} tháng · Trả trước {paymentSelection.downPayment}%
+                                    </p>
+                                    <div className="checkout__price-line">
+                                        <span>Trả trước</span>
+                                        <strong>{formatter(installment.upfront)}</strong>
+                                    </div>
+                                    <div className="checkout__price-line">
+                                        <span>Hàng tháng trả</span>
+                                        <strong>{formatter(installment.monthly)}</strong>
+                                    </div>
+                                </div>
+                            ) : (
+                                <p className="checkout__full-price">{formatter(product.price)}</p>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -192,7 +235,11 @@ const CheckoutPage = () => {
                                 className="btn-l"
                                 disabled={isPending}
                             >
-                                {isPending ? "Đang đặt hàng..." : "Đặt Hàng"}
+                                {isPending
+                                    ? "Đang đặt hàng..."
+                                    : isInstallment
+                                        ? "Thanh toán"
+                                        : "Đặt Hàng"}
                             </button>
                         </div>
                     </form>

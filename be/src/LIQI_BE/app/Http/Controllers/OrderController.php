@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Services\InstallmentService;
 use App\Services\OrderCancellationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,11 +16,16 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'product_id' => 'required|integer|exists:products,id',
-            'name'       => 'required|string|max:100',
-            'phone'      => 'required|string|max:20',
-            'email'      => 'required|email|max:100',
+            'product_id'                   => 'required|integer|exists:products,id',
+            'name'                         => 'required|string|max:100',
+            'phone'                        => 'required|string|max:20',
+            'email'                        => 'required|email|max:100',
+            'payment_type'                 => 'nullable|in:full,installment',
+            'installment_months'           => 'required_if:payment_type,installment|integer|in:1,3,6,9,12',
+            'installment_down_payment_pct' => 'required_if:payment_type,installment|integer|in:30,50,70',
         ]);
+
+        $paymentType = $validated['payment_type'] ?? 'full';
 
         $product = Product::findOrFail($validated['product_id']);
 
@@ -38,19 +44,45 @@ class OrderController extends Controller
             }
         }
 
-        $order = DB::transaction(function () use ($validated, $product, $userId) {
+        $order = DB::transaction(function () use ($validated, $product, $userId, $paymentType) {
+            $payAmount          = $product->price;
+            $installmentMonths  = null;
+            $installmentPct     = null;
+            $installmentMonthly = null;
+            $installmentTotal   = null;
+
+            if ($paymentType === 'installment') {
+                $installment = InstallmentService::calc(
+                    $product->price,
+                    $validated['installment_months'],
+                    $validated['installment_down_payment_pct']
+                );
+
+                $payAmount          = $installment['upfront'];
+                $installmentMonths  = $validated['installment_months'];
+                $installmentPct     = $validated['installment_down_payment_pct'];
+                $installmentMonthly = $installment['monthly'];
+                $installmentTotal   = $installment['total'];
+            }
+
             $order = Order::create([
-                'user_id'                    => $userId,
-                'product_id'                 => $product->id,
-                'snapshot_user_name'         => $validated['name'],
-                'snapshot_phone'             => $validated['phone'],
-                'snapshot_email'             => $validated['email'],
-                'snapshot_img'               => $product->img,
-                'snapshot_price'             => $product->price,
-                'snapshot_username_account'  => $product->username_account,
-                'snapshot_password_account'  => $product->password_account,
-                'payment_status'             => 'pending',
-                'cancel_token'               => Str::random(64),
+                'user_id'                      => $userId,
+                'product_id'                   => $product->id,
+                'snapshot_user_name'           => $validated['name'],
+                'snapshot_phone'               => $validated['phone'],
+                'snapshot_email'               => $validated['email'],
+                'snapshot_img'                 => $product->img,
+                'snapshot_price'               => $product->price,
+                'payment_type'                 => $paymentType,
+                'pay_amount'                   => $payAmount,
+                'installment_months'           => $installmentMonths,
+                'installment_down_payment_pct' => $installmentPct,
+                'installment_monthly'          => $installmentMonthly,
+                'installment_total'            => $installmentTotal,
+                'snapshot_username_account'    => $product->username_account,
+                'snapshot_password_account'    => $product->password_account,
+                'payment_status'               => 'pending',
+                'cancel_token'                 => Str::random(64),
             ]);
 
             $product->update(['status' => 'reserved']);

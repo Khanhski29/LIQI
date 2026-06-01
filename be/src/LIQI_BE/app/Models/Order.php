@@ -17,6 +17,12 @@ class Order extends Model
         'snapshot_email',
         'snapshot_img',
         'snapshot_price',
+        'payment_type',
+        'pay_amount',
+        'installment_months',
+        'installment_down_payment_pct',
+        'installment_monthly',
+        'installment_total',
         'snapshot_username_account',
         'snapshot_password_account',
         'payment_status',
@@ -26,7 +32,10 @@ class Order extends Model
     protected function casts(): array
     {
         return [
-            'snapshot_price' => 'decimal:2',
+            'snapshot_price'      => 'decimal:2',
+            'pay_amount'          => 'decimal:2',
+            'installment_monthly' => 'decimal:2',
+            'installment_total'   => 'decimal:2',
         ];
     }
 

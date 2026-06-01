@@ -55,6 +55,51 @@
         }
     }
 
+    .checkout__payment-info {
+        margin-top: 16px;
+
+        .checkout__payment-type {
+            font-size: 24px;
+            color: map.get($theme-color, "price-color");
+            margin-bottom: 12px;
+        }
+
+        .checkout__full-price {
+            font-size: 24px;
+            color: map.get($theme-color, "price-color");
+        }
+
+        .checkout__installment-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .checkout__installment-term {
+                font-size: 16px;
+                color: map.get($theme-color, "sub-color");
+                margin-bottom: 4px;
+            }
+
+            .checkout__price-line {
+                display: flex;
+                align-items: baseline;
+                gap: 16px;
+
+                span {
+                    font-size: 16px;
+                    color: map.get($theme-color, "sub-color");
+                    white-space: nowrap;
+                }
+
+                strong {
+                    font-size: 24px;
+                    font-weight: 300;
+                    color: map.get($theme-color, "price-color");
+                }
+            }
+        }
+    }
+
 
     .checkout__option {
 
@@ -62,15 +107,6 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            .option {
-                margin: 10px 0;
-    
-                button{
-                    padding: 8px 16px;
-                    font-size: 16px;
-                    margin-right: 10px; 
-                }
-            }
         }
     }
 
