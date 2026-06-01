@@ -55,24 +55,22 @@
 
             .price-row {
                 display: flex;
-                align-items: baseline;
-                flex-wrap: wrap;
-                gap: 16px;
+                flex-direction: column;
+                gap: 8px;
                 margin-bottom: 20px;
 
-                .price {
-                    margin-bottom: 0;
-                }
-
-                .price-monthly {
+                .price-line {
                     display: flex;
-                    flex-direction: column;
-                    gap: 2px;
-                    font-size: 14px;
-                    color: map.get($theme-color, "sub-color");
+                    align-items: baseline;
+                    gap: 16px;
+
+                    span {
+                        font-size: 16px;
+                        color: map.get($theme-color, "sub-color");
+                    }
 
                     strong {
-                        font-size: 20px;
+                        font-size: 24px;
                         font-weight: 300;
                         color: map.get($theme-color, "price-color");
                     }

@@ -43,9 +43,11 @@ class PaymentController extends Controller
         // Mã đơn PayOS phải là số nguyên dương
         $payosOrderCode = time();
 
+        $amount = (int) ($order->pay_amount ?? $order->snapshot_price);
+
         $paymentData = [
             'orderCode'   => $payosOrderCode,
-            'amount'      => (int) $order->snapshot_price,
+            'amount'      => $amount,
             'description' => 'LIQI ' . $order->id,
             'returnUrl'   => env('PAYOS_RETURN_URL') . '/' . $order->id,
             'cancelUrl'   => env('PAYOS_CANCEL_URL') . '/' . $order->id,
@@ -59,7 +61,7 @@ class PaymentController extends Controller
         Payment::create([
             'order_id'         => $order->id,
             'provider'         => 'payos',
-            'amount'           => $order->snapshot_price,
+            'amount'           => $amount,
             'payment_link'     => $response['checkoutUrl'],
             'payos_order_code' => (string) $payosOrderCode,
             'status'           => 'pending',

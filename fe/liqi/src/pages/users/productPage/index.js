@@ -50,6 +50,7 @@ const ProductPage = () => {
                         downPayment,
                         upfront: installment.upfront,
                         monthly: installment.monthly,
+                        total: installment.total,
                     }
                     : { type: PAYMENT_TYPES.FULL },
             },
@@ -139,11 +140,14 @@ const ProductPage = () => {
 
                     {isInstallment ? (
                         <div className="price-row">
-                            <p className="price">{formatter(installment.upfront)}</p>
-                            <p className="price-monthly">
-                                <span>Trả hàng tháng</span>
+                            <div className="price-line">
+                                <span>Trả trước</span>
+                                <strong>{formatter(installment.upfront)}</strong>
+                            </div>
+                            <div className="price-line">
+                                <span>Hàng tháng trả</span>
                                 <strong>{formatter(installment.monthly)}</strong>
-                            </p>
+                            </div>
                         </div>
                     ) : (
                         <p className="price">{formatter(product?.price)}</p>
