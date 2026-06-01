@@ -5,6 +5,15 @@ Xin chào **{{ $customerName }}**,
 
 Cảm ơn bạn đã mua hàng tại **LiQi Shop**. Đơn hàng **#{{ $orderId }}** của bạn đã được xác nhận thanh toán thành công với số tiền **{{ $price }} VNĐ**.
 
+@if($isInstallment)
+---
+
+**Trả góp {{ $installmentMonths }} tháng** · Trả trước {{ $downPaymentPct }}%  
+**Trả hàng tháng:** {{ $monthlyAmount }} VNĐ  
+
+Shop sẽ gửi mail nhắc kèm link thanh toán vào từng kỳ. Vui lòng trả đúng hạn — quá hạn shop có quyền thu hồi acc.
+@endif
+
 ---
 
 ## Thông tin tài khoản game

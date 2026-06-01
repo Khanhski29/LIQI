@@ -11,6 +11,7 @@ class Payment extends Model
 
     protected $fillable = [
         'order_id',
+        'installment_schedule_id',
         'provider',
         'amount',
         'payment_link',
@@ -31,5 +32,10 @@ class Payment extends Model
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function installmentSchedule()
+    {
+        return $this->belongsTo(InstallmentSchedule::class);
     }
 }

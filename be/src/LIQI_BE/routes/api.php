@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
@@ -33,6 +34,11 @@ Route::post('/payments/create',   [PaymentController::class, 'create']);
 Route::post('/payments/webhook',  [PaymentController::class, 'webhook']);
 Route::post('/payments/cancel',   [PaymentController::class, 'cancel']);
 
+// Trả góp — thanh toán từng kỳ qua link mail
+Route::get('/installments/pay/{token}',               [InstallmentController::class, 'show']);
+Route::post('/installments/pay/{token}/create-payment', [InstallmentController::class, 'createPayment']);
+Route::get('/installments/pay/{token}/status',        [InstallmentController::class, 'status']);
+
 // Protected: user đã đăng nhập
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/orders/my', [OrderController::class, 'myOrders']);
@@ -43,6 +49,9 @@ Route::middleware('auth:sanctum')->group(function () {
 // Protected: chỉ admin
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/orders', [OrderController::class, 'index']);
+
+    Route::post('/orders/{id}/installment/revoke', [InstallmentController::class, 'revokeOrder']);
+    Route::post('/installments/schedules/{id}/mark-paid', [InstallmentController::class, 'markPaid']);
 
     Route::get('/products/{id}/edit',  [ProductController::class, 'edit']);
     Route::post('/products',           [ProductController::class, 'store']);

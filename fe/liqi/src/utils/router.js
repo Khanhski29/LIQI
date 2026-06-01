@@ -13,6 +13,7 @@ export const ROUTERS = {
         PAYMENT: "/thanh-toan-qr/:orderId",
         ORDER_SUCCESS: "/dat-hang-thanh-cong/:orderId",
         ORDER_FAIL: "/thanh-toan-that-bai/:orderId",
+        INSTALLMENT_PAY: "/tra-gop/thanh-toan/:token",
         TERMS: "/dieu-khoan-su-dung",
         PRIVACY: "/chinh-sach-bao-mat",
         SUPPORT: "/lien-he",

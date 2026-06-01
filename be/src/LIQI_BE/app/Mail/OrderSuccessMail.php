@@ -29,9 +29,13 @@ class OrderSuccessMail extends Mailable
             with: [
                 'customerName'    => $this->order->snapshot_user_name,
                 'orderId'         => $this->order->id,
-                'price'           => number_format($this->order->snapshot_price, 0, ',', '.'),
+                'price'           => number_format($this->order->pay_amount ?? $this->order->snapshot_price, 0, ',', '.'),
                 'usernameAccount' => $this->order->snapshot_username_account,
                 'passwordAccount' => $this->order->snapshot_password_account,
+                'isInstallment'   => $this->order->payment_type === 'installment',
+                'installmentMonths' => $this->order->installment_months,
+                'downPaymentPct'  => $this->order->installment_down_payment_pct,
+                'monthlyAmount'   => number_format($this->order->installment_monthly ?? 0, 0, ',', '.'),
             ],
         );
     }
