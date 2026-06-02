@@ -106,7 +106,10 @@ const OrderList = ({ status, paymentType, installmentStatus, showInstallmentActi
                             </p>
                         )}
                         {isInstallment && item.installment_next_due && (
-                            <p className="order__card-item--g order__card-item-user">
+                            <p
+                                className="order__card-item--g order__card-item-next-due"
+                                title={`Kỳ tiếp: ${formatter(item.installment_next_amount)} · ${item.installment_next_due}${item.installment_next_status === "overdue" ? " (quá hạn)" : ""}`}
+                            >
                                 Kỳ tiếp: {formatter(item.installment_next_amount)} · {item.installment_next_due}
                                 {item.installment_next_status === "overdue" && " (quá hạn)"}
                             </p>

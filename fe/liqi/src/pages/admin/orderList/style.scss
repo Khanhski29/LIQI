@@ -2,15 +2,21 @@
 @import "style/pages/theme.scss";
 
 .order__list {
-    margin-top: 50px;
+    margin-top: 32px;
+    overflow-x: auto;
+
     .order__card-item {
         display: flex;
-        margin: 15px 0px;
-        font-size: 16px;
-        gap: 20px;
+        align-items: center;
+        margin: 10px 0;
+        font-size: 13px;
+        gap: 10px;
+        min-width: 0;
+
         &-img {
-            width: 100px;
-            height: 70px;
+            width: 64px;
+            height: 45px;
+            flex-shrink: 0;
             object-fit: cover;
             cursor: pointer;
         }
@@ -38,33 +44,50 @@
         }
 
         &-id {
-            width: 70px;
+            width: 52px;
+            flex-shrink: 0;
+
+            &:nth-of-type(2) {
+                width: 68px;
+            }
         }
 
         &-price {
             color: map.get($theme-color, "price-color");
-            width: 100px;
+            width: 82px;
+            flex-shrink: 0;
         }
 
         &-user {
             color: #d29213;
-            width: 140px;
+            width: 96px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            flex-shrink: 0;
 
-            &:nth-of-type(5) { width: 110px; } // phone
-            &:nth-of-type(6) { width: 180px; } // email
+            &:nth-of-type(5) { width: 88px; } // phone
+            &:nth-of-type(6) { width: 148px; } // email
         }
 
         &-type {
             color: #1316d2;
-            width: 140px;
+            width: 96px;
+            flex-shrink: 0;
+        }
+
+        &-next-due {
+            color: #d29213;
+            width: 168px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         &-revoke {
-            padding: 6px 12px;
-            font-size: 14px;
+            padding: 4px 8px;
+            font-size: 12px;
             cursor: pointer;
             background: #e74c3c;
             color: #fff;
@@ -74,11 +97,14 @@
 
         &-time {
             color: #a41fa4;
-            width: 155px;
+            width: 128px;
+            flex-shrink: 0;
+            font-size: 12px;
         }
 
         &-status {
-            width: 120px;
+            width: 96px;
+            flex-shrink: 0;
 
             &.status--pending { color: #f39c12; }
             &.status--done    { color: #13d22c; }
