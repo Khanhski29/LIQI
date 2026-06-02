@@ -7,6 +7,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useGetProductUS } from "api/homepage";
 import { useCreateOrderUS } from "api/orders";
 import { useCreatePaymentUS } from "api/payments";
+import { getUserAuth, isUserLoggedIn } from "utils/authStorage";
 
 const PAYMENT_TYPES = {
     FULL: "full",
@@ -19,10 +20,8 @@ const CheckoutPage = () => {
     const location = useLocation();
     const paymentSelection = location.state?.payment ?? { type: PAYMENT_TYPES.FULL };
 
-    const authUser = (() => {
-        try { return JSON.parse(localStorage.getItem("auth_user")); } catch { return null; }
-    })();
-    const isLoggedIn = !!localStorage.getItem("auth_token") && authUser?.role === "user";
+    const authUser = getUserAuth();
+    const isLoggedIn = isUserLoggedIn();
 
     const { data: product, isLoading, error } = useGetProductUS(id);
 

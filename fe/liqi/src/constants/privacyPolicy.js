@@ -132,7 +132,7 @@ export const PRIVACY_SECTIONS = [
         title: "9. Cookie và localStorage",
         paragraphs: [
             "Website hiện không sử dụng cookie theo dõi quảng cáo hoặc phân tích hành vi người dùng.",
-            "Chúng tôi sử dụng localStorage của trình duyệt để lưu token đăng nhập và thông tin tài khoản (auth_token, auth_user), giúp bạn không phải đăng nhập lại mỗi lần truy cập.",
+            "Chúng tôi sử dụng localStorage của trình duyệt để lưu token đăng nhập riêng cho khách hàng và quản trị, giúp bạn không phải đăng nhập lại mỗi lần truy cập.",
             "Bạn có thể xóa dữ liệu localStorage qua cài đặt trình duyệt; tuy nhiên, điều này có thể khiến bạn bị đăng xuất và một số tính năng (lịch sử đơn, đánh giá) không hoạt động đúng.",
         ],
     },

@@ -4,13 +4,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ROUTERS } from "utils/router";
 import { useReviewEligibilityUS } from "api/reviews";
 import ReviewModal from "pages/users/theme/reviewModal";
+import { isUserLoggedIn } from "utils/authStorage";
 
 const OrderSuccessPage = () => {
     const { orderId } = useParams();
     const navigate = useNavigate();
     const [showReviewModal, setShowReviewModal] = useState(false);
 
-    const isLoggedIn = !!localStorage.getItem("auth_token");
+    const isLoggedIn = isUserLoggedIn();
 
     const { data: eligibility } = useReviewEligibilityUS(orderId, {
         enabled: isLoggedIn,

@@ -1,11 +1,9 @@
 import { Navigate } from "react-router-dom";
 import { ROUTERS } from "utils/router";
+import { isAdminLoggedIn } from "utils/authStorage";
 
 const ProtectedAdminRoute = ({ children }) => {
-    const token = localStorage.getItem("auth_token");
-    const user = JSON.parse(localStorage.getItem("auth_user") || "null");
-
-    if (!token || user?.role !== "admin") {
+    if (!isAdminLoggedIn()) {
         return <Navigate to={ROUTERS.ADMIN.LOGIN} replace />;
     }
 

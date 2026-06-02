@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getActiveAuthToken } from "utils/authStorage";
 
 const baseURL = process.env.REACT_APP_API_URI;
 const timeout = +process.env.REACT_APP_API_TIMEOUT || 20000;
@@ -12,7 +13,7 @@ axiosInstance.interceptors.request.use(
     function (config) {
         config.headers["Content-Type"] = "application/json";
 
-        const token = localStorage.getItem("auth_token");
+        const token = getActiveAuthToken();
         if (token) {
             config.headers["Authorization"] = `Bearer ${token}`;
         }
