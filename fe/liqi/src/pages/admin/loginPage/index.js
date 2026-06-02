@@ -4,6 +4,7 @@ import Title from "pages/users/theme/title";
 import { useNavigate } from "react-router-dom";
 import { ROUTERS } from "utils/router";
 import { useLoginUS } from "api/auth";
+import { setAdminSession } from "utils/authStorage";
 
 const LoginAdminPage = () => {
     const navigate = useNavigate();
@@ -18,8 +19,7 @@ const LoginAdminPage = () => {
                 return;
             }
 
-            localStorage.setItem("auth_token", data.token);
-            localStorage.setItem("auth_user", JSON.stringify(data.user));
+            setAdminSession(data.token, data.user);
 
             navigate(ROUTERS.ADMIN.ORDERMANAGER);
         },

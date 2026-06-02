@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { ROUTERS } from "utils/router";
 import { useRegisterUS } from "api/auth";
 import Title from "pages/users/theme/title";
+import { setUserSession } from "utils/authStorage";
 
 const RegisterPage = () => {
     const navigate = useNavigate();
@@ -12,8 +13,7 @@ const RegisterPage = () => {
 
     const { mutate: register, isPending } = useRegisterUS({
         onSuccess: (data) => {
-            localStorage.setItem("auth_token", data.token);
-            localStorage.setItem("auth_user", JSON.stringify(data.user));
+            setUserSession(data.token, data.user);
             navigate(ROUTERS.USER.PROFILE);
         },
         onError: (error) => {

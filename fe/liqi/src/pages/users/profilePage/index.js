@@ -5,6 +5,7 @@ import { ROUTERS } from "utils/router";
 import { useMyOrdersUS, useChangePasswordUS, useLogoutUS } from "api/auth";
 import { formatter } from "utils/formatter";
 import Title from "pages/users/theme/title";
+import { clearUserSession, getUserAuth } from "utils/authStorage";
 
 const CopyCredentials = ({ username, password }) => {
     const [copied, setCopied] = useState(false);
@@ -48,16 +49,13 @@ const ProfilePage = () => {
     const [pwError, setPwError] = useState("");
     const [pwSuccess, setPwSuccess] = useState("");
 
-    const authUser = (() => {
-        try { return JSON.parse(localStorage.getItem("auth_user")); } catch { return null; }
-    })();
+    const authUser = getUserAuth();
 
     const { data, isLoading } = useMyOrdersUS({ page });
 
     const { mutate: logout } = useLogoutUS({
         onSettled: () => {
-            localStorage.removeItem("auth_token");
-            localStorage.removeItem("auth_user");
+            clearUserSession();
             navigate(ROUTERS.USER.HOME);
         },
     });

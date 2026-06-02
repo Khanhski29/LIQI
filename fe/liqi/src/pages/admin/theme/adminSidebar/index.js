@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ROUTERS } from "../../../../utils/router";
 import React from "react";
 import { useLogoutUS } from "api/auth";
+import { clearAdminSession } from "utils/authStorage";
 
 const AdminSidebar = ({children, ...props}) =>{
     const location = useLocation();
@@ -12,8 +13,7 @@ const AdminSidebar = ({children, ...props}) =>{
 
     const { mutate: logout } = useLogoutUS({
         onSettled: () => {
-            localStorage.removeItem("auth_token");
-            localStorage.removeItem("auth_user");
+            clearAdminSession();
             navigate(ROUTERS.ADMIN.LOGIN, { replace: true });
         },
     });

@@ -44,7 +44,7 @@ const ProfilePage = () => {
     const [pwSuccess, setPwSuccess] = useState("");
 
     const authUser = (() => {
-        try { return JSON.parse(localStorage.getItem("auth_user")); } catch { return null; }
+        try { return JSON.parse(localStorage.getItem("user_auth_user")); } catch { return null; }
     })();
 
     const { data, isLoading } = useMyOrdersUS({ page });

@@ -7,6 +7,7 @@ import {
     updateReviewVisibilityAPI,
 } from "./request";
 import { optionUseQuery } from "utils/common";
+import { getUserToken } from "utils/authStorage";
 
 export const useGetReviewsUS = (params, option) => {
     return useQuery({
@@ -34,7 +35,7 @@ export const useReviewEligibilityUS = (orderId, option) => {
     return useQuery({
         queryKey: ["reviewEligibility", orderId],
         queryFn: () => checkReviewEligibilityAPI(orderId),
-        enabled: !!orderId && !!localStorage.getItem("auth_token"),
+        enabled: !!orderId && !!getUserToken(),
         ...optionUseQuery,
         ...option,
     });

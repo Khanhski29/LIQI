@@ -4,23 +4,21 @@ import "./style.scss"
 import { Link, useNavigate } from 'react-router-dom'
 import { ROUTERS } from "../../../../utils/router";
 import { useLogoutUS } from "api/auth";
+import { clearUserSession, getUserAuth, isUserLoggedIn } from "utils/authStorage";
 
 const Header = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const authUser = (() => {
-        try { return JSON.parse(localStorage.getItem("auth_user")); } catch { return null; }
-    })();
-    const isLoggedIn = !!localStorage.getItem("auth_token") && authUser?.role === "user";
+    const authUser = getUserAuth();
+    const isLoggedIn = isUserLoggedIn();
 
     const closeMenu = useCallback(() => setIsMenuOpen(false), []);
     const openMenu = useCallback(() => setIsMenuOpen(true), []);
 
     const { mutate: logout } = useLogoutUS({
         onSettled: () => {
-            localStorage.removeItem("auth_token");
-            localStorage.removeItem("auth_user");
+            clearUserSession();
             closeMenu();
             navigate(ROUTERS.USER.HOME);
         },

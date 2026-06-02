@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { ROUTERS } from "utils/router";
 import { useLoginUS } from "api/auth";
 import Title from "pages/users/theme/title";
+import { setUserSession } from "utils/authStorage";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -17,8 +18,7 @@ const LoginPage = () => {
                 setErrorMsg("Vui lòng đăng nhập admin tại trang quản trị.");
                 return;
             }
-            localStorage.setItem("auth_token", data.token);
-            localStorage.setItem("auth_user", JSON.stringify(data.user));
+            setUserSession(data.token, data.user);
             navigate(ROUTERS.USER.PROFILE);
         },
         onError: (error) => {
