@@ -69,12 +69,12 @@
 
             strong {
                 color: map.get($theme-color, "ncolor");
-                font-size: 14px;
+                font-size: 16px;
             }
 
             span {
                 color: #777;
-                font-size: 12px;
+                font-size: 14px;
                 white-space: nowrap;
             }
         }
@@ -82,7 +82,7 @@
         &-content {
             flex: 1;
             color: map.get($theme-color, "sub-color");
-            font-size: 13px;
+            font-size: 16px;
             line-height: 1.6;
             white-space: pre-wrap;
             word-break: break-word;
