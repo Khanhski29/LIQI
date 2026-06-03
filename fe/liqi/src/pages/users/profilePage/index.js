@@ -5,7 +5,7 @@ import { ROUTERS } from "utils/router";
 import { useMyOrdersUS, useChangePasswordUS, useLogoutUS } from "api/auth";
 import { formatter } from "utils/formatter";
 import Title from "pages/users/theme/title";
-import { clearUserSession, getUserAuth } from "utils/authStorage";
+import { clearUserSession, getUserAuth, setUserSession } from "utils/authStorage";
 
 const CopyCredentials = ({ username, password }) => {
     const [copied, setCopied] = useState(false);
@@ -61,7 +61,10 @@ const ProfilePage = () => {
     });
 
     const { mutate: changePassword, isPending: isChangingPw } = useChangePasswordUS({
-        onSuccess: () => {
+        onSuccess: (data) => {
+            if (data?.token) {
+                setUserSession(data.token, authUser);
+            }
             setPwSuccess("Đổi mật khẩu thành công!");
             setPwError("");
             setPwForm({ current_password: "", new_password: "", confirm_password: "" });

@@ -62,6 +62,8 @@ class AuthController extends Controller
             return response()->json(['message' => 'Tài khoản đã bị khóa.'], 403);
         }
 
+        $user->tokens()->delete();
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -92,7 +94,13 @@ class AuthController extends Controller
 
         $user->update(['password' => $request->new_password]);
 
-        return response()->json(['message' => 'Đổi mật khẩu thành công.']);
+        $user->tokens()->delete();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Đổi mật khẩu thành công.',
+            'token'   => $token,
+        ]);
     }
 
     public function logout(Request $request)

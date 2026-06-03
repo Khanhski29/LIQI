@@ -9,6 +9,8 @@ use PayOS\PayOS;
 
 class OrderCancellationService
 {
+    public function __construct(private OrderCredentialService $credentialService) {}
+
     public function cancelPendingOrder(Order $order, string $reason = 'Khách hàng hủy đơn hàng'): bool
     {
         if ($order->payment_status !== 'pending') {
@@ -19,6 +21,7 @@ class OrderCancellationService
         $payosOrderCode = $order->payment?->payos_order_code;
 
         DB::transaction(function () use ($order) {
+            $this->credentialService->purge($order);
             $order->update(['payment_status' => 'cancel']);
             $order->product?->update(['status' => 'available']);
 

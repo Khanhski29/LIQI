@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Services\InstallmentScheduleService;
 use App\Services\OrderCancellationService;
+use App\Services\OrderCredentialService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use PayOS\PayOS;
@@ -15,7 +16,10 @@ class PaymentController extends Controller
 {
     private PayOS $payOS;
 
-    public function __construct(private InstallmentScheduleService $scheduleService)
+    public function __construct(
+        private InstallmentScheduleService $scheduleService,
+        private OrderCredentialService $credentialService,
+    )
     {
         $this->payOS = new PayOS(
             env('PAYOS_CLIENT_ID'),
@@ -134,12 +138,14 @@ class PaymentController extends Controller
             } else {
                 $order = $payment->order;
                 $order->update(['payment_status' => 'done']);
+                $this->credentialService->deliver($order, $order->product);
                 $order->product->update(['status' => 'sold']);
 
                 if ($order->payment_type === 'installment') {
                     $this->scheduleService->activateAfterUpfrontPaid($order);
                 }
 
+                $order->load('credential');
                 Mail::to($order->snapshot_email)->queue(new OrderSuccessMail($order));
             }
         } else {

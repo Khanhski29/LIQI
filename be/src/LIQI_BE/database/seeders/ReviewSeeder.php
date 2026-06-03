@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\User;
+use App\Services\OrderCredentialService;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -112,19 +113,20 @@ class ReviewSeeder extends Seeder
             $reviewCreatedAt = $orderCreatedAt->copy()->addHour();
 
             $order = Order::create([
-                'user_id'                       => $user->id,
-                'product_id'                    => $product->id,
-                'snapshot_user_name'            => $user->name,
-                'snapshot_phone'                => $user->phone,
-                'snapshot_email'                => $user->email,
-                'snapshot_img'                  => $product->img,
-                'snapshot_price'                => $product->price,
-                'snapshot_username_account'     => $product->username_account,
-                'snapshot_password_account'     => $product->password_account,
-                'payment_status'                => 'done',
-                'created_at'                    => $orderCreatedAt,
-                'updated_at'                    => $orderCreatedAt,
+                'user_id'            => $user->id,
+                'product_id'         => $product->id,
+                'snapshot_user_name' => $user->name,
+                'snapshot_phone'     => $user->phone,
+                'snapshot_email'     => $user->email,
+                'snapshot_img'       => $product->img,
+                'snapshot_price'     => $product->price,
+                'payment_status'     => 'done',
+                'created_at'         => $orderCreatedAt,
+                'updated_at'         => $orderCreatedAt,
             ]);
+
+            app(OrderCredentialService::class)->deliver($order, $product);
+            $product->update(['status' => 'sold']);
 
             Review::create([
                 'order_id'    => $order->id,
