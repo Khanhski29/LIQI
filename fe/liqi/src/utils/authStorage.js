@@ -108,3 +108,12 @@ export function getActiveAuthToken(pathname = window.location.pathname) {
     migrateLegacyAuth();
     return isAdminPath(pathname) ? getAdminToken() : getUserToken();
 }
+
+/** Xóa session theo ngữ cảnh shop hoặc quản trị. */
+export function clearActiveSession(pathname = window.location.pathname) {
+    if (isAdminPath(pathname)) {
+        clearAdminSession();
+    } else {
+        clearUserSession();
+    }
+}

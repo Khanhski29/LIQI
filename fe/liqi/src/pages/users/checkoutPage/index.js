@@ -29,6 +29,7 @@ const CheckoutPage = () => {
 
     const installment = useMemo(() => {
         if (!isInstallment || !product?.price) return null;
+        if (!paymentSelection.months || !paymentSelection.downPayment) return null;
         return calcInstallment(
             product.price,
             paymentSelection.months,
@@ -119,6 +120,26 @@ const CheckoutPage = () => {
         );
     }
 
+    if (isInstallment && !installment) {
+        return (
+            <div className="checkout container wide">
+                <Title name="Thanh Toán" />
+                <p className="checkout__error">
+                    Vui lòng chọn gói trả góp từ trang sản phẩm.
+                </p>
+                <button
+                    type="button"
+                    className="btn-l"
+                    onClick={() => navigate(`/cua-hang/chi-tiet-acc/${id}`)}
+                >
+                    Quay lại sản phẩm
+                </button>
+            </div>
+        );
+    }
+
+    const displayPrice = isInstallment ? installment.upfront : product.price;
+
     return (
         <div className="checkout container wide">
             <Title name="Thanh Toán" />
@@ -152,7 +173,9 @@ const CheckoutPage = () => {
                         </div>
 
                         <p className="col lg-2 md-2 lmd-2 sm-12">#{product.product_code}</p>
-                        <p className="price col lg-2 md-2 lmd-2 sm-12">{formatter(installment.upfront)}</p>
+                        <p className="price col lg-2 md-2 lmd-2 sm-12">
+                            {formatter(displayPrice)}
+                        </p>
                     </div>
                 </div>
 

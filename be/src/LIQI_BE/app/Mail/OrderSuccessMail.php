@@ -24,14 +24,16 @@ class OrderSuccessMail extends Mailable
 
     public function content(): Content
     {
+        $this->order->loadMissing('credential');
+
         return new Content(
             markdown: 'emails.order-success',
             with: [
                 'customerName'    => $this->order->snapshot_user_name,
                 'orderId'         => $this->order->id,
                 'price'           => number_format($this->order->pay_amount ?? $this->order->snapshot_price, 0, ',', '.'),
-                'usernameAccount' => $this->order->snapshot_username_account,
-                'passwordAccount' => $this->order->snapshot_password_account,
+                'usernameAccount' => $this->order->credential?->username,
+                'passwordAccount' => $this->order->credential?->password,
                 'isInstallment'   => $this->order->payment_type === 'installment',
                 'installmentMonths' => $this->order->installment_months,
                 'downPaymentPct'  => $this->order->installment_down_payment_pct,

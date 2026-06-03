@@ -79,8 +79,6 @@ class OrderController extends Controller
                 'installment_down_payment_pct' => $installmentPct,
                 'installment_monthly'          => $installmentMonthly,
                 'installment_total'            => $installmentTotal,
-                'snapshot_username_account'    => $product->username_account,
-                'snapshot_password_account'    => $product->password_account,
                 'payment_status'               => 'pending',
                 'cancel_token'                 => Str::random(64),
             ]);
@@ -191,13 +189,13 @@ class OrderController extends Controller
         $perPage = 10;
         $userId  = $request->user()->id;
 
-        $orders = Order::with(['product', 'installmentSchedules'])
+        $orders = Order::with(['product', 'credential', 'installmentSchedules'])
             ->where('user_id', $userId)
             ->where('payment_status', 'done')
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
 
-        $installmentOrders = Order::with(['product', 'installmentSchedules'])
+        $installmentOrders = Order::with(['product', 'credential', 'installmentSchedules'])
             ->where('user_id', $userId)
             ->where('payment_status', 'done')
             ->where('payment_type', 'installment')
@@ -237,8 +235,8 @@ class OrderController extends Controller
             'payment_status'   => $order->payment_status,
             'payment_type'     => $order->payment_type,
             'created_at'       => $order->created_at?->format('Y-m-d H:i:s'),
-            'username_account' => $isDone ? $order->snapshot_username_account : null,
-            'password_account' => $isDone ? $order->snapshot_password_account : null,
+            'username_account' => $isDone ? $order->credential?->username : null,
+            'password_account' => $isDone ? $order->credential?->password : null,
         ];
 
         if ($order->payment_type === 'installment') {

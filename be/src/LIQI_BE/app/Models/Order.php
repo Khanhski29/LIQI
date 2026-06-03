@@ -26,8 +26,6 @@ class Order extends Model
         'installment_status',
         'installment_anchor_day',
         'installment_started_at',
-        'snapshot_username_account',
-        'snapshot_password_account',
         'payment_status',
         'cancel_token',
     ];
@@ -66,5 +64,10 @@ class Order extends Model
     public function installmentSchedules()
     {
         return $this->hasMany(InstallmentSchedule::class)->orderBy('period');
+    }
+
+    public function credential()
+    {
+        return $this->hasOne(OrderCredential::class);
     }
 }

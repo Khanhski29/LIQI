@@ -11,6 +11,8 @@ class InstallmentScheduleService
 {
     public const GRACE_DAYS = 2;
 
+    public function __construct(private OrderCredentialService $credentialService) {}
+
     public function activateAfterUpfrontPaid(Order $order): void
     {
         if ($order->payment_type !== 'installment' || ! $order->installment_months) {
@@ -80,6 +82,8 @@ class InstallmentScheduleService
 
     public function revokeOrder(Order $order): void
     {
+        $this->credentialService->purge($order);
+
         $order->update(['installment_status' => 'defaulted']);
 
         InstallmentSchedule::where('order_id', $order->id)
