@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Route;
 
 // Auth
 Route::prefix('auth')->group(function () {
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login',    [AuthController::class, 'login']);
+    Route::middleware('throttle:auth')->group(function () {
+        Route::post('/register', [AuthController::class, 'register']);
+        Route::post('/login',    [AuthController::class, 'login']);
+    });
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout',          [AuthController::class, 'logout']);
@@ -34,10 +36,12 @@ Route::post('/payments/create',   [PaymentController::class, 'create']);
 Route::post('/payments/webhook',  [PaymentController::class, 'webhook']);
 Route::post('/payments/cancel',   [PaymentController::class, 'cancel']);
 
-// Trả góp — thanh toán từng kỳ qua link mail
-Route::get('/installments/pay/{token}',               [InstallmentController::class, 'show']);
-Route::post('/installments/pay/{token}/create-payment', [InstallmentController::class, 'createPayment']);
-Route::get('/installments/pay/{token}/status',        [InstallmentController::class, 'status']);
+// Trả góp — thanh toán từng kỳ (token + email key hoặc xác nhận email / user sở hữu đơn)
+Route::get('/installments/pay/{token}', [InstallmentController::class, 'show']);
+Route::middleware('throttle:installment-pay')->group(function () {
+    Route::post('/installments/pay/{token}/create-payment', [InstallmentController::class, 'createPayment']);
+});
+Route::get('/installments/pay/{token}/status', [InstallmentController::class, 'status']);
 
 // Protected: user đã đăng nhập
 Route::middleware('auth:sanctum')->group(function () {

@@ -5,27 +5,39 @@ import {
     getInstallmentScheduleAPI,
 } from "./request";
 
-export const useGetInstallmentScheduleUS = (token, options = {}) => {
+export const useGetInstallmentScheduleUS = (auth, options = {}) => {
+    const { token, key, email } = auth || {};
+
     return useQuery({
-        queryKey: ["installment-schedule", token],
-        queryFn: () => getInstallmentScheduleAPI(token),
-        enabled: !!token,
+        queryKey: ["installment-schedule", token, key, email],
+        queryFn: () => getInstallmentScheduleAPI({ token, key, email }),
+        enabled: !!token && (options.enabled ?? true),
+        retry: (failureCount, err) => {
+            if (err?.response?.status === 403) return false;
+            return failureCount < 2;
+        },
         ...options,
     });
 };
 
 export const useCreateInstallmentPaymentUS = (options = {}) => {
     return useMutation({
-        mutationFn: (token) => createInstallmentPaymentAPI(token),
+        mutationFn: (auth) => createInstallmentPaymentAPI(auth),
         ...options,
     });
 };
 
-export const useInstallmentPaymentStatusUS = (token, options = {}) => {
+export const useInstallmentPaymentStatusUS = (auth, options = {}) => {
+    const { token, key, email } = auth || {};
+
     return useQuery({
-        queryKey: ["installment-payment-status", token],
-        queryFn: () => getInstallmentPaymentStatusAPI(token),
-        enabled: !!token,
+        queryKey: ["installment-payment-status", token, key, email],
+        queryFn: () => getInstallmentPaymentStatusAPI({ token, key, email }),
+        enabled: !!token && (options.enabled ?? true),
+        retry: (failureCount, err) => {
+            if (err?.response?.status === 403) return false;
+            return failureCount < 2;
+        },
         ...options,
     });
 };

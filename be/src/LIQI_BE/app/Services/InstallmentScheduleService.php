@@ -53,11 +53,18 @@ class InstallmentScheduleService
         return $target->day($day)->startOfDay();
     }
 
-    public function markPeriodPaid(InstallmentSchedule $schedule): void
-    {
+    public function markPeriodPaid(
+        InstallmentSchedule $schedule,
+        string $paidSource = 'payos',
+        ?int $markedByUserId = null,
+        ?string $markNote = null,
+    ): void {
         $schedule->update([
-            'status'  => 'paid',
-            'paid_at' => now(),
+            'status'            => 'paid',
+            'paid_at'           => now(),
+            'paid_source'       => $paidSource,
+            'marked_by_user_id' => $markedByUserId,
+            'mark_note'         => $markNote,
         ]);
 
         $order = $schedule->order;

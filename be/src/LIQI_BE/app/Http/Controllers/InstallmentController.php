@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\InstallmentSchedule;
 use App\Models\Payment;
+use App\Services\InstallmentPayAuth;
 use App\Services\InstallmentScheduleService;
 use Illuminate\Http\Request;
 use PayOS\PayOS;
@@ -21,11 +22,17 @@ class InstallmentController extends Controller
         );
     }
 
-    public function show(string $token)
+    public function show(Request $request, string $token)
     {
         $schedule = InstallmentSchedule::with('order.product')
             ->where('payment_token', $token)
             ->firstOrFail();
+
+        if (! InstallmentPayAuth::authorize($request, $schedule)) {
+            return response()->json([
+                'message' => 'Không có quyền truy cập. Dùng link trong email hoặc xác nhận email đặt hàng.',
+            ], 403);
+        }
 
         $order = $schedule->order;
 
@@ -43,11 +50,17 @@ class InstallmentController extends Controller
         ]);
     }
 
-    public function createPayment(string $token)
+    public function createPayment(Request $request, string $token)
     {
         $schedule = InstallmentSchedule::with('order')
             ->where('payment_token', $token)
             ->firstOrFail();
+
+        if (! InstallmentPayAuth::authorize($request, $schedule)) {
+            return response()->json([
+                'message' => 'Không có quyền truy cập. Dùng link trong email hoặc xác nhận email đặt hàng.',
+            ], 403);
+        }
 
         if (! $schedule->isPayable()) {
             return response()->json([
@@ -65,14 +78,16 @@ class InstallmentController extends Controller
 
         $amount = (int) $schedule->amount;
 
+        $payKey = InstallmentPayAuth::emailKey($token, (string) $order->snapshot_email);
+        $frontendPayUrl = rtrim(env('FRONTEND_URL', 'http://localhost:3000'), '/')
+            . '/tra-gop/thanh-toan/' . $token . '?key=' . urlencode($payKey);
+
         $paymentData = [
             'orderCode'   => $payosOrderCode,
             'amount'      => $amount,
             'description' => 'LIQI TG ' . $order->id . 'K' . $schedule->period,
-            'returnUrl'   => rtrim(env('FRONTEND_URL', 'http://localhost:3000'), '/')
-                . '/tra-gop/thanh-toan/' . $token . '?paid=1',
-            'cancelUrl'   => rtrim(env('FRONTEND_URL', 'http://localhost:3000'), '/')
-                . '/tra-gop/thanh-toan/' . $token,
+            'returnUrl'   => $frontendPayUrl . '&paid=1',
+            'cancelUrl'   => $frontendPayUrl,
             'buyerName'   => $order->snapshot_user_name,
             'buyerEmail'  => $order->snapshot_email,
             'buyerPhone'  => $order->snapshot_phone,
@@ -101,9 +116,17 @@ class InstallmentController extends Controller
         ]);
     }
 
-    public function status(string $token)
+    public function status(Request $request, string $token)
     {
-        $schedule = InstallmentSchedule::where('payment_token', $token)->firstOrFail();
+        $schedule = InstallmentSchedule::with('order')
+            ->where('payment_token', $token)
+            ->firstOrFail();
+
+        if (! InstallmentPayAuth::authorize($request, $schedule)) {
+            return response()->json([
+                'message' => 'Không có quyền truy cập. Dùng link trong email hoặc xác nhận email đặt hàng.',
+            ], 403);
+        }
 
         return response()->json([
             'status'               => $schedule->status,
@@ -114,6 +137,10 @@ class InstallmentController extends Controller
 
     public function markPaid(Request $request, int $id)
     {
+        $validated = $request->validate([
+            'note' => ['required', 'string', 'min:10', 'max:500'],
+        ]);
+
         $schedule = InstallmentSchedule::with('order')->findOrFail($id);
 
         if ($schedule->status === 'paid') {
@@ -124,9 +151,19 @@ class InstallmentController extends Controller
             return response()->json(['message' => 'Kỳ này đã bị thu hồi.'], 409);
         }
 
-        $this->scheduleService->markPeriodPaid($schedule);
+        $this->scheduleService->markPeriodPaid(
+            $schedule,
+            paidSource: 'admin_manual',
+            markedByUserId: $request->user()->id,
+            markNote: $validated['note'],
+        );
 
-        return response()->json(['message' => 'Đã ghi nhận thanh toán kỳ ' . $schedule->period]);
+        return response()->json([
+            'message' => 'Đã ghi nhận thanh toán kỳ ' . $schedule->period,
+            'paid_source' => 'admin_manual',
+            'marked_by' => $request->user()->name,
+            'marked_at' => $schedule->fresh()->paid_at?->format('Y-m-d H:i:s'),
+        ]);
     }
 
     public function revokeOrder(Request $request, int $orderId)

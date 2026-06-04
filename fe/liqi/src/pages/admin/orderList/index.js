@@ -3,7 +3,7 @@ import "./style.scss";
 import { formatter } from "utils/formatter";
 import { useSearchParams } from "react-router-dom";
 import { useGetOrdersUS } from "api/orders";
-import { revokeInstallmentOrderAPI } from "api/installments/request";
+import { markInstallmentPaidAPI, revokeInstallmentOrderAPI } from "api/installments/request";
 
 const STATUS_LABEL = {
     pending:       { text: "Chờ thanh toán", cls: "status--pending" },
@@ -62,6 +62,26 @@ const OrderList = ({ status, paymentType, installmentStatus, showInstallmentActi
         }
     };
 
+    const handleMarkPaid = async (scheduleId, period) => {
+        const note = window.prompt(
+            `Ghi nhận đã trả kỳ ${period}. Nhập ghi chú đối soát (tối thiểu 10 ký tự):\nVD: CK 500k 04/06, ref FT123, Zalo @khach`
+        );
+        if (note === null) return;
+        if (note.trim().length < 10) {
+            setActionMsg("Ghi chú phải có ít nhất 10 ký tự.");
+            return;
+        }
+        try {
+            await markInstallmentPaidAPI(scheduleId, note.trim());
+            refetch();
+        } catch (err) {
+            const msg = err?.response?.data?.message
+                || err?.response?.data?.errors?.note?.[0]
+                || "Thao tác thất bại.";
+            setActionMsg(msg);
+        }
+    };
+
     return (
         <div className="order__list">
             {actionMsg && <p className="order__list__msg">{actionMsg}</p>}
@@ -113,6 +133,18 @@ const OrderList = ({ status, paymentType, installmentStatus, showInstallmentActi
                                 Kỳ tiếp: {formatter(item.installment_next_amount)} · {item.installment_next_due}
                                 {item.installment_next_status === "overdue" && " (quá hạn)"}
                             </p>
+                        )}
+                        {showInstallmentActions && item.installment_status === "active" && item.installment_next_schedule_id && (
+                            <button
+                                type="button"
+                                className="order__card-item-mark-paid"
+                                onClick={() => handleMarkPaid(
+                                    item.installment_next_schedule_id,
+                                    item.installment_next_period
+                                )}
+                            >
+                                Ghi nhận trả kỳ {item.installment_next_period}
+                            </button>
                         )}
                         {showInstallmentActions && item.installment_status === "active" && item.installment_next_status === "overdue" && (
                             <button
