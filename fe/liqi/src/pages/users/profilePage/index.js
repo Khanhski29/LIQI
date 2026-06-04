@@ -20,8 +20,12 @@ const CopyCredentials = ({ username, password }) => {
     return (
         <div className="creds-row">
             <span className="creds-row__value">{username} | {password}</span>
-            <button className={`btn-copy ${copied ? "btn-copy--done" : ""}`} onClick={handleCopy}>
-                {copied ? "Đã copy!" : "Copy"}
+            <button
+                className={`btn-copy ${copied ? "btn-copy--done" : ""}`}
+                type="button"
+                onClick={handleCopy}
+            >
+                Copy
             </button>
         </div>
     );

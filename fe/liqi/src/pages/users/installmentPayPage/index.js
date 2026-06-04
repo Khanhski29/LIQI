@@ -1,7 +1,8 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
 import { formatter } from "utils/formatter";
+import { getActiveAuthToken } from "utils/authStorage";
 import Title from "../theme/title";
 import {
     useCreateInstallmentPaymentUS,
@@ -9,6 +10,8 @@ import {
     useInstallmentPaymentStatusUS,
 } from "api/installments";
 import "../paymentPage/style.scss";
+
+const STORAGE_PREFIX = "installment-pay-key:";
 
 const BANK_NAME_MAP = {
     "970422": "MB Bank",
@@ -25,18 +28,47 @@ const InstallmentPayPage = () => {
     const { token } = useParams();
     const [searchParams] = useSearchParams();
     const paidRedirect = searchParams.get("paid") === "1";
+    const urlKey = searchParams.get("key");
+
+    const [storedKey, setStoredKey] = useState(() => {
+        if (!token) return null;
+        return sessionStorage.getItem(`${STORAGE_PREFIX}${token}`);
+    });
+    const [emailInput, setEmailInput] = useState("");
+    const [verifiedEmail, setVerifiedEmail] = useState(null);
+
+    const payKey = urlKey || storedKey;
+    const hasUserSession = !!getActiveAuthToken();
+
+    useEffect(() => {
+        if (!token || !urlKey) return;
+        sessionStorage.setItem(`${STORAGE_PREFIX}${token}`, urlKey);
+        setStoredKey(urlKey);
+    }, [token, urlKey]);
+
+    const auth = useMemo(() => {
+        if (!token) return null;
+        if (payKey) return { token, key: payKey };
+        if (verifiedEmail) return { token, email: verifiedEmail };
+        return { token };
+    }, [token, payKey, verifiedEmail]);
+
+    const needsEmail = !payKey && !verifiedEmail && !hasUserSession;
 
     const [paymentInfo, setPaymentInfo] = useState(null);
     const [timeLeft, setTimeLeft] = useState(5 * 60);
     const timerRef = useRef(null);
 
-    const { data: schedule, isLoading, error } = useGetInstallmentScheduleUS(token);
+    const { data: schedule, isLoading, error, refetch } = useGetInstallmentScheduleUS(auth, {
+        enabled: !!auth && !needsEmail,
+    });
 
     const { mutate: createPayment, isPending: isCreating } = useCreateInstallmentPaymentUS({
         onSuccess: (data) => setPaymentInfo(data),
     });
 
-    const { data: statusData } = useInstallmentPaymentStatusUS(token, {
+    const { data: statusData } = useInstallmentPaymentStatusUS(auth, {
+        enabled: !!auth && !needsEmail,
         refetchInterval: (data) => (data?.status === "paid" ? false : paymentInfo ? 3000 : false),
     });
 
@@ -62,6 +94,47 @@ const InstallmentPayPage = () => {
         return `${m}:${s}`;
     };
 
+    const handleEmailSubmit = (e) => {
+        e.preventDefault();
+        const trimmed = emailInput.trim();
+        if (!trimmed) return;
+        setVerifiedEmail(trimmed);
+    };
+
+    const isForbidden = error?.response?.status === 403;
+
+    if (needsEmail || isForbidden) {
+        return (
+            <div className="payment-page container wide">
+                <div className="payment-page__box">
+                    <Title name="Xác nhận email" />
+                    <p>
+                        Link thanh toán cần email đặt hàng. Dùng link đầy đủ trong email nhắc trả góp,
+                        hoặc nhập email bạn đã dùng khi mua.
+                    </p>
+                    <form onSubmit={handleEmailSubmit}>
+                        <input
+                            type="email"
+                            className="input-l"
+                            placeholder="Email đặt hàng"
+                            value={emailInput}
+                            onChange={(e) => setEmailInput(e.target.value)}
+                            required
+                        />
+                        <button type="submit" className="btn-l" style={{ marginTop: 12 }}>
+                            Tiếp tục
+                        </button>
+                    </form>
+                    {isForbidden && verifiedEmail && (
+                        <p className="payment-page__error" style={{ marginTop: 12 }}>
+                            Email không khớp đơn hàng. Kiểm tra lại hoặc dùng link trong email.
+                        </p>
+                    )}
+                </div>
+            </div>
+        );
+    }
+
     if (isLoading) {
         return (
             <div className="payment-page container wide">
@@ -74,6 +147,9 @@ const InstallmentPayPage = () => {
         return (
             <div className="payment-page container wide">
                 <p className="payment-page__error">Không tìm thấy kỳ trả góp.</p>
+                <button type="button" className="btn-l" onClick={() => refetch()}>
+                    Thử lại
+                </button>
             </div>
         );
     }
@@ -114,7 +190,7 @@ const InstallmentPayPage = () => {
                         <button
                             className="btn-l"
                             disabled={isCreating}
-                            onClick={() => createPayment(token)}
+                            onClick={() => createPayment(auth)}
                         >
                             {isCreating ? "Đang tạo mã QR..." : "Tạo mã QR thanh toán"}
                         </button>

@@ -85,6 +85,16 @@
             flex-shrink: 0;
         }
 
+        &-mark-paid {
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            flex-shrink: 0;
+        }
+
         &-revoke {
             padding: 4px 8px;
             font-size: 12px;
