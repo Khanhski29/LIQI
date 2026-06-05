@@ -7,7 +7,7 @@ const REVIEW_LIMIT = 8;
 const ReviewsSection = () => {
     const trackRef = useRef(null);
     const [isSliderReady, setIsSliderReady] = useState(false);
-    const { data, isLoading } = useGetReviewsUS({ page: 1 });
+    const { data, isLoading, error, refetch } = useGetReviewsUS({ page: 1 });
 
     const reviews = useMemo(() => (data?.data || []).slice(0, REVIEW_LIMIT), [data]);
 
@@ -56,11 +56,20 @@ const ReviewsSection = () => {
 
             {isLoading && <p className="reviews-section__msg">Đang tải...</p>}
 
-            {!isLoading && reviews.length === 0 && (
+            {error && (
+                <div className="reviews-section__msg">
+                    <p>Không tải được đánh giá.</p>
+                    <button type="button" className="btn-l" onClick={() => refetch()}>
+                        Thử lại
+                    </button>
+                </div>
+            )}
+
+            {!isLoading && !error && reviews.length === 0 && (
                 <p className="reviews-section__msg">Chưa có đánh giá nào.</p>
             )}
 
-            {!isLoading && reviews.length > 0 && (
+            {!isLoading && !error && reviews.length > 0 && (
                 <div className="reviews-section__slider">
                     <div className={trackClassName} ref={trackRef}>
                         {sliderTrack.map((review, index) => (

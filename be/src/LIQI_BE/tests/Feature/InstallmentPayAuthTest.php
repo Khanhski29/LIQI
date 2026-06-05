@@ -65,12 +65,12 @@ test('installment pay accepts valid email key', function () {
         ->assertJsonPath('period', 1);
 });
 
-test('installment pay accepts matching email', function () {
+test('installment pay rejects email without key', function () {
     $schedule = makeInstallmentSchedule();
     $token    = $schedule->payment_token;
 
     $this->getJson("/api/installments/pay/{$token}?email=".urlencode('buyer@example.com'))
-        ->assertOk();
+        ->assertForbidden();
 });
 
 test('installment pay accepts order owner via bearer token', function () {

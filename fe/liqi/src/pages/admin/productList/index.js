@@ -15,7 +15,7 @@ const ProductList = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const type = searchParams.get("type");
-    const { data  } = useGetProductsUS({type});
+    const { data, isLoading, error, refetch } = useGetProductsUS({ type });
 
     const { mutate: deleteProduct, isPending: isDeleting } = useDeleteProductUS({
         onError: (error) => {
@@ -82,6 +82,27 @@ const ProductList = () => {
 
         return pages;
     };
+
+    if (isLoading) {
+        return (
+            <div className="product__list">
+                <p className="product__list-status">Đang tải...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="product__list">
+                <p className="product__list-status product__list-status--error">
+                    Không tải được danh sách sản phẩm.
+                </p>
+                <button type="button" className="edit-btn" onClick={() => refetch()}>
+                    Thử lại
+                </button>
+            </div>
+        );
+    }
 
     return (
 

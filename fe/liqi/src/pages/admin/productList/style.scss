@@ -3,6 +3,15 @@
 
 .product__list {
     margin-top: 50px;
+
+    &-status {
+        padding: 24px 0;
+        color: #666;
+
+        &--error {
+            color: map.get($theme-color, "price-color");
+        }
+    }
     .product__card-item {
         display: flex;
         margin: 15px 0px;

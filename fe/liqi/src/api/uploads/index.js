@@ -1,0 +1,1 @@
+export { uploadImageAPI } from "./request";

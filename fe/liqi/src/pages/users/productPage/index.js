@@ -31,7 +31,7 @@ const ProductPage = () => {
     const [downPayment, setDownPayment] = useState(50);
 
     const { id } = useParams();
-    const { data: product, isLoading, error } = useGetProductUS(id);
+    const { data: product, isLoading, error, refetch } = useGetProductUS(id);
 
     const isInstallment = paymentType === PAYMENT_TYPES.INSTALLMENT;
 
@@ -62,6 +62,29 @@ const ProductPage = () => {
     const location = useLocation();
 
     const { min, max, page, code } = location.state || {};
+
+    if (isLoading) {
+        return (
+            <div className="container wide product">
+                <Title name="Chi Tiết Sản Phẩm" />
+                <p className="product__status-msg">Đang tải...</p>
+            </div>
+        );
+    }
+
+    if (error || !product) {
+        return (
+            <div className="container wide product">
+                <Title name="Chi Tiết Sản Phẩm" />
+                <p className="product__status-msg product__status-msg--error">
+                    Không tải được sản phẩm. Vui lòng thử lại.
+                </p>
+                <button type="button" className="btn-l" onClick={() => refetch()}>
+                    Thử lại
+                </button>
+            </div>
+        );
+    }
 
     return (
         <div className="container wide product">

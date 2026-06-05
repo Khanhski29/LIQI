@@ -55,7 +55,7 @@ const ProfilePage = () => {
 
     const authUser = getUserAuth();
 
-    const { data, isLoading } = useMyOrdersUS({ page });
+    const { data, isLoading, error, refetch } = useMyOrdersUS({ page });
 
     const { mutate: logout } = useLogoutUS({
         onSettled: () => {
@@ -242,11 +242,20 @@ const ProfilePage = () => {
 
                 {isLoading && <p className="profile__loading">Đang tải...</p>}
 
-                {!isLoading && data?.data?.length === 0 && (
+                {error && (
+                    <div className="profile__error">
+                        <p>Không tải được lịch sử đơn hàng.</p>
+                        <button type="button" className="btn-l" onClick={() => refetch()}>
+                            Thử lại
+                        </button>
+                    </div>
+                )}
+
+                {!isLoading && !error && data?.data?.length === 0 && (
                     <p className="profile__empty">Bạn chưa có đơn hàng nào.</p>
                 )}
 
-                {data?.data?.map((order) => {
+                {!error && data?.data?.map((order) => {
                     const status = STATUS_LABEL[order.payment_status] || { text: order.payment_status, cls: "" };
 
                     return (

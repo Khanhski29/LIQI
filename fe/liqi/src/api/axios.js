@@ -12,7 +12,9 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     function (config) {
-        config.headers["Content-Type"] = "application/json";
+        if (!(config.data instanceof FormData)) {
+            config.headers["Content-Type"] = "application/json";
+        }
 
         const token = getActiveAuthToken();
         if (token) {

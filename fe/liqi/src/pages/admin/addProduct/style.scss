@@ -3,6 +3,15 @@
 
 .add__product {
     margin-top: 50px;
+
+    &-status {
+        padding: 24px 0;
+        color: #666;
+
+        &--error {
+            color: map.get($theme-color, "price-color");
+        }
+    }
     &-form {
         position: relative;
     }
