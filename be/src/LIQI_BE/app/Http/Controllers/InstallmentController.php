@@ -30,7 +30,7 @@ class InstallmentController extends Controller
 
         if (! InstallmentPayAuth::authorize($request, $schedule)) {
             return response()->json([
-                'message' => 'Không có quyền truy cập. Dùng link trong email hoặc xác nhận email đặt hàng.',
+                'message' => 'Không có quyền truy cập. Dùng link đầy đủ trong email nhắc trả góp hoặc đăng nhập tài khoản đặt hàng.',
             ], 403);
         }
 
@@ -58,7 +58,7 @@ class InstallmentController extends Controller
 
         if (! InstallmentPayAuth::authorize($request, $schedule)) {
             return response()->json([
-                'message' => 'Không có quyền truy cập. Dùng link trong email hoặc xác nhận email đặt hàng.',
+                'message' => 'Không có quyền truy cập. Dùng link đầy đủ trong email nhắc trả góp hoặc đăng nhập tài khoản đặt hàng.',
             ], 403);
         }
 
@@ -124,7 +124,7 @@ class InstallmentController extends Controller
 
         if (! InstallmentPayAuth::authorize($request, $schedule)) {
             return response()->json([
-                'message' => 'Không có quyền truy cập. Dùng link trong email hoặc xác nhận email đặt hàng.',
+                'message' => 'Không có quyền truy cập. Dùng link đầy đủ trong email nhắc trả góp hoặc đăng nhập tài khoản đặt hàng.',
             ], 403);
         }
 

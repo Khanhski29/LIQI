@@ -34,8 +34,6 @@ const InstallmentPayPage = () => {
         if (!token) return null;
         return sessionStorage.getItem(`${STORAGE_PREFIX}${token}`);
     });
-    const [emailInput, setEmailInput] = useState("");
-    const [verifiedEmail, setVerifiedEmail] = useState(null);
 
     const payKey = urlKey || storedKey;
     const hasUserSession = !!getActiveAuthToken();
@@ -49,26 +47,34 @@ const InstallmentPayPage = () => {
     const auth = useMemo(() => {
         if (!token) return null;
         if (payKey) return { token, key: payKey };
-        if (verifiedEmail) return { token, email: verifiedEmail };
         return { token };
-    }, [token, payKey, verifiedEmail]);
+    }, [token, payKey]);
 
-    const needsEmail = !payKey && !verifiedEmail && !hasUserSession;
+    const needsKey = !payKey && !hasUserSession;
 
     const [paymentInfo, setPaymentInfo] = useState(null);
+    const [createPaymentError, setCreatePaymentError] = useState("");
     const [timeLeft, setTimeLeft] = useState(5 * 60);
     const timerRef = useRef(null);
 
     const { data: schedule, isLoading, error, refetch } = useGetInstallmentScheduleUS(auth, {
-        enabled: !!auth && !needsEmail,
+        enabled: !!auth && !needsKey,
     });
 
     const { mutate: createPayment, isPending: isCreating } = useCreateInstallmentPaymentUS({
-        onSuccess: (data) => setPaymentInfo(data),
+        onSuccess: (data) => {
+            setCreatePaymentError("");
+            setPaymentInfo(data);
+        },
+        onError: (err) => {
+            setCreatePaymentError(
+                err?.response?.data?.message || "Không thể tạo mã QR. Vui lòng thử lại."
+            );
+        },
     });
 
     const { data: statusData } = useInstallmentPaymentStatusUS(auth, {
-        enabled: !!auth && !needsEmail,
+        enabled: !!auth && !needsKey,
         refetchInterval: (data) => (data?.status === "paid" ? false : paymentInfo ? 3000 : false),
     });
 
@@ -94,40 +100,20 @@ const InstallmentPayPage = () => {
         return `${m}:${s}`;
     };
 
-    const handleEmailSubmit = (e) => {
-        e.preventDefault();
-        const trimmed = emailInput.trim();
-        if (!trimmed) return;
-        setVerifiedEmail(trimmed);
-    };
-
     const isForbidden = error?.response?.status === 403;
 
-    if (needsEmail || isForbidden) {
+    if (needsKey || isForbidden) {
         return (
             <div className="payment-page container wide">
                 <div className="payment-page__box">
-                    <Title name="Xác nhận email" />
+                    <Title name="Link thanh toán không hợp lệ" />
                     <p>
-                        Link thanh toán cần email đặt hàng. Dùng link đầy đủ trong email nhắc trả góp,
-                        hoặc nhập email bạn đã dùng khi mua.
+                        Vui lòng mở link đầy đủ trong email nhắc trả góp, hoặc đăng nhập tài khoản
+                        đã dùng khi đặt hàng để tiếp tục thanh toán.
                     </p>
-                    <form onSubmit={handleEmailSubmit}>
-                        <input
-                            type="email"
-                            className="input-l"
-                            placeholder="Email đặt hàng"
-                            value={emailInput}
-                            onChange={(e) => setEmailInput(e.target.value)}
-                            required
-                        />
-                        <button type="submit" className="btn-l" style={{ marginTop: 12 }}>
-                            Tiếp tục
-                        </button>
-                    </form>
-                    {isForbidden && verifiedEmail && (
+                    {isForbidden && (
                         <p className="payment-page__error" style={{ marginTop: 12 }}>
-                            Email không khớp đơn hàng. Kiểm tra lại hoặc dùng link trong email.
+                            Không có quyền truy cập kỳ trả góp này.
                         </p>
                     )}
                 </div>
@@ -187,13 +173,18 @@ const InstallmentPayPage = () => {
                             Chưa đến hạn thanh toán. Vui lòng quay lại từ ngày {schedule.due_date}.
                         </p>
                     ) : (
-                        <button
-                            className="btn-l"
-                            disabled={isCreating}
-                            onClick={() => createPayment(auth)}
-                        >
-                            {isCreating ? "Đang tạo mã QR..." : "Tạo mã QR thanh toán"}
-                        </button>
+                        <>
+                            {createPaymentError && (
+                                <p className="payment-page__error">{createPaymentError}</p>
+                            )}
+                            <button
+                                className="btn-l"
+                                disabled={isCreating}
+                                onClick={() => createPayment(auth)}
+                            >
+                                {isCreating ? "Đang tạo mã QR..." : "Tạo mã QR thanh toán"}
+                            </button>
+                        </>
                     )}
                 </div>
             </div>

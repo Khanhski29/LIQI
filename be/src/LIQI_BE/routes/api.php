@@ -6,6 +6,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 
 // Auth
@@ -36,7 +37,7 @@ Route::post('/payments/create',   [PaymentController::class, 'create']);
 Route::post('/payments/webhook',  [PaymentController::class, 'webhook']);
 Route::post('/payments/cancel',   [PaymentController::class, 'cancel']);
 
-// Trả góp — thanh toán từng kỳ (token + email key hoặc xác nhận email / user sở hữu đơn)
+// Trả góp — thanh toán từng kỳ (token + email key hoặc user sở hữu đơn)
 Route::get('/installments/pay/{token}', [InstallmentController::class, 'show']);
 Route::middleware('throttle:installment-pay')->group(function () {
     Route::post('/installments/pay/{token}/create-payment', [InstallmentController::class, 'createPayment']);
@@ -64,6 +65,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
     Route::get('/reviews/manage',              [ReviewController::class, 'manage']);
     Route::patch('/reviews/{id}/visibility',   [ReviewController::class, 'updateVisibility']);
+
+    Route::post('/uploads/image', [UploadController::class, 'storeImage']);
 
     // Route::apiResource('categories', CategoryController::class); // Chưa sử dụng
 });

@@ -9,7 +9,7 @@ import ReviewsSection from "../theme/reviewsSection";
 
 const ProductsPage = () => {
 
-    const { data: products } = useGetProductsUS();
+    const { data: products, isLoading, error, refetch } = useGetProductsUS();
 
 
     const boxRef = useRef();
@@ -170,15 +170,29 @@ const ProductsPage = () => {
                         <div className="row">
                             <div className="items col lg-12 md-12 lmd-12 sm-12">
                                 <div className="row">
-                                    {currentProducts?.length === 0 && (
+                                    {isLoading && (
+                                        <div className="product__empty col lg-12 md-12 lmd-12 sm-12">
+                                            Đang tải sản phẩm...
+                                        </div>
+                                    )}
+
+                                    {!isLoading && error && (
+                                        <div className="product__empty col lg-12 md-12 lmd-12 sm-12">
+                                            <p>Không tải được danh sách sản phẩm.</p>
+                                            <button type="button" className="btn-l" onClick={() => refetch()}>
+                                                Thử lại
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {!isLoading && !error && currentProducts?.length === 0 && (
                                         <div className="product__empty col lg-12 md-12 lmd-12 sm-12">
                                             {codeQuery
                                                 ? `Không tìm thấy sản phẩm với mã "${codeQuery}".`
                                                 : "Không có sản phẩm trong khoảng giá này."}
                                         </div>
                                     )}
-                                    {
-                                        currentProducts?.map((item) => (
+                                    {!isLoading && !error && currentProducts?.map((item) => (
                                             <div className="col lg-4 md-4 lmd-6 sm-12" key={item.id}>
                                                 <Link to={generatePath(ROUTERS.USER.PRODUCT, { id: item.id })}
                                                     state={{

@@ -1,33 +1,32 @@
 import axios from "api/axios";
 
-const payParams = ({ token, key, email }) => {
+const payParams = ({ key }) => {
     const params = {};
     if (key) params.key = key;
-    if (email) params.email = email;
     return params;
 };
 
-export const getInstallmentScheduleAPI = async ({ token, key, email }) => {
+export const getInstallmentScheduleAPI = async ({ token, key }) => {
     return await axios({
         url: `installments/pay/${token}`,
         method: "GET",
-        params: payParams({ token, key, email }),
+        params: payParams({ key }),
     });
 };
 
-export const createInstallmentPaymentAPI = async ({ token, key, email }) => {
+export const createInstallmentPaymentAPI = async ({ token, key }) => {
     return await axios({
         url: `installments/pay/${token}/create-payment`,
         method: "POST",
-        params: payParams({ token, key, email }),
+        params: payParams({ key }),
     });
 };
 
-export const getInstallmentPaymentStatusAPI = async ({ token, key, email }) => {
+export const getInstallmentPaymentStatusAPI = async ({ token, key }) => {
     return await axios({
         url: `installments/pay/${token}/status`,
         method: "GET",
-        params: payParams({ token, key, email }),
+        params: payParams({ key }),
     });
 };
 

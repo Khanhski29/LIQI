@@ -2,6 +2,7 @@ import { memo, useState, useEffect } from "react";
 import "./style.scss";
 import { useParams } from "react-router-dom";
 import { useCreateProductUS, useGetProductForEditUS, useUpdateProductUS } from "api/homepage";
+import { uploadImageAPI } from "api/uploads";
 
 const initialProduct = {
     product_code: "",
@@ -20,7 +21,7 @@ const AddProduct = () => {
     const [product, setProduct] = useState(initialProduct);
     const [isUploading, setIsUploading] = useState(false);
 
-    const { data: productForEdit } = useGetProductForEditUS(id);
+    const { data: productForEdit, isLoading: isLoadingEdit, error: editError, refetch: refetchEdit } = useGetProductForEditUS(id);
 
     useEffect(() => {
         if (productForEdit) {
@@ -40,13 +41,19 @@ const AddProduct = () => {
         onSuccess: () => {
             alert("Thêm sản phẩm thành công");
             setProduct(initialProduct);
-        }
+        },
+        onError: (error) => {
+            alert(error?.response?.data?.message || "Thêm sản phẩm thất bại.");
+        },
     });
 
     const { mutate: updateProduct } = useUpdateProductUS({
         onSuccess: () => {
             alert("Cập nhật sản phẩm thành công");
-        }
+        },
+        onError: (error) => {
+            alert(error?.response?.data?.message || "Cập nhật sản phẩm thất bại.");
+        },
     });
 
     const handleChange = (e) => {
@@ -60,25 +67,14 @@ const AddProduct = () => {
 
         setIsUploading(true);
 
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("upload_preset", "liqi_upload");
-        formData.append("folder", "liqi/accounts");
-
         try {
-            const response = await fetch(
-                `https://api.cloudinary.com/v1_1/drgoaizrr/image/upload`,
-                { method: "POST", body: formData }
-            );
+            const data = await uploadImageAPI(file);
 
-            const data = await response.json();
-
-            if (data.secure_url) {
-                setProduct((prev) => ({ ...prev, img: data.secure_url }));
+            if (data.url) {
+                setProduct((prev) => ({ ...prev, img: data.url }));
             }
-        } catch (error) {
-            console.error("Upload error:", error);
-            alert("Lỗi khi tải ảnh lên Cloudinary");
+        } catch {
+            alert("Lỗi khi tải ảnh lên. Vui lòng thử lại.");
         } finally {
             setIsUploading(false);
         }
@@ -114,6 +110,27 @@ const AddProduct = () => {
             setProduct(initialProduct);
         }
     };
+
+    if (isEditMode && isLoadingEdit) {
+        return (
+            <div className="add__product">
+                <p className="add__product-status">Đang tải sản phẩm...</p>
+            </div>
+        );
+    }
+
+    if (isEditMode && editError) {
+        return (
+            <div className="add__product">
+                <p className="add__product-status add__product-status--error">
+                    Không tải được sản phẩm để chỉnh sửa.
+                </p>
+                <button type="button" className="add__product-submit" onClick={() => refetchEdit()}>
+                    Thử lại
+                </button>
+            </div>
+        );
+    }
 
     return (
         <div className="add__product">

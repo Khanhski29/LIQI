@@ -63,12 +63,6 @@ class InstallmentPayAuth
             return true;
         }
 
-        $providedEmail = $request->query('email') ?? $request->input('email');
-        if (is_string($providedEmail) && $providedEmail !== ''
-            && self::normalizeEmail($providedEmail) === self::normalizeEmail($email)) {
-            return true;
-        }
-
         return false;
     }
 }

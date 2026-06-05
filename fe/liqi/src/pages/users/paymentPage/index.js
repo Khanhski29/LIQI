@@ -31,7 +31,13 @@ const PaymentPage = () => {
     const [timeLeft, setTimeLeft] = useState(TIMEOUT);
     const timerRef = useRef(null);
 
-    const { mutate: cancelPayment } = useCancelPaymentUS();
+    const navigateToFail = () => {
+        navigate(`/thanh-toan-that-bai/${orderId}`, { replace: true, state: { cancelToken } });
+    };
+
+    const { mutate: cancelPayment } = useCancelPaymentUS({
+        onSettled: () => navigateToFail(),
+    });
 
     const { data: statusData } = useOrderStatusUS(
         orderId,
@@ -64,7 +70,6 @@ const PaymentPage = () => {
                     if (prev <= 1) {
                         clearInterval(timerRef.current);
                         cancelPayment({ order_id: Number(orderId), cancel_token: cancelToken });
-                        navigate(`/thanh-toan-that-bai/${orderId}`, { replace: true, state: { cancelToken } });
                     return 0;
                 }
                 return prev - 1;
@@ -77,7 +82,6 @@ const PaymentPage = () => {
     const handleCancel = () => {
         clearInterval(timerRef.current);
         cancelPayment({ order_id: Number(orderId), cancel_token: cancelToken });
-        navigate(`/thanh-toan-that-bai/${orderId}`, { replace: true, state: { cancelToken } });
     };
 
     const formatTime = (seconds) => {

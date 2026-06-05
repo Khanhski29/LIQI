@@ -5,6 +5,16 @@
     padding: 60px 10px !important;
     min-height: 70vh;
 
+    &__error {
+        margin: 12px 0 20px;
+        color: map.get($theme-color, "price-color");
+        font-size: 14px;
+
+        button {
+            margin-top: 10px;
+        }
+    }
+
     &__info {
         margin: 16px 0 32px;
         padding: 20px 24px;

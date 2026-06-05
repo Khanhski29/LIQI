@@ -4,6 +4,16 @@
 .product {
     margin-top: 60px !important;
     padding: 32px 16px 64px !important;
+
+    &__status-msg {
+        margin: 24px 0;
+        color: map.get($theme-color, "sub-color");
+        font-size: 16px;
+
+        &--error {
+            color: map.get($theme-color, "price-color");
+        }
+    }
    
 
     .product__detail {
