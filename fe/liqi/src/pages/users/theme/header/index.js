@@ -1,14 +1,17 @@
 
-import { memo, useState, useEffect, useCallback } from 'react';
+import { memo, useState, useEffect, useCallback, useRef } from 'react';
 import "./style.scss"
 import { Link, useNavigate } from 'react-router-dom'
 import { ROUTERS } from "../../../../utils/router";
 import { useLogoutUS } from "api/auth";
 import { clearUserSession, getUserAuth, isUserLoggedIn } from "utils/authStorage";
+import { animate, createScope, stagger } from "utils/anime";
 
 const Header = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const drawerRef = useRef(null);
+    const drawerScopeRef = useRef(null);
 
     const authUser = getUserAuth();
     const isLoggedIn = isUserLoggedIn();
@@ -38,6 +41,33 @@ const Header = () => {
             window.removeEventListener("keydown", onKeyDown);
         };
     }, [isMenuOpen, closeMenu]);
+
+    useEffect(() => {
+        if (!isMenuOpen) {
+            drawerScopeRef.current?.revert();
+            drawerScopeRef.current = null;
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            drawerScopeRef.current?.revert();
+            drawerScopeRef.current = createScope({ root: drawerRef }).add(() => {
+                animate(".header__drawer-animate", {
+                    opacity: [0, 1],
+                    translateX: [28, 0],
+                    delay: stagger(65, { start: 60 }),
+                    duration: 420,
+                    ease: "out(3)",
+                });
+            });
+        }, 80);
+
+        return () => {
+            clearTimeout(timer);
+            drawerScopeRef.current?.revert();
+            drawerScopeRef.current = null;
+        };
+    }, [isMenuOpen, isLoggedIn]);
 
     const menus = [
         { name: "Giới Thiệu", path: ROUTERS.USER.HOME },
@@ -139,12 +169,13 @@ const Header = () => {
             />
 
             <nav
+                ref={drawerRef}
                 className={`header__drawer${isMenuOpen ? " header__drawer--open" : ""}`}
                 aria-hidden={!isMenuOpen}
             >
                 <button
                     type="button"
-                    className="header__drawer-close"
+                    className="header__drawer-close header__drawer-animate"
                     aria-label="Đóng menu"
                     onClick={closeMenu}
                 >
@@ -153,7 +184,7 @@ const Header = () => {
 
                 <ul className="header__drawer-list">
                     {menus.map((menu, menuKey) => (
-                        <li key={menuKey}>
+                        <li key={menuKey} className="header__drawer-animate">
                             <Link to={menu.path} onClick={closeMenu}>{menu.name}</Link>
                         </li>
                     ))}
@@ -162,10 +193,10 @@ const Header = () => {
                 <ul className="header__drawer-list header__drawer-list--auth">
                     {isLoggedIn ? (
                         <>
-                            <li>
+                            <li className="header__drawer-animate">
                                 <Link to={ROUTERS.USER.PROFILE} onClick={closeMenu}>Hồ Sơ</Link>
                             </li>
-                            <li>
+                            <li className="header__drawer-animate">
                                 <button type="button" className="header__drawer-logout" onClick={handleLogout}>
                                     Đăng Xuất
                                 </button>
@@ -173,10 +204,10 @@ const Header = () => {
                         </>
                     ) : (
                         <>
-                            <li>
+                            <li className="header__drawer-animate">
                                 <Link to={ROUTERS.USER.LOGIN} onClick={closeMenu}>Đăng Nhập</Link>
                             </li>
-                            <li>
+                            <li className="header__drawer-animate">
                                 <Link to={ROUTERS.USER.REGISTER} onClick={closeMenu}>Đăng Ký</Link>
                             </li>
                         </>

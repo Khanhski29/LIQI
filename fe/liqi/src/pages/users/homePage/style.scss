@@ -131,6 +131,53 @@
                 }
             }
         }
+
+        .home-block {
+            .home-block__title,
+            .home-block__line,
+            .home-block__cta,
+            .home-block__picture img {
+                opacity: 0;
+                will-change: transform, opacity;
+            }
+
+            .home-block__cta {
+                transform: scale(0.9);
+            }
+
+            .home-block__picture--floating {
+                animation: home-block-float 2.4s ease-in-out infinite alternate;
+            }
+
+            &--text-left {
+                .home-block__title {
+                    transform: translateX(-48px);
+                }
+
+                .home-block__line {
+                    transform: translateX(-32px);
+                }
+
+                .home-block__picture img {
+                    transform: translateX(56px);
+                }
+            }
+
+            &--text-right {
+                .home-block__title {
+                    transform: translateX(48px);
+                }
+
+                .home-block__line {
+                    transform: translateX(32px);
+                }
+
+                .home-block__picture img {
+                    transform: translateX(-56px);
+                }
+            }
+        }
+
         .block2 {
             // background-color: #ECE7E1;
             background: url("https://res.cloudinary.com/drgoaizrr/image/upload/v1779827787/background_3_aenl6s.jpg") center / cover no-repeat;
@@ -166,5 +213,15 @@
             }
         }
 
+    }
+}
+
+@keyframes home-block-float {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-7px);
     }
 }

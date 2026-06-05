@@ -86,20 +86,37 @@
 
     .service__item {
 
-        .service__title:hover {
-            color: map.get($theme-color, "price-color");
+        .service__title {
+            font-size: 42px;
+            // font-family: "BeaufortHeavy";
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            color: map.get($theme-color, "color");
+
+            &--hovered {
+                color: map.get($theme-color, "price-color");
+            }
+
+            [data-char],
+            [data-char] > span {
+                // font-family: "BeaufortHeavy", Oswald, sans-serif;
+                font-weight: 900;
+                font-size: inherit;
+                font-style: normal;
+                text-transform: inherit;
+                line-height: inherit;
+                color: inherit;
+            }
+
+            [data-char] {
+                display: inline-block;
+            }
         }
 
         p {
             font-size: 18px;
             color: map.get($theme-color, "color");
-
-            &:first-child {
-                font-size: 42px;
-                font-weight: 900;
-                text-transform: uppercase;
-                cursor: pointer;
-            }
         }
     }
 
@@ -113,11 +130,15 @@
             font-style: italic;
         }
 
-        a {
+        a.service__about-link {
+            display: inline-block;
             color: map.get($theme-color, "price-color");
             text-decoration: none;
             font-size: 22px;
             font-style: italic;
+            opacity: 0;
+            transform: translateX(20px);
+            will-change: transform, opacity;
         }
     }
 }
