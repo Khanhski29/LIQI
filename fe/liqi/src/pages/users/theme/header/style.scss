@@ -67,6 +67,9 @@
                text-decoration: none;
                text-transform: uppercase;
                font-family: "BeaufortBold";
+               font-size: inherit;
+               font-weight: inherit;
+               letter-spacing: inherit;
                text-align: center;
                display: block;
                cursor: pointer;
@@ -139,6 +142,12 @@
         transform: translateX(0);
     }
 
+    &-animate {
+        opacity: 0;
+        transform: translateX(28px);
+        will-change: transform, opacity;
+    }
+
     &-close {
         display: block;
         margin-left: auto;
@@ -179,6 +188,9 @@
                 border: none;
                 background: transparent;
                 text-align: left;
+                font-size: inherit;
+                font-weight: inherit;
+                letter-spacing: inherit;
             }
         }
 

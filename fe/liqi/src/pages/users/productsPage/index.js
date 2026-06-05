@@ -6,6 +6,7 @@ import { generatePath, Link, useSearchParams } from "react-router-dom";
 import { ROUTERS } from "utils/router";
 import { useGetProductsUS } from "api/homepage";
 import ReviewsSection from "../theme/reviewsSection";
+import { useScrollItemsAnimation } from "hooks/useScrollItemsAnimation";
 
 const ProductsPage = () => {
 
@@ -13,6 +14,7 @@ const ProductsPage = () => {
 
 
     const boxRef = useRef();
+    const itemsRef = useRef(null);
     const setActive = (btn) => {
         const buttons = boxRef.current.querySelectorAll("button");
 
@@ -72,6 +74,13 @@ const ProductsPage = () => {
 
         return filteredProducts?.slice(start, end);
     }, [filteredProducts, page]);
+
+    const itemsKey = useMemo(
+        () => currentProducts?.map((item) => item.id).join(",") ?? "",
+        [currentProducts]
+    );
+
+    useScrollItemsAnimation(itemsRef, itemsKey);
 
     const getPagination = () => {
         if (totalPages === 0) return [];
@@ -168,7 +177,7 @@ const ProductsPage = () => {
                         </form>
 
                         <div className="row">
-                            <div className="items col lg-12 md-12 lmd-12 sm-12">
+                            <div className="items col lg-12 md-12 lmd-12 sm-12" ref={itemsRef}>
                                 <div className="row">
                                     {isLoading && (
                                         <div className="product__empty col lg-12 md-12 lmd-12 sm-12">
@@ -202,7 +211,7 @@ const ProductsPage = () => {
                                                         code: codeQuery,
                                                     }}
                                                 >
-                                                    <div className="item">
+                                                    <div className="item product-item">
                                                         <img src={item.img} alt={item.id} />
                                                         <div className="item__about">
                                                             <div>
